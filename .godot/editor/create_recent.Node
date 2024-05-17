@@ -1,0 +1,14 @@
+CollisionShape2D
+StaticBody2D
+TileMap
+Panel
+TextureRect
+NinePatchRect
+Node2D
+MultiplayerSpawner
+MultiplayerSynchronizer
+Label
+AnimatedSprite2D
+CharacterBody2D
+MarginContainer
+Button

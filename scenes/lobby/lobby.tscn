@@ -1,0 +1,130 @@
+[gd_scene load_steps=8 format=3 uid="uid://q8fjpeqw2smm"]
+
+[ext_resource type="Script" path="res://scenes/lobby/lobby.gd" id="1_1u523"]
+[ext_resource type="FontFile" uid="uid://bhvepy8hqrp7p" path="res://fonts/normal/normal.png" id="2_8l7bb"]
+[ext_resource type="Texture2D" uid="uid://byp01oykmm2x0" path="res://textures/gui/ninepatch_outline.png" id="3_shq0y"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_sub6h"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_bm2gw"]
+normal = Vector2(1, 0)
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_xktci"]
+normal = Vector2(0, 1)
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_lvn4f"]
+normal = Vector2(-1, 0)
+
+[node name="Lobby" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_1u523")
+
+[node name="Collision" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Collision"]
+position = Vector2(100, 326)
+shape = SubResource("WorldBoundaryShape2D_sub6h")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Collision"]
+position = Vector2(0, 228)
+shape = SubResource("WorldBoundaryShape2D_bm2gw")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Collision"]
+position = Vector2(378, 0)
+shape = SubResource("WorldBoundaryShape2D_xktci")
+
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="Collision"]
+position = Vector2(518, 133)
+shape = SubResource("WorldBoundaryShape2D_lvn4f")
+
+[node name="Players" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 8.0
+offset_bottom = 20.0
+grow_horizontal = 2
+theme_override_fonts/font = ExtResource("2_8l7bb")
+text = "LOBBY"
+horizontal_alignment = 1
+
+[node name="Panel" type="Panel" parent="Label"]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Outline" type="NinePatchRect" parent="."]
+layout_mode = 2
+offset_left = 207.0
+offset_top = 55.0
+offset_right = 311.0
+offset_bottom = 68.0
+texture = ExtResource("3_shq0y")
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 2
+patch_margin_bottom = 2
+
+[node name="PlayersLabel" type="Label" parent="."]
+texture_filter = 3
+layout_mode = 2
+offset_left = 208.0
+offset_top = 40.0
+offset_right = 310.0
+offset_bottom = 52.0
+theme_override_fonts/font = ExtResource("2_8l7bb")
+theme_override_font_sizes/font_size = 12
+text = "PLAYERS"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Panel" type="Panel" parent="PlayersLabel"]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -51.0
+offset_top = 56.0
+offset_right = 51.0
+offset_bottom = 68.0
+grow_horizontal = 2
+
+[node name="PlayerList" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="MarginContainer/PlayerList"]
+texture_filter = 3
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_8l7bb")
+theme_override_font_sizes/font_size = 12
+text = "PLAYERS"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Panel" type="Panel" parent="MarginContainer"]
+show_behind_parent = true
+layout_mode = 2
+
+[connection signal="resized" from="MarginContainer" to="." method="_on_margin_container_resized"]

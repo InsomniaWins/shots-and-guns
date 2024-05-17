@@ -1,0 +1,39 @@
+[gd_scene load_steps=6 format=3 uid="uid://dm4a4urf6pi5o"]
+
+[ext_resource type="Script" path="res://scenes/test_scene/test_scene.gd" id="1_a7h4m"]
+[ext_resource type="Texture2D" uid="uid://dsax77c8leeo7" path="res://textures/entities/bear_trap/bear_trap_armed.png" id="2_pv3ye"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_y4ocq"]
+atlas = ExtResource("2_pv3ye")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cfhur"]
+atlas = ExtResource("2_pv3ye")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_5tpk2"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_y4ocq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cfhur")
+}],
+"loop": true,
+"name": &"armed",
+"speed": 5.0
+}]
+
+[node name="TestScene" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_a7h4m")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_5tpk2")
+animation = &"armed"
