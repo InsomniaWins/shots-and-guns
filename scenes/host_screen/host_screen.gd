@@ -2,7 +2,6 @@ extends Control
 
 
 @onready var port_line_edit_node:LineEdit = $VBoxContainer/PortLineEdit
-@onready var username_line_edit_node:LineEdit = $VBoxContainer/UsernameEdit
 @onready var status_label_node:Label = $StatusLabel
 
 
@@ -16,7 +15,7 @@ func _process(delta):
 
 func _on_host_button_pressed():
 	var port:int = port_line_edit_node.text.to_int()
-	var username:String = username_line_edit_node.text
+	var username:String = Network.my_information.username
 	
 	if username.is_empty():
 		status_label_node.text = "Username cannot be left blank!"
@@ -46,8 +45,11 @@ func _host_server(port:int, username:String):
 	multiplayer.multiplayer_peer = peer
 	
 	
-	Network.players[peer.get_unique_id()] = Network.create_new_player_info()
-	Network.players[peer.get_unique_id()]["username"] = username
+	Network.players[peer.get_unique_id()] = Network.create_new_player_info(
+		Network.my_information.username,
+		Network.my_information.hat,
+		Network.my_information.color
+	)
 	
 	
 	SceneManager.change_scene("res://scenes/lobby/lobby.tscn")

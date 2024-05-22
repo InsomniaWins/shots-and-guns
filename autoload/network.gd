@@ -4,6 +4,7 @@ signal player_list_updated
 signal player_joined(peer_id)
 signal player_left(peer_id)
 
+var my_information = create_new_player_info("default_username", HatManager.Hats.NONE, Color.WHITE)
 var players:Dictionary = {}
 
 
@@ -43,9 +44,11 @@ func peer_disconnected(peer_id:int) -> void:
 		_player_left.rpc(peer_id)
 
 
-func create_new_player_info() -> Dictionary:
+func create_new_player_info(username:String, hat:int, color:Color) -> Dictionary:
 	return {
-		"username": "?"
+		"username": username,
+		"hat": hat,
+		"color": color
 	}
 
 
@@ -53,17 +56,21 @@ func send_player_info_to_server(player_info:Dictionary) -> void:
 	got_player_info_from_peer.rpc_id(1, player_info)
 
 
+func kick_player(peer_id:int) -> void:
+	get_tree().get_multiplayer().multiplayer_peer.disconnect_peer(peer_id)
+
+
 @rpc("any_peer")
 func got_player_info_from_peer(player_info:Dictionary) -> void:
-	if !player_info.has("username"):
-		return
 	
 	var sender:int = multiplayer.get_remote_sender_id()
 	
-	if !players.has(sender):
-		players[sender] = create_new_player_info()
+	if !player_info.has("username") and !player_info.has("color") and !player_info.has("hat"):
+		kick_player(sender)
+		return
 	
-	players[sender]["username"] = player_info["username"]
+	if !players.has(sender):
+		players[sender] = create_new_player_info(player_info["username"], player_info["hat"], player_info["color"])
 	
 	send_player_list_to_clients()
 	player_list_updated.emit()
@@ -94,14 +101,45 @@ func got_player_list_from_server(_players:Dictionary) -> void:
 func synchronize_node_unreliable(node_path:String, node_data:Dictionary, should_print_error:bool=false):
 	
 	var node = get_node_or_null(node_path)
+	var my_peer_id:int = get_tree().get_multiplayer().multiplayer_peer.get_unique_id()
 	
 	if is_instance_valid(node):
+		
 		if node.has_method("_synchronize_unreliable"):
 			node._synchronize_unreliable(node_data)
+		
 		elif should_print_error:
-			printerr("peer ", get_tree().get_multiplayer().multiplayer_peer.get_unique_id(), " could not sync node: ", node_path)
+			printerr("peer ", my_peer_id, " could not sync node: ", node_path)
+	
 	elif should_print_error:
-		printerr("peer ", get_tree().get_multiplayer().multiplayer_peer.get_unique_id(), " could not find node: ", node_path)
+		printerr("peer ", my_peer_id, " could not find node: ", node_path)
 
 
+func refuse_new_connections():
+	multiplayer.multiplayer_peer.refuse_new_connections = true
 
+
+func allow_new_connections():
+	multiplayer.multiplayer_peer.refuse_new_connections = false
+
+
+func spawn_player(peer_id:int, parent_node:Node, spawn_position:Vector2, is_local:bool = false) -> Node:
+	var player_node = preload("res://scenes/player/player.tscn").instantiate()
+	
+	player_node.local_player = is_local
+	player_node.peer_id = peer_id
+	player_node.name = str("player_", peer_id)
+	player_node.position = spawn_position
+	
+	parent_node.add_child(player_node)
+	player_node.set_username(Network.players[peer_id].username)
+	player_node.set_color(Network.players[peer_id].color)
+	player_node.set_hat(Network.players[peer_id].hat)
+	
+	if is_local:
+		var camera = Camera2D.new()
+		player_node.camera_node = camera
+		player_node.add_child(camera)
+		camera.make_current()
+	
+	return player_node

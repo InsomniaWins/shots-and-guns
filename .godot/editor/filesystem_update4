@@ -1,6 +1,17 @@
+res://scenes/levels/level.tscn
+res://shaders/sprite_outline.gdshader
+res://scenes/levels/level.gd
 res://scenes/main/main.tscn
 res://scenes/titlescreen/titlescreen.tscn
 res://scenes/join_screen/join_screen.tscn
 res://scenes/host_screen/host_screen.tscn
 res://scenes/lobby/lobby.tscn
 res://scenes/player/player.tscn
+res://autoload/scene_manager.gd
+res://scenes/lobby/lobby.gd
+res://autoload/network.gd
+res://scenes/player/player.gd
+res://scenes/titlescreen/titlescreen.gd
+res://scenes/vertical_button_menu/vertical_button_menu.tscn
+res://scenes/vertical_button_menu/vertical_button_menu.gd
+res://scenes/join_screen/join_screen.gd

@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3 uid="uid://duaa42vwqvo0k"]
+
+[ext_resource type="Script" path="res://scenes/vertical_button_menu/vertical_button_menu.gd" id="1_hr3at"]
+[ext_resource type="FontFile" uid="uid://bhvepy8hqrp7p" path="res://fonts/normal/normal.png" id="2_e0stw"]
+
+[node name="VerticalButtonMenu" type="Control" groups=["button_menu"]]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_hr3at")
+
+[node name="SelectionLabel" type="Label" parent="."]
+layout_mode = 1
+offset_left = -7.0
+offset_bottom = 12.0
+theme_override_fonts/font = ExtResource("2_e0stw")
+text = ">"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0

@@ -1,60 +1,174 @@
-[gd_scene load_steps=11 format=3 uid="uid://cylhp3m23ae8t"]
+[gd_scene load_steps=15 format=3 uid="uid://cylhp3m23ae8t"]
 
 [ext_resource type="Script" path="res://scenes/player/player.gd" id="1_esw1k"]
+[ext_resource type="Shader" path="res://shaders/sprite_outline.gdshader" id="2_fhlsj"]
 [ext_resource type="Texture2D" uid="uid://cxf6vbo13nsva" path="res://textures/entities/player/player.png" id="2_rnol4"]
+[ext_resource type="Texture2D" uid="uid://vuy3ijme7ks8" path="res://textures/entities/player/hats/yellow_dog.png" id="3_0bkh4"]
 [ext_resource type="FontFile" uid="uid://bhvepy8hqrp7p" path="res://fonts/normal/normal.png" id="3_lmcf5"]
 [ext_resource type="Texture2D" uid="uid://dnwr7vktqrbu1" path="res://textures/entities/player/nameplate_ninepatch.png" id="4_ed3bs"]
 [ext_resource type="Texture2D" uid="uid://njagl4vf4qqn" path="res://textures/entities/player/nameplate_arrow.png" id="5_rybmr"]
+[ext_resource type="Texture2D" uid="uid://c1lfr7oe1i5gr" path="res://textures/entities/player/aim_arrow.png" id="8_wp4i1"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_xo1f6"]
-atlas = ExtResource("2_rnol4")
-region = Rect2(0, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_mqx7r"]
-atlas = ExtResource("2_rnol4")
-region = Rect2(0, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_w2ikb"]
-atlas = ExtResource("2_rnol4")
-region = Rect2(16, 0, 16, 16)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_4o1ym"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_xo1f6")
-}],
-"loop": true,
-"name": &"idle",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_mqx7r")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_w2ikb")
-}],
-"loop": true,
-"name": &"walk",
-"speed": 15.0
-}]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lo8ta"]
+shader = ExtResource("2_fhlsj")
+shader_parameter/tint_color = Color(1, 1, 1, 1)
+shader_parameter/color = Color(0.129412, 1, 0.137255, 1)
+shader_parameter/width = 1.0
+shader_parameter/pattern = 0
+shader_parameter/inside = false
+shader_parameter/add_margins = false
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_yrwfv"]
-size = Vector2(6, 4)
+size = Vector2(8, 6)
+
+[sub_resource type="Animation" id="Animation_ovpua"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("FacingScaler/Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("FacingScaler/Sprite:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("FacingScaler/Sprite/Hat:offset")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_knomg"]
+resource_name = "idle"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("FacingScaler/Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("FacingScaler/Sprite:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("FacingScaler/Sprite/Hat:offset")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_ruarp"]
+resource_name = "walk"
+length = 0.2
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("FacingScaler/Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [0, 1]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("FacingScaler/Sprite:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(-2, -2),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.25, 0.75)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("FacingScaler/Sprite/Hat:offset")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(0, 0),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_y6nrn"]
+_data = {
+"RESET": SubResource("Animation_ovpua"),
+"idle": SubResource("Animation_knomg"),
+"walk": SubResource("Animation_ruarp")
+}
 
 [node name="Player" type="CharacterBody2D"]
 collision_layer = 2
 motion_mode = 1
 script = ExtResource("1_esw1k")
 
-[node name="Sprite" type="AnimatedSprite2D" parent="."]
-sprite_frames = SubResource("SpriteFrames_4o1ym")
-animation = &"walk"
-frame_progress = 0.262373
+[node name="FacingScaler" type="Node2D" parent="."]
+
+[node name="Sprite" type="Sprite2D" parent="FacingScaler"]
+material = SubResource("ShaderMaterial_lo8ta")
+position = Vector2(0, 7)
+texture = ExtResource("2_rnol4")
+offset = Vector2(0, -8)
+hframes = 4
+vframes = 4
+
+[node name="Hat" type="Sprite2D" parent="FacingScaler/Sprite"]
+position = Vector2(0, -16)
+texture = ExtResource("3_0bkh4")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, 5)
+position = Vector2(0, 4)
 shape = SubResource("RectangleShape2D_yrwfv")
 
 [node name="UsernameLabel" type="Label" parent="."]
@@ -79,7 +193,8 @@ anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = -3.0
-offset_right = 3.0
+offset_right = 4.0
+offset_bottom = 2.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("4_ed3bs")
@@ -94,8 +209,19 @@ anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -4.0
-offset_top = 11.0
+offset_top = 13.0
 offset_right = 4.0
-offset_bottom = 19.0
+offset_bottom = 21.0
 grow_horizontal = 2
 texture = ExtResource("5_rybmr")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_y6nrn")
+}
+
+[node name="AimArrowRotation" type="Node2D" parent="."]
+
+[node name="AimArrowSprite" type="Sprite2D" parent="AimArrowRotation"]
+position = Vector2(11, 0)
+texture = ExtResource("8_wp4i1")

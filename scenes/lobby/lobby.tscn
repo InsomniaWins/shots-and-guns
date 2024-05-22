@@ -27,7 +27,7 @@ script = ExtResource("1_1u523")
 [node name="Collision" type="StaticBody2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Collision"]
-position = Vector2(100, 326)
+position = Vector2(102, 320)
 shape = SubResource("WorldBoundaryShape2D_sub6h")
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="Collision"]
@@ -35,15 +35,18 @@ position = Vector2(0, 228)
 shape = SubResource("WorldBoundaryShape2D_bm2gw")
 
 [node name="CollisionShape2D3" type="CollisionShape2D" parent="Collision"]
-position = Vector2(378, 0)
+position = Vector2(258, 40)
 shape = SubResource("WorldBoundaryShape2D_xktci")
 
 [node name="CollisionShape2D4" type="CollisionShape2D" parent="Collision"]
-position = Vector2(518, 133)
+position = Vector2(512, 134)
 shape = SubResource("WorldBoundaryShape2D_lvn4f")
 
 [node name="Players" type="Node2D" parent="."]
 y_sort_enabled = true
+
+[node name="PlayerSpawnPoint" type="Node2D" parent="."]
+position = Vector2(258, 214)
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 1
@@ -66,6 +69,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Outline" type="NinePatchRect" parent="."]
+visible = false
 layout_mode = 2
 offset_left = 207.0
 offset_top = 55.0
@@ -78,6 +82,7 @@ patch_margin_right = 2
 patch_margin_bottom = 2
 
 [node name="PlayersLabel" type="Label" parent="."]
+visible = false
 texture_filter = 3
 layout_mode = 2
 offset_left = 208.0
@@ -100,6 +105,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -127,4 +133,18 @@ vertical_alignment = 1
 show_behind_parent = true
 layout_mode = 2
 
+[node name="StartButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -102.0
+offset_top = 8.0
+offset_right = -24.0
+offset_bottom = 28.0
+grow_horizontal = 0
+theme_override_fonts/font = ExtResource("2_8l7bb")
+text = "START GAME"
+
 [connection signal="resized" from="MarginContainer" to="." method="_on_margin_container_resized"]
+[connection signal="pressed" from="StartButton" to="." method="_on_start_button_pressed"]

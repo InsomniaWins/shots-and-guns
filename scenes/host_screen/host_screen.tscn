@@ -72,13 +72,6 @@ theme_override_fonts/font = ExtResource("2_ii6d6")
 text = "25565"
 placeholder_text = "PORT"
 
-[node name="UsernameEdit" type="LineEdit" parent="VBoxContainer"]
-custom_minimum_size = Vector2(0, 20)
-layout_mode = 2
-theme_override_fonts/font = ExtResource("2_ii6d6")
-placeholder_text = "USERNAME"
-max_length = 16
-
 [node name="HostButton" type="Button" parent="VBoxContainer"]
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2

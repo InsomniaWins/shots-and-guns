@@ -1,9 +1,13 @@
 extends Control
 
+
 @onready var margin_container_node:MarginContainer = $MarginContainer
 @onready var player_list_node:VBoxContainer = margin_container_node.get_node("PlayerList")
 @onready var outline_node:NinePatchRect = $Outline
 @onready var players_node = $Players
+@onready var player_spawn_point_node = $PlayerSpawnPoint
+@onready var start_button_node = $StartButton
+
 
 func _ready():
 	Network.player_list_updated.connect(_players_dictionary_updated)
@@ -13,7 +17,12 @@ func _ready():
 	
 	Network.player_joined.connect(server_on_player_joined)
 	Network.player_left.connect(server_on_player_left)
-
+	
+	if multiplayer.is_server():
+		start_button_node.visible = true
+		Network.allow_new_connections()
+	else:
+		start_button_node.visible = false
 
 func server_on_player_joined(peer_id):
 	spawn_player(peer_id)
@@ -32,23 +41,14 @@ func despawn_player(peer_id:int) -> void:
 
 
 func spawn_player(peer_id:int) -> void:
-	var player_node = preload("res://scenes/player/player.tscn").instantiate()
+	var player_node = Network.spawn_player(peer_id, players_node, player_spawn_point_node.position, peer_id == multiplayer.get_unique_id())
 	
-	player_node.peer_id = peer_id
-	player_node.name = str("player_", peer_id)
-	player_node.position = Vector2(100, 100)
-	
-	players_node.add_child(player_node)
-	player_node.set_username(Network.players[peer_id].username)
-	
-	if peer_id == multiplayer.get_unique_id():
-		var camera = Camera2D.new()
+	if player_node.is_local():
+		var camera = player_node.camera_node
 		camera.limit_left = 0
 		camera.limit_top = 0
 		camera.limit_right = size.x
 		camera.limit_bottom = size.y
-		player_node.add_child(camera)
-		camera.make_current()
 
 
 func _players_dictionary_updated():
@@ -86,4 +86,18 @@ func _on_margin_container_resized():
 	
 	outline_node.position = margin_container_node.position - Vector2(4,4)
 	outline_node.size = margin_container_node.size + Vector2(8,8)
+
+
+
+func _on_start_button_pressed():
+	
+	Network.refuse_new_connections()
+	
+	var next_scene_path:String = "res://scenes/levels/level.tscn"
+	SceneManager.server_change_scene(next_scene_path)
+	
+
+
+
+
 
