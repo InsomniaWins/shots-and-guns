@@ -1,6 +1,9 @@
-LineEdit
 Label
+NinePatchRect
+TextureRect
+GridContainer
 ColorRect
+LineEdit
 AnimationPlayer
 Timer
 VBoxContainer
@@ -9,6 +12,3 @@ Node2D
 TileMap
 Button
 ScrollContainer
-ColorPicker
-ColorPickerButton
-Control

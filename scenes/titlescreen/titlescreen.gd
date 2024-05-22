@@ -12,6 +12,7 @@ extends Control
 @onready var main_menu_node = $MainMenu
 @onready var character_editor_node = $CharacterEditor
 @onready var edit_character_menu_node = $CharacterEditor/EditCharacterMenu
+@onready var body_color_picker_node = $BodyColorPicker
 
 func _ready():
 	username_edit_node.text = Network.my_information.username
@@ -54,11 +55,6 @@ func add_swatches_to_color_picker(color_picker:ColorPicker) -> void:
 func update_hat_texture() -> void:
 	hat_sprite_node.texture = HatManager.get_hat_texture(Network.my_information.hat)
 	hat_name_label_node.text = "Hat: " + HatManager.get_hat_name(Network.my_information.hat)
-	body_sprite_node.material.set_shader_parameter("tint_color", Network.my_information.color)
-	
-	var outline_color = Color.WHITE - Network.my_information.color
-	outline_color.a = 1.0
-	body_sprite_node.material.set_shader_parameter("color", outline_color)
 
 func _on_host_button_pressed():
 	SceneManager.change_scene("res://scenes/host_screen/host_screen.tscn")
@@ -101,6 +97,7 @@ func _on_player_color_picker_color_changed(color):
 
 func _on_color_picker_okay_button_pressed():
 	player_color_picker_parent.visible = false
+	character_editor_node.edit_character_menu_node.activate()
 
 
 func _on_edit_player_color_button_pressed():
@@ -146,5 +143,30 @@ func _on_edit_character_menu_menu_selected():
 			character_editor_node.hat_edit_menu_node.visible = true
 			edit_character_menu_node.deactivate()
 			character_editor_node.hat_edit_menu_node.activate()
-		"COLOR":
-			pass
+		"BODY COLOR":
+			body_color_picker_node.visible = true
+			body_color_picker_node.activate()
+			edit_character_menu_node.deactivate()
+
+
+func _on_body_color_picker_menu_moved():
+	
+	var body_color:Color = Network.my_information.color
+	
+	var color_button = body_color_picker_node.get_selected_color_node()
+	if color_button is ColorRect:
+		body_color = color_button.color
+	
+	Network.my_information.color = body_color
+	
+	body_sprite_node.material.set_shader_parameter("tint_color", Network.my_information.color)
+	
+	var body_color_average:float = (body_color.r + body_color.g + body_color.b) / 3.0
+	var outline_color = Color.WHITE if body_color_average <= 0.5 else Color.BLACK
+	body_sprite_node.material.set_shader_parameter("color", outline_color)
+
+
+func _on_body_color_picker_menu_selected():
+	body_color_picker_node.visible = false
+	body_color_picker_node.deactivate()
+	edit_character_menu_node.activate()

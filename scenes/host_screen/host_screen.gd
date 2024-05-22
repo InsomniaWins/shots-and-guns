@@ -80,7 +80,7 @@ func _input(event):
 					return
 			
 			if editing_port:
-				current_port = current_port + key_string
+				current_port = str(current_port, key_string.to_int())
 			update_current_information()
 
 

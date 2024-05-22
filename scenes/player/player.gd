@@ -35,10 +35,12 @@ func _process(_delta):
 				"moving": moving,
 			})
 		
-		aim_direction = Vector2(
+		var axis_vector:Vector2 = Vector2(
 			Input.get_axis("aim_left", "aim_right"),
 			Input.get_axis("aim_up", "aim_down")
 		)
+		if axis_vector.x != 0 or axis_vector.y != 0:
+			aim_direction = axis_vector
 		aim_arrow_rotation_node.rotation = aim_direction.angle()
 		
 	

@@ -10,3 +10,9 @@ res://scenes/vertical_button_menu/vertical_button_menu.tscn
 res://scenes/titlescreen/titlescreen.gd
 res://scenes/vertical_button_menu/vertical_button_menu.gd
 res://scenes/titlescreen/character_editor.gd
+res://scenes/color_picker_menu/color_picker_menu.tscn
+res://scenes/color_picker_menu/color_picker_menu.gd
+res://scenes/join_screen/join_screen.gd
+res://scenes/host_screen/host_screen.gd
+res://scenes/player/player.gd
+res://scenes/levels/level.gd

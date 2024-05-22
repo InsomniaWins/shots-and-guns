@@ -12,6 +12,7 @@ func _rpc_network_ready():
 func _network_ready():
 	
 	for peer_id in Network.players:
-		Network.spawn_player(peer_id, players_node, Vector2.ZERO, peer_id == multiplayer.get_unique_id())
-	
+		var player = Network.spawn_player(peer_id, players_node, Vector2.ZERO, peer_id == multiplayer.get_unique_id())
+		var camera:Camera2D = player.camera_node
+		camera.enabled = false
 	
