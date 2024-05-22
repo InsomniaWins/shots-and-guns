@@ -24,6 +24,18 @@ func _ready():
 	update_selected_button_graphic()
 
 
+func _unhandled_input(event):
+	if active:
+		if event.is_action_pressed("aim_down") and !event.is_echo():
+			move_down()
+			get_viewport().set_input_as_handled()
+		elif event.is_action_pressed("aim_up") and !event.is_echo():
+			move_up()
+			get_viewport().set_input_as_handled()
+		elif event.is_action_pressed("select") and !event.is_echo():
+			select()
+			get_viewport().set_input_as_handled()
+
 func update_active_effect():
 	
 	
@@ -63,15 +75,6 @@ func update_labels() -> void:
 
 func select():
 	menu_selected.emit()
-
-func _process(delta):
-	if active:
-		if Input.is_action_just_pressed("aim_down"):
-			move_down()
-		elif Input.is_action_just_pressed("aim_up"):
-			move_up()
-		elif Input.is_action_just_pressed("select"):
-			select()
 
 
 func move(direction:int) -> void:

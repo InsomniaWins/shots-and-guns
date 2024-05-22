@@ -1,10 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://c1pstmk3bsdv8"]
+[gd_scene load_steps=9 format=3 uid="uid://c1pstmk3bsdv8"]
 
 [ext_resource type="Script" path="res://scenes/titlescreen/titlescreen.gd" id="1_vrurj"]
 [ext_resource type="FontFile" uid="uid://bhvepy8hqrp7p" path="res://fonts/normal/normal.png" id="2_grua3"]
 [ext_resource type="Texture2D" uid="uid://cxf6vbo13nsva" path="res://textures/entities/player/player.png" id="3_oxjnk"]
 [ext_resource type="Shader" path="res://shaders/sprite_outline.gdshader" id="3_qq2v1"]
 [ext_resource type="PackedScene" uid="uid://duaa42vwqvo0k" path="res://scenes/vertical_button_menu/vertical_button_menu.tscn" id="5_vtk78"]
+[ext_resource type="Script" path="res://scenes/titlescreen/character_editor.gd" id="6_j4asw"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_d7fkh"]
 shader = ExtResource("3_qq2v1")
@@ -301,6 +302,103 @@ grow_vertical = 2
 button_names = Array[String](["HOST GAME", "JOIN GAME", "EDIT CHARACTER", "QUIT"])
 active = true
 
+[node name="CharacterEditor" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.129412, 0.129412, 0.137255, 1)
+script = ExtResource("6_j4asw")
+
+[node name="Label" type="Label" parent="CharacterEditor"]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 120.0
+offset_bottom = 20.0
+theme_override_fonts/font = ExtResource("2_grua3")
+text = "CHARACTER EDITOR"
+
+[node name="UsernameLabel" type="Label" parent="CharacterEditor"]
+layout_mode = 0
+offset_left = 56.0
+offset_top = 48.0
+offset_right = 238.0
+offset_bottom = 60.0
+theme_override_fonts/font = ExtResource("2_grua3")
+text = "USERNAME: "
+
+[node name="HatLabel" type="Label" parent="CharacterEditor"]
+layout_mode = 0
+offset_left = 56.0
+offset_top = 64.0
+offset_right = 238.0
+offset_bottom = 76.0
+theme_override_fonts/font = ExtResource("2_grua3")
+text = "HAT: NONE"
+
+[node name="EditCharacterMenu" parent="CharacterEditor" instance=ExtResource("5_vtk78")]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 16.0
+offset_top = -50.0
+offset_right = 116.0
+offset_bottom = 50.0
+grow_vertical = 2
+button_names = Array[String](["BACK", "USERNAME", "HAT", "BODY COLOR"])
+
+[node name="UsernameEdit" type="LineEdit" parent="CharacterEditor"]
+layout_mode = 0
+offset_left = 120.0
+offset_top = 44.0
+offset_right = 276.0
+offset_bottom = 64.0
+mouse_filter = 2
+theme_override_fonts/font = ExtResource("2_grua3")
+text = "Insomnia_Wins"
+
+[node name="HatEditMenu" parent="CharacterEditor" instance=ExtResource("5_vtk78")]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.0
+offset_top = -50.0
+offset_right = 50.0
+offset_bottom = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+button_names = Array[String](["BACK", "NEXT HAT", "PREVIOUS HAT", "REMOVE HAT"])
+
+[node name="Character" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -80.0
+offset_right = -80.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="Body" type="Sprite2D" parent="Character"]
+material = SubResource("ShaderMaterial_d7fkh")
+scale = Vector2(5, 5)
+texture = ExtResource("3_oxjnk")
+hframes = 4
+vframes = 4
+
+[node name="Hat" type="Sprite2D" parent="Character/Body"]
+position = Vector2(0, -8)
+
 [connection signal="text_changed" from="HBoxContainer/CharacterEditor/UsernameEdit" to="." method="_on_username_edit_text_changed"]
 [connection signal="pressed" from="HBoxContainer/CharacterEditor/HatButtons/DecrementHat" to="." method="_on_decrement_hat_pressed"]
 [connection signal="pressed" from="HBoxContainer/CharacterEditor/HatButtons/RemoveHat" to="." method="_on_remove_hat_pressed"]
@@ -312,3 +410,7 @@ active = true
 [connection signal="pressed" from="PlayerColorEditor/ColorPickerOkayButton" to="." method="_on_color_picker_okay_button_pressed"]
 [connection signal="pressed" from="MessagePanel/CloseMessagePanelButton" to="." method="_on_close_message_panel_button_pressed"]
 [connection signal="menu_selected" from="MainMenu" to="." method="_on_main_menu_menu_selected"]
+[connection signal="menu_selected" from="CharacterEditor/EditCharacterMenu" to="." method="_on_edit_character_menu_menu_selected"]
+[connection signal="focus_exited" from="CharacterEditor/UsernameEdit" to="CharacterEditor" method="_on_username_edit_focus_exited"]
+[connection signal="text_submitted" from="CharacterEditor/UsernameEdit" to="CharacterEditor" method="_on_username_edit_text_submitted"]
+[connection signal="menu_selected" from="CharacterEditor/HatEditMenu" to="CharacterEditor" method="_on_hat_edit_menu_menu_selected"]

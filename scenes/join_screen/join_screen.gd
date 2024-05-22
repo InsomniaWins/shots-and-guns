@@ -135,6 +135,6 @@ func _on_main_menu_menu_selected():
 			main_menu_node.deactivate()
 		"JOIN":
 			main_menu_node.deactivate()
-			_join_server(current_ip, int(current_port), Network.my_information.username)
+			_join_server(current_ip, current_port.to_int(), Network.my_information.username)
 		"BACK":
 			SceneManager.change_scene("res://scenes/titlescreen/titlescreen.tscn")

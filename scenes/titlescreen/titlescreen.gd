@@ -3,14 +3,15 @@ extends Control
 
 @onready var message_panel_node:Control = $MessagePanel
 @onready var username_edit_node:LineEdit = $HBoxContainer/CharacterEditor/UsernameEdit
-@onready var hat_sprite_node:Sprite2D = $HBoxContainer/CharacterEditor/Character/Body/Hat
+@onready var hat_sprite_node:Sprite2D = $Character/Body/Hat
 @onready var hat_name_label_node:Label = $HBoxContainer/CharacterEditor/HatNameLabel
 @onready var player_color_picker_node:ColorPicker = $PlayerColorEditor/ScrollContainer/PlayerColorPicker
 @onready var player_color_picker_parent:ColorRect = $PlayerColorEditor
-@onready var body_sprite_node:Sprite2D = $HBoxContainer/CharacterEditor/Character/Body
+@onready var body_sprite_node:Sprite2D = $Character/Body
 
 @onready var main_menu_node = $MainMenu
-
+@onready var character_editor_node = $CharacterEditor
+@onready var edit_character_menu_node = $CharacterEditor/EditCharacterMenu
 
 func _ready():
 	username_edit_node.text = Network.my_information.username
@@ -121,9 +122,29 @@ func _on_main_menu_menu_selected():
 		"JOIN GAME":
 			SceneManager.change_scene("res://scenes/join_screen/join_screen.tscn")
 		
-		"EDIT_CHARACTER":
-			pass
+		"EDIT CHARACTER":
+			character_editor_node.visible = true
+			main_menu_node.deactivate()
+			edit_character_menu_node.activate()
 		
 		"QUIT":
 			get_tree().quit()
 	
+
+
+func _on_edit_character_menu_menu_selected():
+	var button_name = edit_character_menu_node.button_names[edit_character_menu_node.selected_button_index]
+	match button_name:
+		"BACK":
+			edit_character_menu_node.deactivate()
+			main_menu_node.activate()
+			character_editor_node.visible = false
+		"USERNAME":
+			$CharacterEditor/UsernameEdit.grab_focus()
+			edit_character_menu_node.deactivate()
+		"HAT":
+			character_editor_node.hat_edit_menu_node.visible = true
+			edit_character_menu_node.deactivate()
+			character_editor_node.hat_edit_menu_node.activate()
+		"COLOR":
+			pass
