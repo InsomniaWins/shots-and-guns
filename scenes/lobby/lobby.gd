@@ -42,13 +42,6 @@ func despawn_player(peer_id:int) -> void:
 
 func spawn_player(peer_id:int) -> void:
 	var player_node = Network.spawn_player(peer_id, players_node, player_spawn_point_node.position, peer_id == multiplayer.get_unique_id())
-	
-	if player_node.is_local():
-		var camera = player_node.camera_node
-		camera.limit_left = 0
-		camera.limit_top = 0
-		camera.limit_right = size.x
-		camera.limit_bottom = size.y
 
 
 func _players_dictionary_updated():

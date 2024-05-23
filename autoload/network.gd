@@ -7,6 +7,7 @@ signal player_left(peer_id)
 var my_information = create_new_player_info("default_username", HatManager.Hats.NONE, Color.WHITE)
 var players:Dictionary = {}
 
+var entity_counter:int = 0
 
 func _ready():
 	multiplayer.server_disconnected.connect(server_disconnected)
@@ -123,6 +124,29 @@ func allow_new_connections():
 	multiplayer.multiplayer_peer.refuse_new_connections = false
 
 
+@rpc("authority", "call_local")
+func create_entity(entity_path:String, entity_name:String, parent_node_path:NodePath, data:Dictionary = {}):
+	var entity = load(entity_path).instantiate()
+	
+	entity.name = entity_name
+	
+	if entity.has_method("set_entity_data"):
+		entity.set_entity_data(data)
+	
+	get_node(parent_node_path).add_child(entity)
+	
+	entity_counter += 1
+
+
+@rpc("authority", "call_local")
+func free_entity(entity_node_path:NodePath):
+	
+	var entity = get_node_or_null(entity_node_path)
+	
+	if is_instance_valid(entity):
+		entity.queue_free()
+
+
 func spawn_player(peer_id:int, parent_node:Node, spawn_position:Vector2, is_local:bool = false) -> Node:
 	var player_node = preload("res://scenes/player/player.tscn").instantiate()
 	
@@ -135,11 +159,5 @@ func spawn_player(peer_id:int, parent_node:Node, spawn_position:Vector2, is_loca
 	player_node.set_username(Network.players[peer_id].username)
 	player_node.set_color(Network.players[peer_id].color)
 	player_node.set_hat(Network.players[peer_id].hat)
-	
-	if is_local:
-		var camera = Camera2D.new()
-		player_node.camera_node = camera
-		player_node.add_child(camera)
-		camera.make_current()
 	
 	return player_node

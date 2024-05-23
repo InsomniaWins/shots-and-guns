@@ -253,6 +253,22 @@ grow_vertical = 2
 button_names = Array[String](["HOST GAME", "JOIN GAME", "EDIT CHARACTER", "QUIT"])
 active = true
 
+[node name="TitleLabel" type="Label" parent="MainMenu"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -35.0
+offset_top = -56.0
+offset_right = 35.0
+offset_bottom = -44.0
+grow_horizontal = 2
+theme_override_fonts/font = ExtResource("2_grua3")
+theme_override_font_sizes/font_size = 18
+text = "Shots Guns"
+horizontal_alignment = 1
+vertical_alignment = 2
+
 [node name="CharacterEditor" type="ColorRect" parent="."]
 visible = false
 layout_mode = 1

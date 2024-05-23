@@ -1,13 +1,20 @@
-[gd_scene load_steps=15 format=3 uid="uid://cylhp3m23ae8t"]
+[gd_scene load_steps=32 format=3 uid="uid://cylhp3m23ae8t"]
 
 [ext_resource type="Script" path="res://scenes/player/player.gd" id="1_esw1k"]
 [ext_resource type="Shader" path="res://shaders/sprite_outline.gdshader" id="2_fhlsj"]
 [ext_resource type="Texture2D" uid="uid://cxf6vbo13nsva" path="res://textures/entities/player/player.png" id="2_rnol4"]
+[ext_resource type="Script" path="res://scenes/player/health_manager.gd" id="2_swqtb"]
 [ext_resource type="Texture2D" uid="uid://vuy3ijme7ks8" path="res://textures/entities/player/hats/yellow_dog.png" id="3_0bkh4"]
+[ext_resource type="Script" path="res://scenes/player/ammo_manager.gd" id="3_1o33k"]
 [ext_resource type="FontFile" uid="uid://bhvepy8hqrp7p" path="res://fonts/normal/normal.png" id="3_lmcf5"]
 [ext_resource type="Texture2D" uid="uid://dnwr7vktqrbu1" path="res://textures/entities/player/nameplate_ninepatch.png" id="4_ed3bs"]
 [ext_resource type="Texture2D" uid="uid://njagl4vf4qqn" path="res://textures/entities/player/nameplate_arrow.png" id="5_rybmr"]
 [ext_resource type="Texture2D" uid="uid://c1lfr7oe1i5gr" path="res://textures/entities/player/aim_arrow.png" id="8_wp4i1"]
+[ext_resource type="Script" path="res://scenes/player/status_bar.gd" id="9_dyjj4"]
+[ext_resource type="Texture2D" uid="uid://bkxi2dkpj7j41" path="res://textures/gui/health_indicator_full.png" id="9_vwq3s"]
+[ext_resource type="Texture2D" uid="uid://jtatwv2ri5bh" path="res://textures/gui/ammo_indicator_full.png" id="12_ijtbc"]
+[ext_resource type="Texture2D" uid="uid://dh4we0fn177h8" path="res://textures/gui/stamina_bar_back.png" id="13_ba5ku"]
+[ext_resource type="Texture2D" uid="uid://cnd8boqab3y5q" path="res://textures/gui/stamina_bar_front.png" id="14_1gkjs"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_lo8ta"]
 shader = ExtResource("2_fhlsj")
@@ -148,10 +155,66 @@ _data = {
 "walk": SubResource("Animation_ruarp")
 }
 
-[node name="Player" type="CharacterBody2D"]
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_i12mq"]
+particles_animation = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="Curve" id="Curve_7j7di"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_xxc6k"]
+curve = SubResource("Curve_7j7di")
+
+[sub_resource type="Curve" id="Curve_dqyxv"]
+min_value = -360.0
+max_value = 360.0
+_data = [Vector2(0, 360), 0.0, 0.0, 0, 0, Vector2(1, -360), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_n0tsi"]
+curve = SubResource("Curve_dqyxv")
+
+[sub_resource type="Curve" id="Curve_1dye0"]
+max_value = 200.0
+_data = [Vector2(0, 200), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_yj6vv"]
+curve = SubResource("Curve_1dye0")
+
+[sub_resource type="Curve" id="Curve_g3lkw"]
+max_value = 4.0
+_data = [Vector2(0, 0.480365), 0.0, 0.0, 0, 0, Vector2(1, 4), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_spw8k"]
+curve = SubResource("Curve_g3lkw")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_5mvie"]
+particle_flag_disable_z = true
+angle_max = 720.0
+angle_curve = SubResource("CurveTexture_n0tsi")
+spread = 180.0
+initial_velocity_min = 30.0
+initial_velocity_max = 100.0
+gravity = Vector3(0, 0, 0)
+scale_curve = SubResource("CurveTexture_spw8k")
+alpha_curve = SubResource("CurveTexture_xxc6k")
+anim_speed_curve = SubResource("CurveTexture_yj6vv")
+
+[node name="Player" type="CharacterBody2D" groups=["player"]]
 collision_layer = 2
 motion_mode = 1
 script = ExtResource("1_esw1k")
+
+[node name="HealthManager" type="Node" parent="."]
+script = ExtResource("2_swqtb")
+
+[node name="AmmoManager" type="Node" parent="."]
+script = ExtResource("3_1o33k")
 
 [node name="FacingScaler" type="Node2D" parent="."]
 
@@ -225,3 +288,130 @@ libraries = {
 [node name="AimArrowSprite" type="Sprite2D" parent="AimArrowRotation"]
 position = Vector2(11, 0)
 texture = ExtResource("8_wp4i1")
+
+[node name="DashTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="DashParticles" type="GPUParticles2D" parent="."]
+material = SubResource("CanvasItemMaterial_i12mq")
+emitting = false
+amount = 32
+process_material = SubResource("ParticleProcessMaterial_5mvie")
+lifetime = 0.25
+one_shot = true
+explosiveness = 0.2
+
+[node name="GUI" type="CanvasLayer" parent="."]
+
+[node name="StatusBar" type="ColorRect" parent="GUI"]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -40.0
+grow_horizontal = 2
+grow_vertical = 0
+color = Color(0.129412, 0.129412, 0.137255, 1)
+script = ExtResource("9_dyjj4")
+
+[node name="StaminaBar" type="TextureProgressBar" parent="GUI/StatusBar"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -34.0
+offset_top = -42.0
+offset_right = 34.0
+offset_bottom = -37.0
+grow_horizontal = 2
+grow_vertical = 0
+max_value = 1.0
+step = 0.0
+value = 1.0
+texture_under = ExtResource("13_ba5ku")
+texture_progress = ExtResource("14_1gkjs")
+texture_progress_offset = Vector2(1, 1)
+
+[node name="Stats" type="VBoxContainer" parent="GUI/StatusBar"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -34.0
+offset_top = -38.0
+offset_right = 34.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 2
+alignment = 1
+
+[node name="Hearts" type="HBoxContainer" parent="GUI/StatusBar/Stats"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 1
+
+[node name="0" type="TextureRect" parent="GUI/StatusBar/Stats/Hearts"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("9_vwq3s")
+
+[node name="1" type="TextureRect" parent="GUI/StatusBar/Stats/Hearts"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("9_vwq3s")
+
+[node name="2" type="TextureRect" parent="GUI/StatusBar/Stats/Hearts"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("9_vwq3s")
+
+[node name="Ammo" type="HBoxContainer" parent="GUI/StatusBar/Stats"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 1
+
+[node name="0" type="TextureRect" parent="GUI/StatusBar/Stats/Ammo"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("12_ijtbc")
+
+[node name="1" type="TextureRect" parent="GUI/StatusBar/Stats/Ammo"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("12_ijtbc")
+
+[node name="2" type="TextureRect" parent="GUI/StatusBar/Stats/Ammo"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("12_ijtbc")
+
+[node name="3" type="TextureRect" parent="GUI/StatusBar/Stats/Ammo"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("12_ijtbc")
+
+[node name="4" type="TextureRect" parent="GUI/StatusBar/Stats/Ammo"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("12_ijtbc")
+
+[node name="5" type="TextureRect" parent="GUI/StatusBar/Stats/Ammo"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("12_ijtbc")
+
+[connection signal="timeout" from="DashTimer" to="." method="_on_dash_timer_timeout"]

@@ -1,6 +1,6 @@
 extends Control
 
-var current_ip:String = "192.168.1.1"
+var current_ip:String = "LOCALHOST"
 var current_port:String = "25565"
 var editing_ip = false
 var editing_port = false

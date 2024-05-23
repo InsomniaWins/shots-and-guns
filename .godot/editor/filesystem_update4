@@ -16,3 +16,15 @@ res://scenes/join_screen/join_screen.gd
 res://scenes/host_screen/host_screen.gd
 res://scenes/player/player.gd
 res://scenes/levels/level.gd
+res://scenes/main/main.gd
+res://scenes/player/status_bar.gd
+res://scenes/player/health_manager.gd
+res://scenes/ammo_pickup/ammo_pickup.tscn
+res://scenes/ammo_pickup/ammo_pickup.gd
+res://autoload/network.gd
+res://scenes/player/ammo_manager.gd
+res://scenes/bullet_line/bullet_line.tscn
+res://scenes/bullet_line/bullet_line.gd
+res://scenes/bullet/bullet.tscn
+res://scenes/bullet/bullet.gd
+res://scenes/lobby/lobby.gd

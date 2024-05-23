@@ -1,5 +1,10 @@
 extends CharacterBody2D
 
+const BulletLine = preload("res://scenes/bullet_line/bullet_line.tscn")
+
+const WALK_SPEED:float = 100.0
+const DASH_SPEED:float = 250.0
+
 var peer_id:int = 1:
 	set(id):
 		peer_id = id
@@ -10,30 +15,44 @@ var peer_id:int = 1:
 		set_multiplayer_authority(peer_id)
 
 var local_player:bool = false
-var move_speed:float = 100.0
+var move_speed:float = WALK_SPEED
 var moving:bool = false
 var facing_direction:int = 1
 var camera_node:Camera2D = null
 var aim_direction:Vector2 = Vector2.RIGHT
 
+@onready var gui_node = $GUI
 @onready var animation_player_node = $AnimationPlayer
 @onready var facing_scaler_node = $FacingScaler
 @onready var aim_arrow_rotation_node = $AimArrowRotation
-
+@onready var dash_timer_node = $DashTimer
+@onready var dash_particles_node = $DashParticles
+@onready var stamina_bar_node = $GUI/StatusBar/StaminaBar
+@onready var ammo_manager_node = $AmmoManager
+@onready var health_manager_node = $HealthManager
 
 func _ready():
 	aim_arrow_rotation_node.visible = is_local()
+	gui_node.visible = is_local()
+
+@rpc("authority", "call_local")
+func emit_dash_particles():
+	dash_particles_node.emitting = true
 
 
-func _process(_delta):
+func _process(delta):
+	
 	
 	if is_local():
-		if is_online():
-			Network.synchronize_node_unreliable.rpc(get_path(), {
-				"position": position,
-				"facing_direction": facing_direction,
-				"moving": moving,
-			})
+		
+		move_speed = move_toward(move_speed, WALK_SPEED, delta * 150)
+		if Input.is_action_just_pressed("dash"):
+			if dash_timer_node.is_stopped():
+				emit_dash_particles.rpc()
+				move_speed = DASH_SPEED
+				dash_timer_node.start()
+		
+		stamina_bar_node.value = 1.0 - (dash_timer_node.time_left / dash_timer_node.wait_time)
 		
 		var axis_vector:Vector2 = Vector2(
 			Input.get_axis("aim_left", "aim_right"),
@@ -43,8 +62,58 @@ func _process(_delta):
 			aim_direction = axis_vector
 		aim_arrow_rotation_node.rotation = aim_direction.angle()
 		
+		
+		if Input.is_action_just_pressed("shoot"):
+			shoot.rpc(aim_direction)
+		
+		
+		if is_online():
+			Network.synchronize_node_unreliable.rpc(get_path(), {
+				"position": position,
+				"facing_direction": facing_direction,
+				"moving": moving,
+			})
 	
 	_handle_sprite_animations()
+
+
+@rpc("authority", "call_local")
+func shoot(direction:Vector2):
+	
+	if ammo_manager_node.get_ammo() <= 0:
+		return
+	
+	var shoot_directions = [direction.rotated(-PI * 0.1), direction, direction.rotated(PI * 0.1)]
+	for shoot_direction in shoot_directions:
+		
+		shoot_direction = shoot_direction.normalized()
+		
+		# shoot effect
+		var bullet_line = BulletLine.instantiate()
+		bullet_line.add_point(position)
+		bullet_line.add_point(position + shoot_direction * 100)
+		
+		get_parent().add_child(bullet_line)
+	
+	var current_scene = SceneManager.get_current_scene()
+	if current_scene is Level:
+		current_scene.shake_camera(3, 0.1)
+	
+	
+	if multiplayer.is_server():
+		if ammo_manager_node.get_ammo() > 0:
+			ammo_manager_node.remove_ammo()
+			create_bullet_entity(direction)
+	
+
+
+# called on server ONLY
+func create_bullet_entity(direction:Vector2):
+	Network.create_entity.rpc("res://scenes/bullet/bullet.tscn", str("bullet_e", Network.entity_counter), get_parent().get_path(), {
+		"position": position,
+		"rotation": direction.angle(),
+		"shooter": peer_id
+	})
 
 
 func is_local():
@@ -97,7 +166,7 @@ func _handle_sprite_animations() -> void:
 
 
 func _physics_process(_delta):
-	if get_multiplayer_authority() == multiplayer.get_unique_id():
+	if is_local():
 		var move_direction = Vector2(
 			Input.get_axis("move_left", "move_right"),
 			Input.get_axis("move_up", "move_down")
@@ -110,3 +179,7 @@ func _physics_process(_delta):
 			facing_direction = sign(velocity.x)
 		
 		move_and_slide()
+
+
+func _on_dash_timer_timeout():
+	move_speed = WALK_SPEED

@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://d2dgv15xtau3l"]
+
+[ext_resource type="Script" path="res://scenes/bullet_line/bullet_line.gd" id="1_40wyn"]
+
+[sub_resource type="Curve" id="Curve_652au"]
+_data = [Vector2(0, 0.227491), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[node name="BulletLine" type="Line2D"]
+width = 6.0
+width_curve = SubResource("Curve_652au")
+begin_cap_mode = 2
+end_cap_mode = 2
+script = ExtResource("1_40wyn")

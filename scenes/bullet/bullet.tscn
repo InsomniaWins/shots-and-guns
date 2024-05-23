@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://c47wvkr76ghfr"]
+
+[ext_resource type="Script" path="res://scenes/bullet/bullet.gd" id="1_b34i2"]
+[ext_resource type="Texture2D" uid="uid://bdpkjhh1ujykm" path="res://textures/entities/bullet/bullet.png" id="2_43iex"]
+
+[sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_chqcm"]
+points = PackedVector2Array(-5, -3, 3, -3, 5, -2, 5, 2, 3, 3, -5, 3)
+
+[node name="Bullet" type="Node2D"]
+script = ExtResource("1_b34i2")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_43iex")
+
+[node name="ShapeCast2D" type="ShapeCast2D" parent="."]
+shape = SubResource("ConvexPolygonShape2D_chqcm")
+target_position = Vector2(100, 0)
+collision_mask = 3
