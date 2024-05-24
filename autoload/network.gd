@@ -8,6 +8,7 @@ var my_information = create_new_player_info("default_username", HatManager.Hats.
 var players:Dictionary = {}
 
 var entity_counter:int = 0
+var show_server_closed_message:bool = true
 
 func _ready():
 	multiplayer.server_disconnected.connect(server_disconnected)
@@ -19,15 +20,25 @@ func clear_player_list():
 	players.clear()
 
 
+func leave_game() -> void:
+	show_server_closed_message = false
+	multiplayer.multiplayer_peer.close()
+
+
 func server_disconnected() -> void:
 	clear_player_list()
 	
 	SceneManager.change_scene("res://scenes/titlescreen/titlescreen.tscn")
 	
-	await SceneManager.changed_scene
 	
-	var title_scene = SceneManager.get_current_scene()
-	title_scene.show_message("Server Closed")
+	if show_server_closed_message:
+		await SceneManager.changed_scene
+		
+		var title_scene = SceneManager.get_current_scene()
+		title_scene.show_message("Server Closed")
+		
+	else:
+		show_server_closed_message = true
 
 
 func peer_connected(_peer_id:int) -> void:
@@ -161,3 +172,10 @@ func spawn_player(peer_id:int, parent_node:Node, spawn_position:Vector2, is_loca
 	player_node.set_hat(Network.players[peer_id].hat)
 	
 	return player_node
+
+
+func is_online() -> bool:
+	return multiplayer.multiplayer_peer.get_connection_status() == ENetMultiplayerPeer.CONNECTION_CONNECTED
+
+
+

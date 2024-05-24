@@ -11,7 +11,7 @@ const EMPTY_AMMO_TEXTURE:Texture = preload("res://textures/gui/ammo_indicator_em
 @onready var ammo_manager_node:Node = $"../../AmmoManager"
 @onready var hearts_hbox_node:HBoxContainer = $Stats/Hearts
 @onready var ammo_hbox_node:HBoxContainer = $Stats/Ammo
-
+@onready var mini_health_indicator_node:HBoxContainer = $"../../UsernameLabel/HealthIndicator"
 
 func update_ammo_indicator():
 	
@@ -38,6 +38,8 @@ func update_health_indicator():
 		var indicator_texture_node:TextureRect = hearts_hbox_node.get_child(i)
 		
 		if i < health_manager_node.get_health():
+			mini_health_indicator_node.get_child(i).visible = true
 			indicator_texture_node.texture = FULL_HEART_TEXTURE
 		else:
+			mini_health_indicator_node.get_child(i).visible = false
 			indicator_texture_node.texture = EMPTY_HEART_TEXTURE

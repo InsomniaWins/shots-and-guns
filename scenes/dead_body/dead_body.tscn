@@ -1,0 +1,36 @@
+[gd_scene load_steps=6 format=3 uid="uid://c5cek2iumpbf"]
+
+[ext_resource type="Script" path="res://scenes/dead_body/dead_body.gd" id="1_88s0t"]
+[ext_resource type="Texture2D" uid="uid://cxf6vbo13nsva" path="res://textures/entities/player/player.png" id="2_5uc4s"]
+[ext_resource type="Texture2D" uid="uid://bm3owyg1wk1lm" path="res://textures/entities/blood_splatter.png" id="2_tkmnu"]
+[ext_resource type="Shader" path="res://shaders/sprite_outline.gdshader" id="2_tq4fr"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cregn"]
+shader = ExtResource("2_tq4fr")
+shader_parameter/tint_color = Color(1, 1, 1, 1)
+shader_parameter/color = Color(1, 1, 1, 1)
+shader_parameter/width = 1.0
+shader_parameter/pattern = 0
+shader_parameter/inside = false
+shader_parameter/add_margins = false
+
+[node name="DeadBody" type="Node2D"]
+y_sort_enabled = true
+script = ExtResource("1_88s0t")
+
+[node name="BloodSplatter" type="Sprite2D" parent="."]
+show_behind_parent = true
+position = Vector2(0, -21)
+texture = ExtResource("2_tkmnu")
+offset = Vector2(0, 16)
+
+[node name="Body" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_cregn")
+position = Vector2(0, -4)
+rotation = -1.5708
+texture = ExtResource("2_5uc4s")
+hframes = 4
+vframes = 4
+
+[node name="Hat" type="Sprite2D" parent="Body"]
+position = Vector2(0, -8)

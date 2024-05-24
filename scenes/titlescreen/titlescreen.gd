@@ -17,6 +17,7 @@ extends Control
 func _ready():
 	username_edit_node.text = Network.my_information.username
 	update_hat_texture()
+	update_body_color()
 	add_swatches_to_color_picker(player_color_picker_node)
 
 
@@ -70,6 +71,9 @@ func show_message(message:String) -> void:
 
 
 func _on_close_message_panel_button_pressed():
+	hide_message()
+
+func hide_message() -> void:
 	message_panel_node.visible = false
 
 
@@ -159,9 +163,13 @@ func _on_body_color_picker_menu_moved():
 	
 	Network.my_information.color = body_color
 	
+	update_body_color()
+
+func update_body_color():
+	
 	body_sprite_node.material.set_shader_parameter("tint_color", Network.my_information.color)
 	
-	var body_color_average:float = (body_color.r + body_color.g + body_color.b) / 3.0
+	var body_color_average:float = (Network.my_information.color.r + Network.my_information.color.g + Network.my_information.color.b) / 3.0
 	var outline_color = Color.WHITE if body_color_average <= 0.5 else Color.BLACK
 	body_sprite_node.material.set_shader_parameter("color", outline_color)
 

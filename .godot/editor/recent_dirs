@@ -1,11 +1,17 @@
+res://autoload
+res://scenes/results_screen
+res://textures/map
+res://scenes/dead_body
+res://shaders
+res://scenes/hitbox
+res://scenes/entity_stuff
+res://scenes/health_pickup
 res://scenes/bullet
 res://scenes/bullet_line
 res://scenes/ammo_pickup
 res://scenes/color_picker_menu
 res://scenes/vertical_button_menu
 res://scenes/levels
-res://shaders
-res://autoload
 res://scenes/player
 res://textures/entities/player
 res://textures/entities/bear_trap
@@ -14,6 +20,3 @@ C:/Users/insom/Documents/GitHub/party-game/exports/windows
 res://scenes/lobby
 res://scenes/join_screen
 res://scenes/host_screen
-res://scenes/test_scene
-res://scenes/titlescreen
-res://scenes/main

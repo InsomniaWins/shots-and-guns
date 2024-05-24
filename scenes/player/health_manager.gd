@@ -13,7 +13,7 @@ func _ready():
 
 
 func _process(delta):
-	if multiplayer.is_server():
+	if Network.is_online() and multiplayer.is_server():
 		if player_node.is_online():
 			Network.synchronize_node_unreliable.rpc(get_path(), {
 				"health": _health
@@ -27,10 +27,71 @@ func _synchronize_unreliable(data:Dictionary):
 		status_bar_node.update_health_indicator()
 
 
+func get_new_respawn_position() -> Vector2:
+	
+	var current_scene = SceneManager.get_current_scene()
+	if current_scene.has_method("get_new_player_respawn_position"):
+		return current_scene.get_new_player_respawn_position()
+	
+	return Vector2.ZERO
+
+
+@rpc("any_peer", "call_local")
+func respawn():
+	
+	var sender:int = multiplayer.get_remote_sender_id()
+	
+	if sender != 1:
+		return
+	
+	player_node.visible = false
+	player_node.respawning = true
+	
+	player_node.position = Vector2(-10000, -10000)
+	
+	if _health <= 0:
+		player_node.eliminated.emit(player_node)
+		return
+	
+	await get_tree().create_timer(2).timeout
+	
+	if player_node.is_local():
+		player_node.global_position = get_new_respawn_position()
+	
+	player_node.respawning = false
+	player_node.respawned.emit()
+	player_node.visible = true
+	player_node.i_time = 2
+
+
 
 func take_damage(amount:int = 1) -> void:
+	
+	if player_node.i_time > 0.0:
+		return
+	
+	if player_node.is_respawning():
+		return
+	
 	_health = max(0, _health - amount)
 	status_bar_node.update_health_indicator()
+	
+	
+	# create dead body
+	Network.create_entity.rpc(
+		"res://scenes/dead_body/dead_body.tscn",
+		str("dead_body_e", Network.entity_counter),
+		player_node.get_parent().get_path(),
+		{
+			"position": player_node.global_position + Vector2(0, 6),
+			"color": Network.players[player_node.peer_id].color,
+			"hat": Network.players[player_node.peer_id].hat
+		}
+		
+		)
+	
+	
+	respawn.rpc()
 
 
 func heal(amount:int = 1) -> void:

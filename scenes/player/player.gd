@@ -1,5 +1,8 @@
 extends CharacterBody2D
 
+signal respawned
+signal eliminated(player_node)
+
 const BulletLine = preload("res://scenes/bullet_line/bullet_line.tscn")
 
 const WALK_SPEED:float = 100.0
@@ -14,12 +17,14 @@ var peer_id:int = 1:
 		
 		set_multiplayer_authority(peer_id)
 
+var respawning:bool = false
 var local_player:bool = false
 var move_speed:float = WALK_SPEED
 var moving:bool = false
 var facing_direction:int = 1
 var camera_node:Camera2D = null
 var aim_direction:Vector2 = Vector2.RIGHT
+var i_time:float = 0.0
 
 @onready var gui_node = $GUI
 @onready var animation_player_node = $AnimationPlayer
@@ -30,6 +35,8 @@ var aim_direction:Vector2 = Vector2.RIGHT
 @onready var stamina_bar_node = $GUI/StatusBar/StaminaBar
 @onready var ammo_manager_node = $AmmoManager
 @onready var health_manager_node = $HealthManager
+@onready var shoot_timer_node:Timer = $ShootTimer
+@onready var invincible_particle_emitter_node:GPUParticles2D = $InvincibleParticles
 
 func _ready():
 	aim_arrow_rotation_node.visible = is_local()
@@ -40,32 +47,41 @@ func emit_dash_particles():
 	dash_particles_node.emitting = true
 
 
+func is_respawning() -> bool:
+	return respawning
+
 func _process(delta):
 	
+	i_time = max(i_time - delta, 0.0)
+	invincible_particle_emitter_node.emitting = i_time > 0.0
 	
 	if is_local():
 		
-		move_speed = move_toward(move_speed, WALK_SPEED, delta * 150)
-		if Input.is_action_just_pressed("dash"):
-			if dash_timer_node.is_stopped():
-				emit_dash_particles.rpc()
-				move_speed = DASH_SPEED
-				dash_timer_node.start()
+		if !is_respawning():
+			move_speed = move_toward(move_speed, WALK_SPEED, delta * 150)
+			if Input.is_action_just_pressed("dash"):
+				if dash_timer_node.is_stopped():
+					emit_dash_particles.rpc()
+					move_speed = DASH_SPEED
+					dash_timer_node.start()
+			
+			
+			var axis_vector:Vector2 = Vector2(
+				Input.get_axis("aim_left", "aim_right"),
+				Input.get_axis("aim_up", "aim_down")
+			)
+			if axis_vector.x != 0 or axis_vector.y != 0:
+				aim_direction = axis_vector
+			aim_arrow_rotation_node.rotation = aim_direction.angle()
+			
+			
+			if Input.is_action_just_pressed("shoot"):
+				if shoot_timer_node.time_left <= 0.0:
+					shoot.rpc(aim_direction)
+					shoot_timer_node.start()
+					
 		
 		stamina_bar_node.value = 1.0 - (dash_timer_node.time_left / dash_timer_node.wait_time)
-		
-		var axis_vector:Vector2 = Vector2(
-			Input.get_axis("aim_left", "aim_right"),
-			Input.get_axis("aim_up", "aim_down")
-		)
-		if axis_vector.x != 0 or axis_vector.y != 0:
-			aim_direction = axis_vector
-		aim_arrow_rotation_node.rotation = aim_direction.angle()
-		
-		
-		if Input.is_action_just_pressed("shoot"):
-			shoot.rpc(aim_direction)
-		
 		
 		if is_online():
 			Network.synchronize_node_unreliable.rpc(get_path(), {
@@ -83,6 +99,9 @@ func shoot(direction:Vector2):
 	if ammo_manager_node.get_ammo() <= 0:
 		return
 	
+	if multiplayer.get_remote_sender_id() == peer_id:
+		gui_node.flash()
+	
 	var shoot_directions = [direction.rotated(-PI * 0.1), direction, direction.rotated(PI * 0.1)]
 	for shoot_direction in shoot_directions:
 		
@@ -97,13 +116,15 @@ func shoot(direction:Vector2):
 	
 	var current_scene = SceneManager.get_current_scene()
 	if current_scene is Level:
-		current_scene.shake_camera(3, 0.1)
+		current_scene.shake_camera(3, 0.1, PI * 0.0125)
 	
 	
 	if multiplayer.is_server():
 		if ammo_manager_node.get_ammo() > 0:
 			ammo_manager_node.remove_ammo()
-			create_bullet_entity(direction)
+			
+			for shoot_direction in shoot_directions:
+				create_bullet_entity(shoot_direction.normalized())
 	
 
 
@@ -121,7 +142,7 @@ func is_local():
 
 
 func is_online():
-	return multiplayer.multiplayer_peer.get_connection_status() == ENetMultiplayerPeer.CONNECTION_CONNECTED
+	return Network.is_online()
 
 
 func _synchronize_unreliable(data:Dictionary):
@@ -139,10 +160,13 @@ func set_username(username:String) -> void:
 func set_color(color:Color) -> void:
 	if !is_inside_tree():
 		await ready
+	
 	$FacingScaler/Sprite.material = $FacingScaler/Sprite.material.duplicate()
 	$FacingScaler/Sprite.material.set_shader_parameter("tint_color", color)
-	var outline_color = Color.WHITE - color
-	outline_color.a = 1.0
+	
+	var body_color_average:float = (color.r + color.g + color.b) / 3.0
+	var outline_color = Color.WHITE if body_color_average <= 0.5 else Color.BLACK
+	
 	$FacingScaler/Sprite.material.set_shader_parameter("color", outline_color)
 	
 
@@ -166,7 +190,7 @@ func _handle_sprite_animations() -> void:
 
 
 func _physics_process(_delta):
-	if is_local():
+	if is_local() and !is_respawning():
 		var move_direction = Vector2(
 			Input.get_axis("move_left", "move_right"),
 			Input.get_axis("move_up", "move_down")
@@ -183,3 +207,7 @@ func _physics_process(_delta):
 
 func _on_dash_timer_timeout():
 	move_speed = WALK_SPEED
+
+
+func _on_hit_box_damaged(amount):
+	health_manager_node.take_damage(amount)

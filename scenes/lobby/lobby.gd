@@ -6,7 +6,8 @@ extends Control
 @onready var outline_node:NinePatchRect = $Outline
 @onready var players_node = $Players
 @onready var player_spawn_point_node = $PlayerSpawnPoint
-@onready var start_button_node = $StartButton
+@onready var start_button_node = $CanvasLayer/StartButton
+
 
 
 func _ready():
@@ -24,11 +25,15 @@ func _ready():
 	else:
 		start_button_node.visible = false
 
+
 func server_on_player_joined(peer_id):
 	spawn_player(peer_id)
 
 func server_on_player_left(peer_id):
 	despawn_player(peer_id)
+
+func get_new_player_respawn_position() -> Vector2:
+	return player_spawn_point_node.global_position
 
 
 func despawn_player(peer_id:int) -> void:
@@ -37,11 +42,13 @@ func despawn_player(peer_id:int) -> void:
 		return
 	
 	var player_node = players_node.get_node(player_node_name)
+	
 	player_node.queue_free()
 
 
 func spawn_player(peer_id:int) -> void:
 	var player_node = Network.spawn_player(peer_id, players_node, player_spawn_point_node.position, peer_id == multiplayer.get_unique_id())
+	
 
 
 func _players_dictionary_updated():
@@ -92,5 +99,7 @@ func _on_start_button_pressed():
 
 
 
-
-
+func _on_leave_button_pressed():
+	
+	Network.leave_game()
+	

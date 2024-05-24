@@ -13,7 +13,7 @@ func _ready():
 
 
 func _process(delta):
-	if multiplayer.is_server():
+	if Network.is_online() and multiplayer.is_server():
 		if player_node.is_online():
 			Network.synchronize_node_unreliable.rpc(get_path(), {
 				"ammo": _ammo

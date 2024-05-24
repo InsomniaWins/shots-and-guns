@@ -1,18 +1,39 @@
-[gd_scene load_steps=4 format=3 uid="uid://c47wvkr76ghfr"]
+[gd_scene load_steps=7 format=3 uid="uid://c47wvkr76ghfr"]
 
 [ext_resource type="Script" path="res://scenes/bullet/bullet.gd" id="1_b34i2"]
 [ext_resource type="Texture2D" uid="uid://bdpkjhh1ujykm" path="res://textures/entities/bullet/bullet.png" id="2_43iex"]
 
-[sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_chqcm"]
-points = PackedVector2Array(-5, -3, 3, -3, 5, -2, 5, 2, 3, 3, -5, 3)
+[sub_resource type="Curve" id="Curve_8lbo7"]
+max_value = 3.0
+_data = [Vector2(0, 3), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
 
-[node name="Bullet" type="Node2D"]
+[sub_resource type="CurveTexture" id="CurveTexture_gefbm"]
+curve = SubResource("Curve_8lbo7")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_qq6i2"]
+particle_flag_disable_z = true
+emission_shape = 1
+emission_sphere_radius = 2.25
+gravity = Vector3(0, 0, 0)
+scale_curve = SubResource("CurveTexture_gefbm")
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_or3a3"]
+radius = 3.25
+
+[node name="Bullet" type="Node2D" groups=["bullet"]]
 script = ExtResource("1_b34i2")
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+amount = 15
+process_material = SubResource("ParticleProcessMaterial_qq6i2")
+lifetime = 0.25
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("2_43iex")
 
 [node name="ShapeCast2D" type="ShapeCast2D" parent="."]
-shape = SubResource("ConvexPolygonShape2D_chqcm")
+shape = SubResource("CircleShape2D_or3a3")
 target_position = Vector2(100, 0)
-collision_mask = 3
+collision_mask = 5
+collide_with_areas = true

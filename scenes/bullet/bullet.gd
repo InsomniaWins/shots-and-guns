@@ -34,6 +34,12 @@ func _physics_process(delta):
 	shape_cast_node.target_position = next_position_local
 	shape_cast_node.force_shapecast_update()
 	
+	_move_and_collide(next_position_local)
+
+
+
+func _move_and_collide(next_position_local:Vector2):
+	
 	var should_free:bool = false
 	
 	position += next_position_local
@@ -43,13 +49,28 @@ func _physics_process(delta):
 		for i in shape_cast_node.get_collision_count():
 			var collider = shape_cast_node.get_collider(i)
 			
-			if collider.is_in_group("player"):
-				var player_node = collider
+			if collider.is_in_group("hitbox"):
 				
-				if player_node.peer_id != shooter:
-					player_node.health_manager_node.take_damage()
+				if collider.get_parent().is_in_group("player"):
+					
+					var entity = collider.get_node_or_null(collider.entity_node_path)
+					
 					should_free = true
-				
+					var should_damage = true
+					
+					if is_instance_valid(entity):
+						if entity.is_in_group("player"):
+							if entity.peer_id == shooter:
+								should_free = false
+								should_damage = false
+					
+					if should_damage:
+						collider.on_damage(1)
+					
+				else:
+					should_free = false
+			elif collider.is_in_group("bullet"):
+				should_free = false
 			else:
 				should_free = true
 			

@@ -12,6 +12,9 @@ var editing_port = false
 @onready var connect_timer_node:Timer = $ConnectTimer
 @onready var connecting_label_animation_player_node:AnimationPlayer = $ConnectingLabelAnimationPlayer
 
+func _ready():
+	update_current_information()
+
 func _process(delta):
 	status_label_node.modulate.a = lerp(status_label_node.modulate.a, 0.0, delta)
 

@@ -1,0 +1,131 @@
+[gd_scene load_steps=7 format=3 uid="uid://mix78kbxkyo3"]
+
+[ext_resource type="Script" path="res://scenes/results_screen/results_screen.gd" id="1_maanr"]
+[ext_resource type="FontFile" uid="uid://bhvepy8hqrp7p" path="res://fonts/normal/normal.png" id="2_7pvae"]
+[ext_resource type="Texture2D" uid="uid://cxf6vbo13nsva" path="res://textures/entities/player/player.png" id="2_crm47"]
+[ext_resource type="Shader" path="res://shaders/sprite_outline.gdshader" id="3_hlpkq"]
+[ext_resource type="Texture2D" uid="uid://byp01oykmm2x0" path="res://textures/gui/ninepatch_outline.png" id="4_e7b28"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3ffx3"]
+shader = ExtResource("3_hlpkq")
+shader_parameter/tint_color = Color(0, 1, 1, 1)
+shader_parameter/color = Color(1, 1, 1, 1)
+shader_parameter/width = 1.0
+shader_parameter/pattern = 0
+shader_parameter/inside = false
+shader_parameter/add_margins = false
+
+[node name="ResultsScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_maanr")
+
+[node name="CharacterScaler" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_top = 48.0
+offset_bottom = 48.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(3, 3)
+
+[node name="UsernameLabel" type="Label" parent="CharacterScaler"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -28.0
+offset_top = -37.3333
+offset_right = 28.0
+offset_bottom = -25.3333
+grow_horizontal = 2
+theme_override_fonts/font = ExtResource("2_7pvae")
+text = "USERNAME"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="WinnerCharacter" type="Node2D" parent="CharacterScaler"]
+
+[node name="Body" type="Sprite2D" parent="CharacterScaler/WinnerCharacter"]
+material = SubResource("ShaderMaterial_3ffx3")
+texture = ExtResource("2_crm47")
+hframes = 4
+vframes = 4
+
+[node name="Hat" type="Sprite2D" parent="CharacterScaler/WinnerCharacter/Body"]
+position = Vector2(0, -8)
+
+[node name="NinePatchRect" type="NinePatchRect" parent="CharacterScaler"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -84.0
+offset_top = -41.0
+offset_right = 84.0
+offset_bottom = -22.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_e7b28")
+patch_margin_left = 3
+patch_margin_top = 3
+patch_margin_right = 3
+patch_margin_bottom = 3
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -48.5
+offset_top = 32.0
+offset_right = 49.5
+offset_bottom = 56.0
+grow_horizontal = 2
+theme_override_fonts/font = ExtResource("2_7pvae")
+theme_override_font_sizes/font_size = 18
+text = "WINNER:"
+
+[node name="WaitingOnHostLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -23.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("2_7pvae")
+text = "Waiting on host . . . "
+
+[node name="LobbyButton" type="Button" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -117.0
+offset_top = -36.0
+offset_right = -32.0
+offset_bottom = -16.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("2_7pvae")
+text = "GO TO LOBBY"
+
+[connection signal="pressed" from="LobbyButton" to="." method="_on_lobby_button_pressed"]

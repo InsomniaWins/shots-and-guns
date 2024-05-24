@@ -193,50 +193,6 @@ layout_mode = 2
 theme_override_fonts/font = ExtResource("2_grua3")
 text = "JOIN GAME"
 
-[node name="MessagePanel" type="ColorRect" parent="."]
-visible = false
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -218.0
-offset_top = -145.5
-offset_right = 218.0
-offset_bottom = 145.5
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.219501, 0.219501, 0.219501, 1)
-
-[node name="Label" type="Label" parent="MessagePanel"]
-layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_top = 8.0
-offset_bottom = 126.0
-grow_horizontal = 2
-theme_override_fonts/font = ExtResource("2_grua3")
-text = "THIS IS A MESSAGE!"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="CloseMessagePanelButton" type="Button" parent="MessagePanel"]
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -29.0
-offset_top = -40.0
-offset_right = 29.0
-offset_bottom = -16.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_fonts/font = ExtResource("2_grua3")
-text = "CLOSE"
-
 [node name="MainMenu" parent="." instance=ExtResource("5_vtk78")]
 layout_mode = 1
 anchors_preset = 8
@@ -471,6 +427,50 @@ grow_horizontal = 2
 theme_override_fonts/font = ExtResource("2_grua3")
 text = "SELECT COLOR"
 
+[node name="MessagePanel" type="ColorRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -218.0
+offset_top = -145.5
+offset_right = 218.0
+offset_bottom = 145.5
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.129412, 0.129412, 0.137255, 1)
+
+[node name="Label" type="Label" parent="MessagePanel"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 8.0
+offset_bottom = 126.0
+grow_horizontal = 2
+theme_override_fonts/font = ExtResource("2_grua3")
+text = "THIS IS A MESSAGE!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CloseMessagePanelButton" type="Button" parent="MessagePanel"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -29.0
+offset_top = -40.0
+offset_right = 29.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("2_grua3")
+text = "CLOSE"
+
 [connection signal="text_changed" from="HBoxContainer/CharacterEditor/UsernameEdit" to="." method="_on_username_edit_text_changed"]
 [connection signal="pressed" from="HBoxContainer/CharacterEditor/HatButtons/DecrementHat" to="." method="_on_decrement_hat_pressed"]
 [connection signal="pressed" from="HBoxContainer/CharacterEditor/HatButtons/RemoveHat" to="." method="_on_remove_hat_pressed"]
@@ -478,7 +478,6 @@ text = "SELECT COLOR"
 [connection signal="pressed" from="HBoxContainer/CharacterEditor/Character/EditPlayerColorButton" to="." method="_on_edit_player_color_button_pressed"]
 [connection signal="pressed" from="HBoxContainer/Menu/VBoxContainer/HostButton" to="." method="_on_host_button_pressed"]
 [connection signal="pressed" from="HBoxContainer/Menu/VBoxContainer/JoinButton" to="." method="_on_join_button_pressed"]
-[connection signal="pressed" from="MessagePanel/CloseMessagePanelButton" to="." method="_on_close_message_panel_button_pressed"]
 [connection signal="menu_selected" from="MainMenu" to="." method="_on_main_menu_menu_selected"]
 [connection signal="menu_selected" from="CharacterEditor/EditCharacterMenu" to="." method="_on_edit_character_menu_menu_selected"]
 [connection signal="focus_exited" from="CharacterEditor/UsernameEdit" to="CharacterEditor" method="_on_username_edit_focus_exited"]
@@ -488,3 +487,4 @@ text = "SELECT COLOR"
 [connection signal="pressed" from="PlayerColorEditor/ColorPickerOkayButton" to="." method="_on_color_picker_okay_button_pressed"]
 [connection signal="menu_moved" from="BodyColorPicker" to="." method="_on_body_color_picker_menu_moved"]
 [connection signal="menu_selected" from="BodyColorPicker" to="." method="_on_body_color_picker_menu_selected"]
+[connection signal="pressed" from="MessagePanel/CloseMessagePanelButton" to="." method="_on_close_message_panel_button_pressed"]

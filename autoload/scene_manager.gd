@@ -65,7 +65,7 @@ func server_change_scene(next_scene_path:String) -> void:
 		await all_peers_changed_scene
 	
 	var current_scene:Node = get_current_scene()
-	if current_scene.has_method("_network_ready"):
+	if current_scene.has_method("_rpc_network_ready"):
 		current_scene._rpc_network_ready.rpc()
 
 
