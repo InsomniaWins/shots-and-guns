@@ -10,7 +10,7 @@ func set_entity_data(data:Dictionary):
 	rotation = data.rotation
 	shooter = data.shooter
 
-func _process(delta):
+func _process(_delta):
 	if multiplayer.is_server():
 		Network.synchronize_node_unreliable.rpc(get_path(), {
 			"position": position,

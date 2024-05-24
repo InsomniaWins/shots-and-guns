@@ -37,6 +37,9 @@ var i_time:float = 0.0
 @onready var health_manager_node = $HealthManager
 @onready var shoot_timer_node:Timer = $ShootTimer
 @onready var invincible_particle_emitter_node:GPUParticles2D = $InvincibleParticles
+@onready var shotgun_audio_player_node:AudioStreamPlayer2D = $ShotgunSound
+@onready var gain_invincibility_audio_player_node:AudioStreamPlayer2D = $InvincibilitySound
+@onready var heal_audio_player_node:AudioStreamPlayer2D = $HealSound
 
 func _ready():
 	aim_arrow_rotation_node.visible = is_local()
@@ -102,6 +105,8 @@ func shoot(direction:Vector2):
 	if multiplayer.get_remote_sender_id() == peer_id:
 		gui_node.flash()
 	
+	shotgun_audio_player_node.play()
+	
 	var shoot_directions = [direction.rotated(-PI * 0.1), direction, direction.rotated(PI * 0.1)]
 	for shoot_direction in shoot_directions:
 		
@@ -131,7 +136,7 @@ func shoot(direction:Vector2):
 # called on server ONLY
 func create_bullet_entity(direction:Vector2):
 	Network.create_entity.rpc("res://scenes/bullet/bullet.tscn", str("bullet_e", Network.entity_counter), get_parent().get_path(), {
-		"position": position,
+		"position": position + direction * 5,
 		"rotation": direction.angle(),
 		"shooter": peer_id
 	})
@@ -207,6 +212,9 @@ func _physics_process(_delta):
 
 @rpc("any_peer", "call_local")
 func set_invincible(time:float) -> void:
+	
+	if time > 0.0:
+		gain_invincibility_audio_player_node.play()
 	
 	if multiplayer.get_remote_sender_id() != 1:
 		return

@@ -1,5 +1,8 @@
 extends Node2D
 
+@onready var splat_audio_player_node:AudioStreamPlayer2D = $Splat
+
+
 func set_entity_data(data:Dictionary):
 	global_position = data.position
 	
@@ -16,3 +19,6 @@ func set_entity_data(data:Dictionary):
 	
 	$Body/Hat.texture = HatManager.get_hat_texture(data.hat)
 	$Body/Hat.modulate = Color.WHITE.darkened(darken_amount)
+
+func _ready():
+	splat_audio_player_node.play()

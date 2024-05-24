@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://c5cek2iumpbf"]
+[gd_scene load_steps=7 format=3 uid="uid://c5cek2iumpbf"]
 
 [ext_resource type="Script" path="res://scenes/dead_body/dead_body.gd" id="1_88s0t"]
 [ext_resource type="Texture2D" uid="uid://cxf6vbo13nsva" path="res://textures/entities/player/player.png" id="2_5uc4s"]
 [ext_resource type="Texture2D" uid="uid://bm3owyg1wk1lm" path="res://textures/entities/blood_splatter.png" id="2_tkmnu"]
 [ext_resource type="Shader" path="res://shaders/sprite_outline.gdshader" id="2_tq4fr"]
+[ext_resource type="AudioStream" uid="uid://3ds8f3uiu5de" path="res://sounds/dead_body_spawn.ogg" id="5_qdway"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_cregn"]
 shader = ExtResource("2_tq4fr")
@@ -34,3 +35,7 @@ vframes = 4
 
 [node name="Hat" type="Sprite2D" parent="Body"]
 position = Vector2(0, -8)
+
+[node name="Splat" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_qdway")
+volume_db = -10.0

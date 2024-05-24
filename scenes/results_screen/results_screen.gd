@@ -5,6 +5,8 @@ extends Control
 @onready var winner_character_body_node:Sprite2D = $CharacterScaler/WinnerCharacter/Body
 @onready var winner_character_hat_node:Sprite2D = $CharacterScaler/WinnerCharacter/Body/Hat
 @onready var winner_username_label_node:Label = $CharacterScaler/UsernameLabel
+@onready var win_audio_player_node:AudioStreamPlayer = $WinSound
+@onready var lose_audio_player_node:AudioStreamPlayer = $LoseSound
 
 func _ready():
 	if Network.is_online() and multiplayer.is_server():
@@ -22,16 +24,23 @@ func _network_ready():
 	
 	if Network.is_online() and multiplayer.is_server():
 		
+		var winner_id = MatchResults.winner
 		var winner_name = Network.players[MatchResults.winner].username
 		var winner_color = Network.players[MatchResults.winner].color
 		var winner_hat = Network.players[MatchResults.winner].hat
 		
-		show_winner.rpc(winner_name, winner_color, winner_hat)
+		show_winner.rpc(winner_id, winner_name, winner_color, winner_hat)
 	
 
 
 @rpc("authority", "call_local")
-func show_winner(winner_name:String, winner_color:Color, winner_hat:int) -> void:
+func show_winner(winner_id:int, winner_name:String, winner_color:Color, winner_hat:int) -> void:
+	
+	if winner_id == multiplayer.get_unique_id():
+		win_audio_player_node.play()
+	else:
+		lose_audio_player_node.play()
+	
 	character_scaler_node.visible = true
 	
 	winner_username_label_node.text = winner_name

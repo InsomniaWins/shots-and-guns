@@ -6,13 +6,14 @@ var _ammo:int = 0
 
 @onready var status_bar_node:ColorRect = $"../GUI/StatusBar"
 @onready var player_node:CharacterBody2D = $".."
+@onready var ammo_pickup_audio_player_node:AudioStreamPlayer2D = $"../PickupAmmo"
 
 
 func _ready():
 	status_bar_node.update_ammo_indicator()
 
 
-func _process(delta):
+func _process(_delta):
 	if Network.is_online() and multiplayer.is_server():
 		if player_node.is_online():
 			Network.synchronize_node_unreliable.rpc(get_path(), {
@@ -27,8 +28,16 @@ func _synchronize_unreliable(data:Dictionary):
 		status_bar_node.update_ammo_indicator()
 
 
+@rpc("any_peer", "call_local")
+func play_ammo_pickup_sound() -> void:
+	
+	if multiplayer.get_remote_sender_id() != 1:
+		return
+	
+	ammo_pickup_audio_player_node.play()
+
 func remove_ammo(amount:int = 1) -> void:
-	_ammo = max(0, _ammo - 1)
+	_ammo = max(0, _ammo - amount)
 	status_bar_node.update_ammo_indicator()
 
 

@@ -10,6 +10,7 @@ var selected_button_vector:Vector2 = Vector2(0,0)
 
 @onready var grid_container_node:GridContainer = $GridContainer
 @onready var selected_color_outline_node:NinePatchRect = $SelectedColor
+@onready var move_audio_player_node:AudioStreamPlayer = $MoveSound
 
 func _unhandled_input(event):
 	if active:
@@ -49,6 +50,8 @@ func move(move_direction:Vector2):
 	if h_direction == 0.0 and v_direction == 0.0:
 		return
 	
+	move_audio_player_node.play()
+	
 	if h_direction != 0.0:
 		selected_button_vector.x += h_direction
 		if selected_button_vector.x > 5:
@@ -72,7 +75,7 @@ func get_selected_color_node() -> Control:
 
 func get_color_node(button_vector:Vector2) -> Control:
 	
-	var button_index:int = button_vector.x
+	var button_index:int = int(button_vector.x)
 	for i in button_vector.y:
 		button_index += 6
 	
@@ -82,7 +85,7 @@ func get_color_node(button_vector:Vector2) -> Control:
 
 func update_selection_graphic():
 	
-	var selected_node_index:int = selected_button_vector.x
+	var selected_node_index:int = int(selected_button_vector.x)
 	for i in selected_button_vector.y:
 		selected_node_index += 6
 	
@@ -93,6 +96,7 @@ func update_selection_graphic():
 
 
 func select():
+	AudioManager.play_sound(preload("res://sounds/button_select.wav"), -5)
 	menu_selected.emit()
 
 func activate():

@@ -166,7 +166,11 @@ func create_entity(entity_path:String, entity_name:String, parent_node_path:Node
 	
 	entity.set_meta("entity_creation_data", data)
 	
-	get_node(parent_node_path).add_child(entity)
+	var parent_node = get_node_or_null(parent_node_path)
+	if parent_node != null:
+		parent_node.add_child(entity)
+	else:
+		print(parent_node_path, " could not be found")
 	
 	entity_counter += 1
 	

@@ -164,4 +164,9 @@ libraries = {
 "": SubResource("AnimationLibrary_bbq3o")
 }
 
+[node name="ServerAlreadyStartedTimer" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
+
 [connection signal="menu_selected" from="MainMenu" to="." method="_on_main_menu_menu_selected"]
+[connection signal="timeout" from="ServerAlreadyStartedTimer" to="." method="_on_server_already_started_timer_timeout"]

@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://ck6own2dnvfc6"]
+[gd_scene load_steps=9 format=3 uid="uid://ck6own2dnvfc6"]
 
 [ext_resource type="Texture2D" uid="uid://bqytjwdhkabbx" path="res://textures/entities/ammo_pickup/ammo_pickup.png" id="1_62py7"]
 [ext_resource type="Script" path="res://scenes/ammo_pickup/ammo_pickup.gd" id="1_lyb5v"]
 [ext_resource type="Texture2D" uid="uid://lb5gswfr5xrd" path="res://textures/entities/shadow.png" id="2_w0haf"]
+[ext_resource type="AudioStream" uid="uid://c2x0gdiaax13e" path="res://sounds/spawn_pickup.ogg" id="4_17qt5"]
 
 [sub_resource type="Animation" id="Animation_7r3b3"]
 length = 0.001
@@ -115,5 +116,8 @@ speed_scale = 2.0
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -2)
 shape = SubResource("RectangleShape2D_07ju6")
+
+[node name="SpawnSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_17qt5")
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]

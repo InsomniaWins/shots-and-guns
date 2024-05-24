@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://6blpabmrnvlj"]
+[gd_scene load_steps=9 format=3 uid="uid://6blpabmrnvlj"]
 
 [ext_resource type="Script" path="res://scenes/health_pickup/health_pickup.gd" id="1_y73r4"]
 [ext_resource type="Texture2D" uid="uid://lb5gswfr5xrd" path="res://textures/entities/shadow.png" id="2_kl0sn"]
 [ext_resource type="Texture2D" uid="uid://e2bx05gmekn4" path="res://textures/entities/health_pickup/health_pickup.png" id="3_ngmsn"]
+[ext_resource type="AudioStream" uid="uid://c2x0gdiaax13e" path="res://sounds/spawn_pickup.ogg" id="4_8845s"]
 
 [sub_resource type="Animation" id="Animation_7r3b3"]
 length = 0.001
@@ -115,5 +116,8 @@ speed_scale = 2.0
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." groups=["pickup"]]
 position = Vector2(0, -1.5)
 shape = SubResource("RectangleShape2D_07ju6")
+
+[node name="SpawnSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_8845s")
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]

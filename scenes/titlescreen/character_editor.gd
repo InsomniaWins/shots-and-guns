@@ -10,7 +10,7 @@ func _ready():
 	username_edit_node.text = Network.my_information.username
 
 
-func _on_username_edit_text_submitted(new_text):
+func _on_username_edit_text_submitted(_new_text):
 	username_edit_node.release_focus()
 
 

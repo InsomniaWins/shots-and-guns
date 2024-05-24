@@ -6,7 +6,7 @@ func set_entity_data(data:Dictionary) -> void:
 	await ready
 	
 	global_position = data.position
-
+	$SpawnSound.play()
 
 func _on_body_entered(body):
 	if !multiplayer.is_server():
@@ -21,7 +21,7 @@ func _on_body_entered(body):
 		return
 	
 	player_node.ammo_manager_node.add_ammo(6)
-	var peer_id:int = player_node.peer_id
+	player_node.ammo_manager_node.play_ammo_pickup_sound.rpc()
 	
 	Network.free_entity.rpc(get_path())
 	

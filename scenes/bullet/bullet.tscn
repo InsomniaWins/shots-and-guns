@@ -19,7 +19,7 @@ gravity = Vector3(0, 0, 0)
 scale_curve = SubResource("CurveTexture_gefbm")
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_or3a3"]
-radius = 3.25
+radius = 3.0
 
 [node name="Bullet" type="Node2D" groups=["bullet", "entity"]]
 script = ExtResource("1_b34i2")

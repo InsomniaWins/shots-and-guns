@@ -13,6 +13,7 @@ var editing_port = false
 @onready var connecting_label_animation_player_node:AnimationPlayer = $ConnectingLabelAnimationPlayer
 
 func _ready():
+	Network.player_joined.connect(player_joined)
 	update_current_information()
 
 func _process(delta):
@@ -50,8 +51,6 @@ func _join_server(ip:String, port:int, username:String) -> void:
 		if peer.get_connection_status() != MultiplayerPeer.CONNECTION_CONNECTING:
 			break
 	
-	connecting_label_animation_player_node.play("RESET")
-	
 	if peer.get_connection_status() == MultiplayerPeer.CONNECTION_CONNECTING:
 		status_label_node.text = str("Connection took longer than ", TIMEOUT, " seconds, timed-out!")
 		status_label_node.modulate = Color.RED
@@ -59,11 +58,13 @@ func _join_server(ip:String, port:int, username:String) -> void:
 		main_menu_node.activate()
 		
 		peer.close()
+		connecting_label_animation_player_node.play("RESET")
 		return
 		
 	elif peer.get_connection_status() == MultiplayerPeer.CONNECTION_DISCONNECTED:
 		status_label_node.text = "Failed to join server!"
 		status_label_node.modulate = Color.RED
+		connecting_label_animation_player_node.play("RESET")
 		return
 	
 	Network.players[peer.get_unique_id()] = Network.create_new_player_info(
@@ -72,9 +73,17 @@ func _join_server(ip:String, port:int, username:String) -> void:
 		Network.my_information.color
 	)
 	
+	
 	Network.send_player_info_to_server(Network.my_information)
 	
-	var peer_id = await Network.player_joined
+	$ServerAlreadyStartedTimer.start()
+
+
+
+func player_joined(peer_id):
+	
+	connecting_label_animation_player_node.play("RESET")
+	
 	while peer_id != multiplayer.get_unique_id():
 		peer_id = await Network.player_joined
 	
@@ -85,7 +94,6 @@ func _join_server(ip:String, port:int, username:String) -> void:
 	var lobby = SceneManager.get_current_scene()
 	lobby.update_player_list()
 	
-
 
 
 func _input(event):
@@ -139,3 +147,10 @@ func _on_main_menu_menu_selected():
 			_join_server(current_ip, current_port.to_int(), Network.my_information.username)
 		"BACK":
 			SceneManager.change_scene("res://scenes/titlescreen/titlescreen.tscn")
+
+
+func _on_server_already_started_timer_timeout():
+	status_label_node.text = "Failed to join server!\nGame likely already started!"
+	status_label_node.modulate = Color.RED
+	main_menu_node.activate()
+	connecting_label_animation_player_node.play("RESET")

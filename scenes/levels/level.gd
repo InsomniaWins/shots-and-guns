@@ -114,10 +114,7 @@ func _process(delta):
 		)
 	else:
 		camera_node.position = camera_start_position
-	
-	if Input.is_action_just_pressed("ui_cancel"):
-		if multiplayer.is_server():
-			SceneManager.change_scene.rpc("res://scenes/lobby/lobby.tscn")
+
 
 func shake_camera(amount:int = 1, time:float = 2.0, rotation_amount:float = 0.0):
 	camera_shaking_amount = amount

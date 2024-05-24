@@ -48,8 +48,7 @@ func _ready():
 		Network.allow_new_connections()
 	else:
 		start_button_node.visible = false
-	
-	Network.respawn_entities_for_peer.rpc_id(1)
+		Network.respawn_entities_for_peer.rpc_id(1)
 
 func _process(delta):
 	
@@ -148,6 +147,9 @@ func _on_margin_container_resized():
 
 func _on_start_button_pressed():
 	
+	if Network.players.size() < 2:
+		return
+	
 	Network.refuse_new_connections()
 	
 	var next_scene_path:String = "res://scenes/levels/level.tscn"
@@ -187,7 +189,7 @@ func attempt_pickup_spawn() -> void:
 	var entity_name = str("pickup_e", Network.entity_counter)
 	
 	Network.create_entity.rpc(
-		["res://scenes/ammo_pickup/ammo_pickup.tscn", "res://scenes/health_pickup/health_pickup.tscn"].pick_random(),
+		"res://scenes/ammo_pickup/ammo_pickup.tscn" if randf() > 0.2 else "res://scenes/health_pickup/health_pickup.tscn",
 		entity_name,
 		players_node.get_path(),
 		{

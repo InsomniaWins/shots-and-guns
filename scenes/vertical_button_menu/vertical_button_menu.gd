@@ -13,10 +13,9 @@ signal menu_selected
 
 var selected_button_index:int = 0
 
-
+@onready var move_sound_audio_player_node:AudioStreamPlayer = $MoveSound
 @onready var labels_vbox_node = $VBoxContainer
 @onready var selection_label_node = $SelectionLabel
-
 
 func _ready():
 	update_active_effect()
@@ -74,6 +73,7 @@ func update_labels() -> void:
 	
 
 func select():
+	AudioManager.play_sound(preload("res://sounds/button_select.wav"), -5)
 	menu_selected.emit()
 
 
@@ -82,6 +82,8 @@ func move(direction:int) -> void:
 	
 	if direction == 0:
 		return
+	
+	move_sound_audio_player_node.play()
 	
 	selected_button_index += direction
 	

@@ -6,13 +6,15 @@ var _max_health:int = 3
 
 @onready var status_bar_node:ColorRect = $"../GUI/StatusBar"
 @onready var player_node = $".."
+@onready var gain_invincibility_audio_player_node:AudioStreamPlayer2D = $"../InvincibilitySound"
+@onready var lose_audio_player_node:AudioStreamPlayer = $"../LoseSound"
 
 func _ready():
 	status_bar_node.update_health_indicator()
 
 
 
-func _process(delta):
+func _process(_delta):
 	if Network.is_online() and multiplayer.is_server():
 		if player_node.is_online():
 			Network.synchronize_node_unreliable.rpc(get_path(), {
@@ -53,8 +55,11 @@ func respawn(new_health):
 	status_bar_node.update_health_indicator()
 	
 	if _health <= 0:
+		
+		if player_node.is_local():
+			lose_audio_player_node.play()
+		
 		player_node.eliminated.emit(player_node)
-		print("health < 0")
 		return
 	
 	await get_tree().create_timer(2).timeout
@@ -66,6 +71,18 @@ func respawn(new_health):
 	player_node.respawned.emit()
 	player_node.visible = true
 	player_node.i_time = 2
+	gain_invincibility_audio_player_node.play()
+
+
+@rpc("any_peer", "call_local")
+func play_heal_sound() -> void:
+	
+	if multiplayer.get_remote_sender_id() != 1:
+		return
+	
+	player_node.heal_audio_player_node.play()
+
+
 
 
 

@@ -17,3 +17,17 @@ res://scenes/levels/level.tscn
 res://scenes/levels/level.gd
 res://scenes/bullet/bullet.tscn
 res://autoload/scene_manager.gd
+res://scenes/ammo_pickup/ammo_pickup.gd
+res://scenes/vertical_button_menu/vertical_button_menu.tscn
+res://scenes/vertical_button_menu/vertical_button_menu.gd
+res://scenes/color_picker_menu/color_picker_menu.tscn
+res://scenes/color_picker_menu/color_picker_menu.gd
+res://autoload/audio_manager.gd
+res://scenes/results_screen/results_screen.tscn
+res://scenes/results_screen/results_screen.gd
+res://scenes/dead_body/dead_body.tscn
+res://scenes/dead_body/dead_body.gd
+res://scenes/join_screen/join_screen.tscn
+res://scenes/join_screen/join_screen.gd
+res://scenes/bullet/bullet.gd
+res://scenes/titlescreen/character_editor.gd
