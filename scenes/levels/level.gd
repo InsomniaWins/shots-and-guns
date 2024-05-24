@@ -2,8 +2,8 @@ class_name Level
 extends Control
 
 
-var camera_shaking_amount:int = 1
-var camera_shaking_timer:float = 0.0
+@export var camera_shaking_amount:int = 1
+@export var camera_shaking_timer:float = 0.0
 var previous_ammo_spawn_position:Vector2 = Vector2.ZERO
 
 var total_players:Array[int] = []
@@ -106,6 +106,7 @@ func _process(delta):
 	
 	if camera_shaking_timer > 0.0:
 		camera_shaking_timer = max(0.0, camera_shaking_timer - delta)
+		
 		
 		camera_node.position = camera_start_position + Vector2(
 			randi_range(-camera_shaking_amount, camera_shaking_amount),

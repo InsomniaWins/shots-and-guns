@@ -1,0 +1,24 @@
+[gd_scene load_steps=5 format=3 uid="uid://8bjgjmci7m42"]
+
+[ext_resource type="Script" path="res://scenes/effects_loader/effects_loader.gd" id="1_bsqwg"]
+[ext_resource type="Material" uid="uid://do57vqbce53gv" path="res://particle_process_materials/player_invincible_particles.tres" id="2_mptcx"]
+[ext_resource type="Material" uid="uid://c16pwq8urvk3r" path="res://particle_process_materials/player_dash_particles.tres" id="3_pafuy"]
+[ext_resource type="Material" uid="uid://8hd61a7k83pu" path="res://particle_process_materials/bullet_trail_particles.tres" id="4_kah31"]
+
+[node name="EffectsLoader" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_bsqwg")
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+process_material = ExtResource("2_mptcx")
+
+[node name="GPUParticles2D2" type="GPUParticles2D" parent="."]
+process_material = ExtResource("3_pafuy")
+
+[node name="GPUParticles2D3" type="GPUParticles2D" parent="."]
+process_material = ExtResource("4_kah31")

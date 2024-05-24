@@ -3,6 +3,7 @@ extends Node
 signal player_list_updated
 signal player_joined(peer_id)
 signal player_left(peer_id)
+signal spawned_entity(entity_node_path:NodePath)
 
 var my_information = create_new_player_info("default_username", HatManager.Hats.NONE, Color.WHITE)
 var players:Dictionary = {}
@@ -147,6 +148,8 @@ func create_entity(entity_path:String, entity_name:String, parent_node_path:Node
 	get_node(parent_node_path).add_child(entity)
 	
 	entity_counter += 1
+	
+	spawned_entity.emit(entity.get_path())
 
 
 @rpc("authority", "call_local")

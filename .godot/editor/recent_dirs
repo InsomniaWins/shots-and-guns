@@ -1,3 +1,5 @@
+res://particle_process_materials
+res://scenes/effects_loader
 res://autoload
 res://scenes/results_screen
 res://textures/map
@@ -18,5 +20,3 @@ res://textures/entities/bear_trap
 C:/Users/insom/Documents/JetBrainsMono
 C:/Users/insom/Documents/GitHub/party-game/exports/windows
 res://scenes/lobby
-res://scenes/join_screen
-res://scenes/host_screen

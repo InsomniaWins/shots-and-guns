@@ -115,7 +115,7 @@ func shoot(direction:Vector2):
 		get_parent().add_child(bullet_line)
 	
 	var current_scene = SceneManager.get_current_scene()
-	if current_scene is Level:
+	if current_scene.has_method("shake_camera"):
 		current_scene.shake_camera(3, 0.1, PI * 0.0125)
 	
 	
@@ -203,6 +203,15 @@ func _physics_process(_delta):
 			facing_direction = sign(velocity.x)
 		
 		move_and_slide()
+
+
+@rpc("any_peer", "call_local")
+func set_invincible(time:float) -> void:
+	
+	if multiplayer.get_remote_sender_id() != 1:
+		return
+	
+	i_time = time
 
 
 func _on_dash_timer_timeout():

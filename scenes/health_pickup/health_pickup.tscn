@@ -90,7 +90,7 @@ _data = {
 }
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_07ju6"]
-size = Vector2(12, 12)
+size = Vector2(14, 15)
 
 [node name="HealthPickup" type="Area2D" groups=["health_pickup"]]
 collision_layer = 2
@@ -112,8 +112,8 @@ libraries = {
 autoplay = "float"
 speed_scale = 2.0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, -2)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." groups=["pickup"]]
+position = Vector2(0, -1.5)
 shape = SubResource("RectangleShape2D_07ju6")
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]

@@ -1,0 +1,45 @@
+[gd_resource type="ParticleProcessMaterial" load_steps=9 format=3 uid="uid://c16pwq8urvk3r"]
+
+[sub_resource type="Curve" id="Curve_7j7di"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_xxc6k"]
+curve = SubResource("Curve_7j7di")
+
+[sub_resource type="Curve" id="Curve_dqyxv"]
+min_value = -360.0
+max_value = 360.0
+_data = [Vector2(0, 360), 0.0, 0.0, 0, 0, Vector2(1, -360), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_n0tsi"]
+curve = SubResource("Curve_dqyxv")
+
+[sub_resource type="Curve" id="Curve_1dye0"]
+max_value = 200.0
+_data = [Vector2(0, 200), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_yj6vv"]
+curve = SubResource("Curve_1dye0")
+
+[sub_resource type="Curve" id="Curve_g3lkw"]
+max_value = 4.0
+_data = [Vector2(0, 0.480365), 0.0, 0.0, 0, 0, Vector2(1, 4), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_spw8k"]
+curve = SubResource("Curve_g3lkw")
+
+[resource]
+particle_flag_disable_z = true
+angle_max = 720.0
+angle_curve = SubResource("CurveTexture_n0tsi")
+spread = 180.0
+initial_velocity_min = 30.0
+initial_velocity_max = 100.0
+gravity = Vector3(0, 0, 0)
+scale_curve = SubResource("CurveTexture_spw8k")
+alpha_curve = SubResource("CurveTexture_xxc6k")
+anim_speed_curve = SubResource("CurveTexture_yj6vv")

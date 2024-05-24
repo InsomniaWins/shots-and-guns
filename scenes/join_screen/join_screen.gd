@@ -85,9 +85,7 @@ func _join_server(ip:String, port:int, username:String) -> void:
 	var lobby = SceneManager.get_current_scene()
 	lobby.update_player_list()
 	
-	DisplayServer.window_set_title(str(get_tree().get_multiplayer().get_unique_id()))
-	
-	
+
 
 
 func _input(event):

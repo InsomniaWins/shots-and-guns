@@ -37,7 +37,7 @@ func get_new_respawn_position() -> Vector2:
 
 
 @rpc("any_peer", "call_local")
-func respawn():
+func respawn(new_health):
 	
 	var sender:int = multiplayer.get_remote_sender_id()
 	
@@ -49,8 +49,12 @@ func respawn():
 	
 	player_node.position = Vector2(-10000, -10000)
 	
+	_health = new_health
+	status_bar_node.update_health_indicator()
+	
 	if _health <= 0:
 		player_node.eliminated.emit(player_node)
+		print("health < 0")
 		return
 	
 	await get_tree().create_timer(2).timeout
@@ -91,7 +95,7 @@ func take_damage(amount:int = 1) -> void:
 		)
 	
 	
-	respawn.rpc()
+	respawn.rpc(_health)
 
 
 func heal(amount:int = 1) -> void:

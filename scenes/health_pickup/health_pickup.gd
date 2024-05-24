@@ -17,6 +17,11 @@ func _on_body_entered(body):
 	
 	var player_node:CharacterBody2D = body
 	
+	if player_node.health_manager_node.get_health() >= player_node.health_manager_node.get_max_health():
+		
+		player_node.set_invincible.rpc(5.0)
+		
+	
 	player_node.health_manager_node.heal(1)
 	var peer_id:int = player_node.peer_id
 	

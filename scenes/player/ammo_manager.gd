@@ -1,7 +1,7 @@
 extends Node
 
 var _max_ammo:int = 6
-var _ammo:int = 3
+var _ammo:int = 0
 
 
 @onready var status_bar_node:ColorRect = $"../GUI/StatusBar"

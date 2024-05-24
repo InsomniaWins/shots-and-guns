@@ -50,9 +50,6 @@ func _host_server(port:int, username:String):
 	
 	await SceneManager.changed_scene
 	
-	
-	DisplayServer.window_set_title(str(get_tree().get_multiplayer().get_unique_id()))
-	
 	var lobby = SceneManager.get_current_scene()
 	lobby.update_player_list()
 

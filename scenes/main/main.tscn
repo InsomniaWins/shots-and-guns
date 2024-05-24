@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://4nvuo7fq4e8"]
 
 [ext_resource type="Script" path="res://scenes/main/main.gd" id="1_wi0cm"]
-[ext_resource type="PackedScene" uid="uid://c1pstmk3bsdv8" path="res://scenes/titlescreen/titlescreen.tscn" id="2_jr6gl"]
+[ext_resource type="PackedScene" uid="uid://8bjgjmci7m42" path="res://scenes/effects_loader/effects_loader.tscn" id="2_lch1k"]
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -21,7 +21,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Titlescreen" parent="CurrentSceneParent" instance=ExtResource("2_jr6gl")]
+[node name="EffectsLoader" parent="CurrentSceneParent" instance=ExtResource("2_lch1k")]
 layout_mode = 1
 
 [node name="FreedScenesParent" type="Node" parent="."]

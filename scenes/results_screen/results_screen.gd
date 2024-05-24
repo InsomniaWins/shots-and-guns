@@ -11,6 +11,7 @@ func _ready():
 		$LobbyButton.visible = true
 		$WaitingOnHostLabel.visible = false
 
+
 # called when all peers are ready
 @rpc("authority", "call_local")
 func _rpc_network_ready():

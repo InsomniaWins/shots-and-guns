@@ -1,6 +1,7 @@
-[gd_scene load_steps=42 format=3 uid="uid://cylhp3m23ae8t"]
+[gd_scene load_steps=32 format=3 uid="uid://cylhp3m23ae8t"]
 
 [ext_resource type="Script" path="res://scenes/player/player.gd" id="1_esw1k"]
+[ext_resource type="Material" uid="uid://do57vqbce53gv" path="res://particle_process_materials/player_invincible_particles.tres" id="2_2rwgc"]
 [ext_resource type="Shader" path="res://shaders/sprite_outline.gdshader" id="2_fhlsj"]
 [ext_resource type="Texture2D" uid="uid://cxf6vbo13nsva" path="res://textures/entities/player/player.png" id="2_rnol4"]
 [ext_resource type="Script" path="res://scenes/player/health_manager.gd" id="2_swqtb"]
@@ -16,39 +17,12 @@
 [ext_resource type="Script" path="res://scenes/player/gui.gd" id="11_qbqle"]
 [ext_resource type="Texture2D" uid="uid://jtatwv2ri5bh" path="res://textures/gui/ammo_indicator_full.png" id="12_ijtbc"]
 [ext_resource type="Texture2D" uid="uid://dh4we0fn177h8" path="res://textures/gui/stamina_bar_back.png" id="13_ba5ku"]
+[ext_resource type="Material" uid="uid://c16pwq8urvk3r" path="res://particle_process_materials/player_dash_particles.tres" id="13_fhv1g"]
 [ext_resource type="Texture2D" uid="uid://cnd8boqab3y5q" path="res://textures/gui/stamina_bar_front.png" id="14_1gkjs"]
 [ext_resource type="PackedScene" uid="uid://cab13h2075ldn" path="res://scenes/hitbox/hit_box.tscn" id="17_8wme3"]
 [ext_resource type="Script" path="res://scenes/hitbox/hit_box.gd" id="18_hn2mt"]
-
-[sub_resource type="Curve" id="Curve_pu5y2"]
-min_value = -1.0
-_data = [Vector2(0, -1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="CurveTexture" id="CurveTexture_ki0sl"]
-curve = SubResource("Curve_pu5y2")
-
-[sub_resource type="Curve" id="Curve_te2g1"]
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="CurveTexture" id="CurveTexture_imsgc"]
-curve = SubResource("Curve_te2g1")
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_sygh7"]
-particle_flag_disable_z = true
-emission_shape = 1
-emission_sphere_radius = 9.2
-angle_max = 720.0
-spread = 180.0
-initial_velocity_min = 18.8
-initial_velocity_max = 22.3
-gravity = Vector3(0, 0, 0)
-scale_min = 8.0
-scale_max = 8.0
-scale_curve = SubResource("CurveTexture_imsgc")
-hue_variation_max = 1.0
-hue_variation_curve = SubResource("CurveTexture_ki0sl")
+[ext_resource type="Texture2D" uid="uid://ds7k5gyqer5u3" path="res://textures/gui/ammo_indicator_empty.png" id="20_ycssa"]
+[ext_resource type="Texture2D" uid="uid://byp01oykmm2x0" path="res://textures/gui/ninepatch_outline.png" id="21_p4x2s"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_lo8ta"]
 shader = ExtResource("2_fhlsj")
@@ -204,50 +178,6 @@ particles_anim_h_frames = 1
 particles_anim_v_frames = 1
 particles_anim_loop = false
 
-[sub_resource type="Curve" id="Curve_7j7di"]
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="CurveTexture" id="CurveTexture_xxc6k"]
-curve = SubResource("Curve_7j7di")
-
-[sub_resource type="Curve" id="Curve_dqyxv"]
-min_value = -360.0
-max_value = 360.0
-_data = [Vector2(0, 360), 0.0, 0.0, 0, 0, Vector2(1, -360), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="CurveTexture" id="CurveTexture_n0tsi"]
-curve = SubResource("Curve_dqyxv")
-
-[sub_resource type="Curve" id="Curve_1dye0"]
-max_value = 200.0
-_data = [Vector2(0, 200), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="CurveTexture" id="CurveTexture_yj6vv"]
-curve = SubResource("Curve_1dye0")
-
-[sub_resource type="Curve" id="Curve_g3lkw"]
-max_value = 4.0
-_data = [Vector2(0, 0.480365), 0.0, 0.0, 0, 0, Vector2(1, 4), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="CurveTexture" id="CurveTexture_spw8k"]
-curve = SubResource("Curve_g3lkw")
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_5mvie"]
-particle_flag_disable_z = true
-angle_max = 720.0
-angle_curve = SubResource("CurveTexture_n0tsi")
-spread = 180.0
-initial_velocity_min = 30.0
-initial_velocity_max = 100.0
-gravity = Vector3(0, 0, 0)
-scale_curve = SubResource("CurveTexture_spw8k")
-alpha_curve = SubResource("CurveTexture_xxc6k")
-anim_speed_curve = SubResource("CurveTexture_yj6vv")
-
 [node name="Player" type="CharacterBody2D" groups=["player"]]
 z_index = 1
 collision_layer = 2
@@ -257,7 +187,7 @@ script = ExtResource("1_esw1k")
 [node name="InvincibleParticles" type="GPUParticles2D" parent="."]
 emitting = false
 amount = 32
-process_material = SubResource("ParticleProcessMaterial_sygh7")
+process_material = ExtResource("2_2rwgc")
 lifetime = 0.5
 
 [node name="HealthManager" type="Node" parent="."]
@@ -385,7 +315,7 @@ one_shot = true
 material = SubResource("CanvasItemMaterial_i12mq")
 emitting = false
 amount = 32
-process_material = SubResource("ParticleProcessMaterial_5mvie")
+process_material = ExtResource("13_fhv1g")
 lifetime = 0.25
 one_shot = true
 explosiveness = 0.2
@@ -412,9 +342,9 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -34.0
-offset_top = -42.0
+offset_top = -17.0
 offset_right = 34.0
-offset_bottom = -37.0
+offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 0
 max_value = 1.0
@@ -432,15 +362,16 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -34.0
-offset_top = -38.0
+offset_top = -45.0
 offset_right = 34.0
-offset_bottom = -8.0
+offset_bottom = -15.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_constants/separation = 2
 alignment = 1
 
 [node name="Hearts" type="HBoxContainer" parent="GUI/StatusBar/Stats"]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_constants/separation = 1
@@ -502,7 +433,26 @@ texture = ExtResource("12_ijtbc")
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-texture = ExtResource("12_ijtbc")
+texture = ExtResource("20_ycssa")
+
+[node name="NinePatchRect" type="NinePatchRect" parent="GUI/StatusBar"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -36.0
+offset_top = -40.0
+offset_right = 35.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("21_p4x2s")
+patch_margin_left = 3
+patch_margin_top = 3
+patch_margin_right = 3
+patch_margin_bottom = 3
 
 [node name="FlashRect" type="ColorRect" parent="GUI"]
 anchors_preset = 15

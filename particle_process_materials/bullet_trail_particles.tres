@@ -1,0 +1,16 @@
+[gd_resource type="ParticleProcessMaterial" load_steps=3 format=3 uid="uid://8hd61a7k83pu"]
+
+[sub_resource type="Curve" id="Curve_8lbo7"]
+max_value = 3.0
+_data = [Vector2(0, 3), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_gefbm"]
+curve = SubResource("Curve_8lbo7")
+
+[resource]
+particle_flag_disable_z = true
+emission_shape = 1
+emission_sphere_radius = 2.25
+gravity = Vector3(0, 0, 0)
+scale_curve = SubResource("CurveTexture_gefbm")
