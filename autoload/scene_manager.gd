@@ -53,7 +53,7 @@ func change_scene(next_scene_path:String, post_function:Callable = Callable()) -
 	_change_scene.call_deferred(next_scene_path, post_function)
 
 
-# called by the server the change everyone's scene
+# called by the server to change everyone's scene
 func server_change_scene(next_scene_path:String) -> void:
 	
 	peers_not_finished_changing_scene = multiplayer.get_peers()

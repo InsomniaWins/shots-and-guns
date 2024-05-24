@@ -15,3 +15,5 @@ res://scenes/player/health_manager.gd
 res://scenes/player/status_bar.gd
 res://scenes/levels/level.tscn
 res://scenes/levels/level.gd
+res://scenes/bullet/bullet.tscn
+res://autoload/scene_manager.gd

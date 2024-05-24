@@ -48,7 +48,8 @@ func _ready():
 		Network.allow_new_connections()
 	else:
 		start_button_node.visible = false
-
+	
+	Network.respawn_entities_for_peer.rpc_id(1)
 
 func _process(delta):
 	
@@ -88,6 +89,7 @@ func despawn_player(peer_id:int) -> void:
 func spawn_player(peer_id:int) -> void:
 	var player_node = Network.spawn_player(peer_id, players_node, player_spawn_point_node.position, peer_id == multiplayer.get_unique_id())
 	player_node.eliminated.connect(player_eliminated)
+	
 
 
 func player_eliminated(player_node:CharacterBody2D) -> void:

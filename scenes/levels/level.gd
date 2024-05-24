@@ -138,9 +138,7 @@ func spawn_players():
 		
 		if Network.is_online() and multiplayer.is_server():
 			player.eliminated.connect(player_eliminated)
-		
-		
-		
+
 
 
 func player_eliminated(player_node:CharacterBody2D) -> void:

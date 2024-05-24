@@ -92,7 +92,7 @@ _data = {
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_07ju6"]
 size = Vector2(16, 18)
 
-[node name="AmmoPickup" type="Area2D" groups=["ammo_pickup", "pickup"]]
+[node name="AmmoPickup" type="Area2D" groups=["ammo_pickup", "entity", "pickup"]]
 collision_layer = 2
 collision_mask = 2
 monitorable = false

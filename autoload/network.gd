@@ -136,14 +136,35 @@ func allow_new_connections():
 	multiplayer.multiplayer_peer.refuse_new_connections = false
 
 
+@rpc("any_peer")
+func respawn_entities_for_peer():
+	
+	var sender:int = multiplayer.get_remote_sender_id()
+	
+	for entity in get_tree().get_nodes_in_group("entity"):
+		var entity_path = entity.scene_file_path
+		var entity_name = entity.name
+		var parent_node_path = entity.get_parent().get_path()
+		var data = entity.get_meta("entity_creation_data", {})
+		
+		create_entity.rpc_id(sender, entity_path, entity_name, parent_node_path, data)
+	
+
 @rpc("authority", "call_local")
 func create_entity(entity_path:String, entity_name:String, parent_node_path:NodePath, data:Dictionary = {}):
-	var entity = load(entity_path).instantiate()
+	
+	var predicted_node_path_string:String = str("/", parent_node_path.get_concatenated_names(), "/", entity_name)
+	if get_node_or_null(predicted_node_path_string) != null:
+		return
+	
+	var entity:Node = load(entity_path).instantiate()
 	
 	entity.name = entity_name
 	
 	if entity.has_method("set_entity_data"):
 		entity.set_entity_data(data)
+	
+	entity.set_meta("entity_creation_data", data)
 	
 	get_node(parent_node_path).add_child(entity)
 	
