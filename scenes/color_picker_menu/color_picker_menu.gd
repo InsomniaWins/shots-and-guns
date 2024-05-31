@@ -12,21 +12,72 @@ var selected_button_vector:Vector2 = Vector2(0,0)
 @onready var selected_color_outline_node:NinePatchRect = $SelectedColor
 @onready var move_audio_player_node:AudioStreamPlayer = $MoveSound
 
+func _ready():
+	var x:int = 0
+	var y:int = 0
+	for color_node in grid_container_node.get_children():
+		
+		color_node.mouse_entered.connect(move_to_button.bind(Vector2(x, y)))
+		color_node.gui_input.connect(button_gui_input.bind(Vector2(x, y)))
+		
+		x += 1
+		if x >= grid_container_node.columns:
+			x = 0
+			y += 1
+
+
+func button_gui_input(event:InputEvent, button_vector:Vector2) -> void:
+	
+	if !active:
+		return
+	
+	if event is InputEventMouseButton:
+		if event.pressed and !event.is_echo():
+			if event.button_index == MOUSE_BUTTON_LEFT:
+				move_to_button(button_vector, false)
+				select()
+	
+
+
+func move_to_button(button_vector:Vector2, play_sound:bool = true) -> void:
+	
+	if !active:
+		return
+	
+	var direction:Vector2 = Vector2(
+		int(button_vector.x - selected_button_vector.x),
+		int(button_vector.y - selected_button_vector.y)
+		)
+	
+	while button_vector.x != selected_button_vector.x:
+		move(Vector2(direction.x, 0), false)
+	
+	while button_vector.y != selected_button_vector.y:
+		move(Vector2(0, direction.y), false)
+	
+	if play_sound:
+		move_audio_player_node.play()
+
+
 func _unhandled_input(event):
-	if active:
-		if event.is_action_pressed("aim_down") and !event.is_echo():
+	
+	if !Settings.accept_input:
+		return
+	
+	if active and !event.is_echo() and event.is_pressed():
+		if event.is_action_pressed("menu_move_down"):
 			move_down()
 			get_viewport().set_input_as_handled()
-		elif event.is_action_pressed("aim_up") and !event.is_echo():
+		elif event.is_action_pressed("menu_move_up"):
 			move_up()
 			get_viewport().set_input_as_handled()
-		elif event.is_action_pressed("aim_right") and !event.is_echo():
+		elif event.is_action_pressed("menu_move_right"):
 			move_right()
 			get_viewport().set_input_as_handled()
-		elif event.is_action_pressed("aim_left") and !event.is_echo():
+		elif event.is_action_pressed("menu_move_left"):
 			move_left()
 			get_viewport().set_input_as_handled()
-		elif event.is_action_pressed("select") and !event.is_echo():
+		elif event.is_action_pressed("select"):
 			select()
 			get_viewport().set_input_as_handled()
 
@@ -43,14 +94,15 @@ func move_down():
 func move_up():
 	move(Vector2.UP)
 
-func move(move_direction:Vector2):
+func move(move_direction:Vector2, play_sound:bool = true):
 	var h_direction = sign(move_direction.x)
 	var v_direction = sign(move_direction.y)
 	
 	if h_direction == 0.0 and v_direction == 0.0:
 		return
 	
-	move_audio_player_node.play()
+	if play_sound:
+		move_audio_player_node.play()
 	
 	if h_direction != 0.0:
 		selected_button_vector.x += h_direction

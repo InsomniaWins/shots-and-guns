@@ -128,6 +128,9 @@ func _on_main_menu_menu_selected():
 			main_menu_node.deactivate()
 			edit_character_menu_node.activate()
 		
+		"SETTINGS":
+			SceneManager.change_scene("res://scenes/settings_screen/settings_screen.tscn")
+		
 		"QUIT":
 			get_tree().quit()
 	

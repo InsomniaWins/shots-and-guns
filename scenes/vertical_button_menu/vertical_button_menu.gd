@@ -24,14 +24,18 @@ func _ready():
 
 
 func _unhandled_input(event):
-	if active:
-		if event.is_action_pressed("aim_down") and !event.is_echo():
+	
+	if !Settings.accept_input:
+		return
+	
+	if active and event.is_pressed() and !event.is_echo():
+		if event.is_action_pressed("menu_move_down"):
 			move_down()
 			get_viewport().set_input_as_handled()
-		elif event.is_action_pressed("aim_up") and !event.is_echo():
+		elif event.is_action_pressed("menu_move_up"):
 			move_up()
 			get_viewport().set_input_as_handled()
-		elif event.is_action_pressed("select") and !event.is_echo():
+		elif event.is_action_pressed("select"):
 			select()
 			get_viewport().set_input_as_handled()
 
@@ -56,13 +60,30 @@ func clear_buttons():
 	button_names.clear()
 	update_labels()
 
+func button_gui_input(event:InputEvent, button_index:int) -> void:
+	
+	if !active:
+		return
+	
+	if event is InputEventMouseButton:
+		if event.pressed and !event.is_echo():
+			if event.button_index == MOUSE_BUTTON_LEFT:
+				move_to_button(button_index, false)
+				select()
+	
 
 func update_labels() -> void:
 	 
+	var current_button_index = labels_vbox_node.get_child_count()
 	while labels_vbox_node.get_child_count() < get_button_count():
 		var new_label_node = Label.new()
 		new_label_node.add_theme_font_override("font", preload("res://fonts/normal/normal.png"))
+		new_label_node.mouse_filter = Control.MOUSE_FILTER_STOP
+		new_label_node.mouse_entered.connect(move_to_button.bind(current_button_index))
+		new_label_node.gui_input.connect(button_gui_input.bind(current_button_index))
 		labels_vbox_node.add_child(new_label_node)
+		
+		current_button_index += 1
 	
 	while labels_vbox_node.get_child_count() > get_button_count():
 		labels_vbox_node.get_child(0).queue_free()
@@ -77,13 +98,34 @@ func select():
 	menu_selected.emit()
 
 
-func move(direction:int) -> void:
+func move_to_button(button_index:int, play_sound:bool = true) -> void:
+	
+	if !active:
+		return
+	
+	while button_index < 0:
+		button_index += button_names.size()
+	
+	while button_index > button_names.size() - 1:
+		button_index -= button_names.size()
+	
+	var direction:int = selected_button_index - button_index
+	while button_index != selected_button_index:
+		move(direction, false)
+	
+	if play_sound:
+		move_sound_audio_player_node.play()
+
+
+
+func move(direction:int, play_sound:bool = true) -> void:
 	direction = sign(direction)
 	
 	if direction == 0:
 		return
 	
-	move_sound_audio_player_node.play()
+	if play_sound:
+		move_sound_audio_player_node.play()
 	
 	selected_button_index += direction
 	
@@ -144,3 +186,4 @@ func activate():
 func deactivate():
 	active = false
 	update_active_effect()
+	

@@ -1,4 +1,8 @@
+res://scenes/settings_screen
+C:/Users/insom/Desktop/Shots and Guns exports
 res://autoload
+C:/Users/insom/Documents/GitHub/party-game/exports/web
+res://
 res://particle_process_materials
 res://scenes/effects_loader
 res://scenes/results_screen
@@ -16,7 +20,3 @@ res://scenes/vertical_button_menu
 res://scenes/levels
 res://scenes/player
 res://textures/entities/player
-res://textures/entities/bear_trap
-C:/Users/insom/Documents/JetBrainsMono
-C:/Users/insom/Documents/GitHub/party-game/exports/windows
-res://scenes/lobby

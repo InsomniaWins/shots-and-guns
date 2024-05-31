@@ -25,6 +25,7 @@ var facing_direction:int = 1
 var camera_node:Camera2D = null
 var aim_direction:Vector2 = Vector2.RIGHT
 var i_time:float = 0.0
+var wide_spread:bool = false
 
 @onready var gui_node = $GUI
 @onready var animation_player_node = $AnimationPlayer
@@ -69,10 +70,18 @@ func _process(delta):
 					dash_timer_node.start()
 			
 			
-			var axis_vector:Vector2 = Vector2(
-				Input.get_axis("aim_left", "aim_right"),
-				Input.get_axis("aim_up", "aim_down")
-			)
+			var axis_vector:Vector2
+			
+			if Settings.input_mode == Settings.InputMode.CONTROLLER:
+				# key aiming
+				axis_vector = Vector2(
+					Input.get_axis("aim_left", "aim_right"),
+					Input.get_axis("aim_up", "aim_down")
+				)
+			else:
+				# mouse aiming
+				axis_vector = get_global_mouse_position() - global_position
+			
 			if axis_vector.x != 0 or axis_vector.y != 0:
 				aim_direction = axis_vector
 			aim_arrow_rotation_node.rotation = aim_direction.angle()
@@ -107,7 +116,12 @@ func shoot(direction:Vector2):
 	
 	shotgun_audio_player_node.play()
 	
-	var shoot_directions = [direction.rotated(-PI * 0.1), direction, direction.rotated(PI * 0.1)]
+	var shoot_directions = [
+		direction.rotated(-PI * 0.1),
+		direction,
+		direction.rotated(PI * 0.1)
+		]
+	
 	for shoot_direction in shoot_directions:
 		
 		shoot_direction = shoot_direction.normalized()
@@ -125,8 +139,18 @@ func shoot(direction:Vector2):
 	
 	
 	if multiplayer.is_server():
+		
 		if ammo_manager_node.get_ammo() > 0:
 			ammo_manager_node.remove_ammo()
+			
+			
+			if wide_spread:
+				wide_spread = false
+				shoot_directions = [
+					direction.rotated(-PI * 0.2),
+					direction,
+					direction.rotated(PI * 0.2)
+					]
 			
 			for shoot_direction in shoot_directions:
 				create_bullet_entity(shoot_direction.normalized())

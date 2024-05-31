@@ -206,7 +206,7 @@ offset_right = 50.0
 offset_bottom = 50.0
 grow_horizontal = 2
 grow_vertical = 2
-button_names = Array[String](["HOST GAME", "JOIN GAME", "EDIT CHARACTER", "QUIT"])
+button_names = Array[String](["HOST GAME", "JOIN GAME", "EDIT CHARACTER", "SETTINGS", "QUIT"])
 active = true
 
 [node name="TitleLabel" type="Label" parent="MainMenu"]

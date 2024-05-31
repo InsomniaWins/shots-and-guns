@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://scenes/color_picker_menu/color_picker_menu.gd" id="1_jlft5"]
 [ext_resource type="Texture2D" uid="uid://byp01oykmm2x0" path="res://textures/gui/ninepatch_outline.png" id="2_evdef"]
 [ext_resource type="Texture2D" uid="uid://xwop8tb0dkrr" path="res://textures/gui/custom_color_swatch.png" id="3_1c4qq"]
-[ext_resource type="AudioStream" uid="uid://bbjst8r5y5etc" path="res://sounds/button_move.wav" id="4_6vg6m"]
+[ext_resource type="AudioStream" uid="uid://skmslvv2aryl" path="res://sounds/button_move.ogg" id="4_e6t3q"]
 
 [node name="ColorPickerMenu" type="Control" groups=["button_menu"]]
 layout_mode = 3
@@ -201,5 +201,5 @@ layout_mode = 2
 texture = ExtResource("3_1c4qq")
 
 [node name="MoveSound" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("4_6vg6m")
+stream = ExtResource("4_e6t3q")
 volume_db = -10.0

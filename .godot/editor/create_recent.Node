@@ -1,14 +1,15 @@
+RichTextLabel
+Label
+TextureButton
 Timer
 AudioStreamPlayer
 AudioStreamPlayer2D
 AudioListener2D
 NinePatchRect
 ColorRect
-Label
 Node2D
 GPUParticles2D
 Button
 Sprite2D
 Control
 CanvasLayer
-TextureRect

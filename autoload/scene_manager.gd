@@ -8,6 +8,7 @@ signal all_peers_changed_scene(scene_path:String)
 var peers_not_finished_changing_scene:Array = []
 
 
+
 @rpc("any_peer", "call_local")
 func peer_finished_changing_scene(scene_path:String):
 	var peer = multiplayer.get_remote_sender_id()

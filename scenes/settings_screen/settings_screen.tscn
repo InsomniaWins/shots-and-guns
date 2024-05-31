@@ -1,0 +1,53 @@
+[gd_scene load_steps=4 format=3 uid="uid://cyplxupjiqtoi"]
+
+[ext_resource type="Script" path="res://scenes/settings_screen/settings_screen.gd" id="1_cdk5o"]
+[ext_resource type="PackedScene" uid="uid://duaa42vwqvo0k" path="res://scenes/vertical_button_menu/vertical_button_menu.tscn" id="2_lqwry"]
+[ext_resource type="FontFile" uid="uid://bhvepy8hqrp7p" path="res://fonts/normal/normal.png" id="3_odn8h"]
+
+[node name="SettingsScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_cdk5o")
+
+[node name="MainButtonMenu" parent="." instance=ExtResource("2_lqwry")]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 24.0
+offset_top = -50.0
+offset_right = 124.0
+offset_bottom = 50.0
+grow_vertical = 2
+button_names = Array[String](["BACK", "CHANGE INPUT MODE"])
+
+[node name="SettingsInfoLabel" type="RichTextLabel" parent="."]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -287.0
+offset_top = 33.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_fonts/normal_font = ExtResource("3_odn8h")
+bbcode_enabled = true
+
+[node name="Label" type="Label" parent="SettingsInfoLabel"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = -24.0
+offset_bottom = -1.0
+grow_horizontal = 2
+theme_override_fonts/font = ExtResource("3_odn8h")
+text = "SETTINGS"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="menu_selected" from="MainButtonMenu" to="." method="_on_main_button_menu_menu_selected"]

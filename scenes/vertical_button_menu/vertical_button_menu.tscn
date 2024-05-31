@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scenes/vertical_button_menu/vertical_button_menu.gd" id="1_hr3at"]
 [ext_resource type="FontFile" uid="uid://bhvepy8hqrp7p" path="res://fonts/normal/normal.png" id="2_e0stw"]
-[ext_resource type="AudioStream" uid="uid://bbjst8r5y5etc" path="res://sounds/button_move.wav" id="3_4l1kl"]
+[ext_resource type="AudioStream" uid="uid://skmslvv2aryl" path="res://sounds/button_move.ogg" id="3_x4n26"]
 
 [node name="VerticalButtonMenu" type="Control" groups=["button_menu"]]
 custom_minimum_size = Vector2(100, 100)
@@ -23,5 +23,5 @@ offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="MoveSound" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("3_4l1kl")
+stream = ExtResource("3_x4n26")
 volume_db = -10.0
