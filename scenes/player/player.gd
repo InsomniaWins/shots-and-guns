@@ -1,9 +1,13 @@
 extends CharacterBody2D
 
+signal requested_start_game
+signal requested_quit_game
+
 signal respawned
 signal eliminated(player_node)
 
 const BulletLine = preload("res://scenes/bullet_line/bullet_line.tscn")
+const PauseMenu = preload("res://scenes/pause_menu/pause_menu.tscn")
 
 const WALK_SPEED:float = 100.0
 const DASH_SPEED:float = 250.0
@@ -26,6 +30,7 @@ var camera_node:Camera2D = null
 var aim_direction:Vector2 = Vector2.RIGHT
 var i_time:float = 0.0
 var wide_spread:bool = false
+var pause_menu_node:CanvasLayer = null
 
 @onready var gui_node = $GUI
 @onready var animation_player_node = $AnimationPlayer
@@ -54,12 +59,34 @@ func emit_dash_particles():
 func is_respawning() -> bool:
 	return respawning
 
+
+func is_paused() -> bool:
+	return is_instance_valid(pause_menu_node)
+
+
+func _pause() -> void:
+	
+	if !is_local():
+		return
+	
+	pause_menu_node = PauseMenu.instantiate()
+	pause_menu_node.resume_selected.connect(_on_pause_menu_resume_selected)
+	pause_menu_node.quit_selected.connect(_on_pause_menu_quit_selected)
+	pause_menu_node.start_game_selected.connect(_on_pause_menu_start_game_selected)
+	add_child(pause_menu_node)
+	
+
+
 func _process(delta):
+	
+	if Input.is_action_just_pressed("pause"):
+		if !is_paused():
+			_pause()
 	
 	i_time = max(i_time - delta, 0.0)
 	invincible_particle_emitter_node.emitting = i_time > 0.0
 	
-	if is_local():
+	if is_local() and !is_paused():
 		
 		if !is_respawning():
 			move_speed = move_toward(move_speed, WALK_SPEED, delta * 150)
@@ -75,8 +102,8 @@ func _process(delta):
 			if Settings.input_mode == Settings.InputMode.CONTROLLER:
 				# key aiming
 				axis_vector = Vector2(
-					Input.get_axis("aim_left", "aim_right"),
-					Input.get_axis("aim_up", "aim_down")
+					Input.get_joy_axis(0, JOY_AXIS_RIGHT_X),
+					Input.get_joy_axis(0, JOY_AXIS_RIGHT_Y)
 				)
 			else:
 				# mouse aiming
@@ -219,7 +246,7 @@ func _handle_sprite_animations() -> void:
 
 
 func _physics_process(_delta):
-	if is_local() and !is_respawning():
+	if is_local() and !is_respawning() and !is_paused():
 		var move_direction = Vector2(
 			Input.get_axis("move_left", "move_right"),
 			Input.get_axis("move_up", "move_down")
@@ -252,3 +279,15 @@ func _on_dash_timer_timeout():
 
 func _on_hit_box_damaged(amount):
 	health_manager_node.take_damage(amount)
+
+
+func _on_pause_menu_resume_selected():
+	pause_menu_node.queue_free()
+
+
+func _on_pause_menu_quit_selected():
+	requested_quit_game.emit()
+
+
+func _on_pause_menu_start_game_selected():
+	requested_start_game.emit()

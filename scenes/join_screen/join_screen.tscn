@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://l8mp1hxwrg74"]
+[gd_scene load_steps=8 format=3 uid="uid://l8mp1hxwrg74"]
 
 [ext_resource type="Script" path="res://scenes/join_screen/join_screen.gd" id="1_trerf"]
 [ext_resource type="FontFile" uid="uid://bhvepy8hqrp7p" path="res://fonts/normal/normal.png" id="2_mxnmh"]
 [ext_resource type="PackedScene" uid="uid://duaa42vwqvo0k" path="res://scenes/vertical_button_menu/vertical_button_menu.tscn" id="3_j42dk"]
+[ext_resource type="PackedScene" uid="uid://c37ile8f4b5qu" path="res://scenes/controller_keyboard_line_edit_input/controller_keyboard_line_edit_input.tscn" id="4_0tkrc"]
 
 [sub_resource type="Animation" id="Animation_5qphu"]
 length = 0.001
@@ -118,27 +119,6 @@ grow_vertical = 2
 button_names = Array[String](["BACK", "EDIT IP", "EDIT PORT", "JOIN"])
 active = true
 
-[node name="ConnectionInfo" type="VBoxContainer" parent="."]
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -20.0
-offset_top = 40.0
-offset_right = 20.0
-offset_bottom = 80.0
-grow_horizontal = 2
-
-[node name="IPLabel" type="Label" parent="ConnectionInfo"]
-layout_mode = 2
-theme_override_fonts/font = ExtResource("2_mxnmh")
-text = "IP: 192.168.1.1"
-
-[node name="PortLabel" type="Label" parent="ConnectionInfo"]
-layout_mode = 2
-theme_override_fonts/font = ExtResource("2_mxnmh")
-text = "PORT: 25565"
-
 [node name="ConnectTimer" type="Timer" parent="."]
 one_shot = true
 
@@ -168,5 +148,93 @@ libraries = {
 wait_time = 5.0
 one_shot = true
 
+[node name="PortEditControllerInput" parent="." instance=ExtResource("4_0tkrc")]
+visible = false
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -121.5
+offset_top = -180.0
+offset_right = 121.5
+offset_bottom = -88.0
+grow_horizontal = 2
+grow_vertical = 0
+line_edit_node_path = NodePath("../PortEdit")
+
+[node name="IpEditControllerInput" parent="." instance=ExtResource("4_0tkrc")]
+visible = false
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -121.5
+offset_top = -180.0
+offset_right = 121.5
+offset_bottom = -88.0
+grow_horizontal = 2
+grow_vertical = 0
+line_edit_node_path = NodePath("../IpEdit")
+
+[node name="PortEdit" type="LineEdit" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -78.0
+offset_top = 32.0
+offset_right = 78.0
+offset_bottom = 52.0
+grow_horizontal = 2
+theme_override_fonts/font = ExtResource("2_mxnmh")
+text = "25565"
+placeholder_text = "PORT"
+
+[node name="Label" type="Label" parent="PortEdit"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = -40.0
+offset_top = -6.0
+offset_right = -12.0
+offset_bottom = 6.0
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("2_mxnmh")
+text = "PORT"
+
+[node name="IpEdit" type="LineEdit" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -78.0
+offset_top = 56.0
+offset_right = 78.0
+offset_bottom = 76.0
+grow_horizontal = 2
+theme_override_fonts/font = ExtResource("2_mxnmh")
+text = "LOCALHOST"
+placeholder_text = "IP"
+
+[node name="Label" type="Label" parent="IpEdit"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = -40.0
+offset_top = -6.0
+offset_right = -12.0
+offset_bottom = 6.0
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("2_mxnmh")
+text = "IP"
+
 [connection signal="menu_selected" from="MainMenu" to="." method="_on_main_menu_menu_selected"]
 [connection signal="timeout" from="ServerAlreadyStartedTimer" to="." method="_on_server_already_started_timer_timeout"]
+[connection signal="text_submitted" from="PortEdit" to="." method="_on_port_edit_text_submitted"]
+[connection signal="text_submitted" from="IpEdit" to="." method="_on_ip_edit_text_submitted"]

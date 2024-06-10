@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://c37ile8f4b5qu"]
+
+[ext_resource type="PackedScene" uid="uid://caypn28v4edjm" path="res://scenes/controller_keyboard_input/controller_keyboard_input.tscn" id="1_0i156"]
+[ext_resource type="Script" path="res://scenes/controller_keyboard_line_edit_input/controller_keyboard_line_edit_input.gd" id="1_sl73y"]
+
+[node name="ControllerKeyboardLineEditInput" type="MarginContainer"]
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_sl73y")
+
+[node name="ControllerKeyboardInput" parent="." instance=ExtResource("1_0i156")]
+layout_mode = 2
+
+[connection signal="backspace" from="ControllerKeyboardInput" to="." method="_on_controller_keyboard_input_backspace"]
+[connection signal="bumper_left" from="ControllerKeyboardInput" to="." method="_on_controller_keyboard_input_bumper_left"]
+[connection signal="bumper_right" from="ControllerKeyboardInput" to="." method="_on_controller_keyboard_input_bumper_right"]
+[connection signal="enter" from="ControllerKeyboardInput" to="." method="_on_controller_keyboard_input_enter"]
+[connection signal="letter_selected" from="ControllerKeyboardInput" to="." method="_on_controller_keyboard_input_letter_selected"]
+[connection signal="space" from="ControllerKeyboardInput" to="." method="_on_controller_keyboard_input_space"]

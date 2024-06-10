@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://c8s7kqudqdivl"]
+[gd_scene load_steps=5 format=3 uid="uid://c8s7kqudqdivl"]
 
 [ext_resource type="Script" path="res://scenes/host_screen/host_screen.gd" id="1_60xuo"]
 [ext_resource type="FontFile" uid="uid://bhvepy8hqrp7p" path="res://fonts/normal/normal.png" id="2_ii6d6"]
 [ext_resource type="PackedScene" uid="uid://duaa42vwqvo0k" path="res://scenes/vertical_button_menu/vertical_button_menu.tscn" id="3_eokcp"]
+[ext_resource type="PackedScene" uid="uid://c37ile8f4b5qu" path="res://scenes/controller_keyboard_line_edit_input/controller_keyboard_line_edit_input.tscn" id="4_be3ml"]
 
 [node name="HostScreen" type="Control"]
 layout_mode = 3
@@ -56,20 +57,48 @@ grow_vertical = 2
 button_names = Array[String](["BACK", "EDIT PORT", "HOST"])
 active = true
 
-[node name="ConnectionInfo" type="VBoxContainer" parent="."]
+[node name="PortEdit" type="LineEdit" parent="."]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -20.0
-offset_top = 40.0
-offset_right = 20.0
-offset_bottom = 80.0
+offset_left = -78.0
+offset_top = 32.0
+offset_right = 78.0
+offset_bottom = 52.0
 grow_horizontal = 2
-
-[node name="PortLabel" type="Label" parent="ConnectionInfo"]
-layout_mode = 2
 theme_override_fonts/font = ExtResource("2_ii6d6")
-text = "PORT: 25565"
+text = "25565"
+placeholder_text = "PORT"
+
+[node name="Label" type="Label" parent="PortEdit"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = -40.0
+offset_top = -6.0
+offset_right = -12.0
+offset_bottom = 6.0
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("2_ii6d6")
+text = "PORT"
+
+[node name="PortEditControllerKeyboardInput" parent="." instance=ExtResource("4_be3ml")]
+visible = false
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -121.5
+offset_top = -148.0
+offset_right = 121.5
+offset_bottom = -56.0
+grow_horizontal = 2
+grow_vertical = 0
+line_edit_node_path = NodePath("../PortEdit")
 
 [connection signal="menu_selected" from="MainMenu" to="." method="_on_main_menu_menu_selected"]
+[connection signal="text_submitted" from="PortEdit" to="." method="_on_port_edit_text_submitted"]

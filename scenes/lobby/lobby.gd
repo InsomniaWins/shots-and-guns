@@ -89,7 +89,11 @@ func spawn_player(peer_id:int) -> void:
 	var player_node = Network.spawn_player(peer_id, players_node, player_spawn_point_node.position, peer_id == multiplayer.get_unique_id())
 	player_node.eliminated.connect(player_eliminated)
 	
-
+	if peer_id == 1:
+		player_node.requested_start_game.connect(player_requested_start_game.bind(1))
+	
+	if peer_id == multiplayer.get_unique_id():
+		player_node.requested_quit_game.connect(leave_lobby)
 
 func player_eliminated(player_node:CharacterBody2D) -> void:
 	
@@ -147,6 +151,15 @@ func _on_margin_container_resized():
 
 func _on_start_button_pressed():
 	
+	player_requested_start_game(1)
+
+func player_requested_start_game(peer_id:int):
+	
+	if peer_id == 1:
+		start_game()
+
+func start_game():
+	
 	if Network.players.size() < 2:
 		return
 	
@@ -160,7 +173,7 @@ func _on_start_button_pressed():
 
 func _on_leave_button_pressed():
 	
-	Network.leave_game()
+	leave_lobby()
 
 
 # called on server only!
@@ -205,3 +218,6 @@ func _on_spawn_pickup_timer_timeout():
 		return
 	
 	attempt_pickup_spawn()
+
+func leave_lobby():
+	Network.leave_game()

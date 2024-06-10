@@ -1,11 +1,11 @@
 extends Control
 
-var editing_port:bool = false
 var current_port:String = "25565"
 
 @onready var main_menu_node = $MainMenu
-@onready var current_port_label_node = $ConnectionInfo/PortLabel
+@onready var port_edit_node := $PortEdit
 @onready var status_label_node:Label = $StatusLabel
+@onready var port_edit_controller_keyboard_input_node := $PortEditControllerKeyboardInput
 
 
 func _on_back_button_pressed():
@@ -54,35 +54,8 @@ func _host_server(port:int, username:String):
 	lobby.update_player_list()
 
 
-
-func _input(event):
-	if event is InputEventKey:
-		if event.pressed and !event.echo:
-			var key_string:String = event.as_text_keycode()
-			
-			if key_string.length() > 1:
-				
-				if key_string == "Enter" or key_string == "Escape" or key_string == "Enter":
-					editing_port = false
-					main_menu_node.activate()
-					return
-				elif key_string == "Backspace":
-					if editing_port:
-						current_port = current_port.substr(0, current_port.length()-1)
-					update_current_information()
-					return
-				elif key_string == "Period":
-					key_string = "."
-				else:
-					return
-			
-			if editing_port:
-				current_port = str(current_port, key_string.to_int())
-			update_current_information()
-
-
 func update_current_information() -> void:
-	current_port_label_node.text = "PORT: " + current_port
+	port_edit_node.text = current_port
 
 
 func _on_main_menu_menu_selected():
@@ -90,10 +63,16 @@ func _on_main_menu_menu_selected():
 	
 	match button_name:
 		"EDIT PORT":
-			editing_port = true
-			main_menu_node.deactivate()
+			port_edit_node.grab_focus()
 		"HOST":
 			main_menu_node.deactivate()
 			_host_server(current_port.to_int(), Network.my_information.username)
 		"BACK":
 			SceneManager.change_scene("res://scenes/titlescreen/titlescreen.tscn")
+
+
+func _on_port_edit_text_submitted(new_text):
+	port_edit_node.text = str(new_text.to_int())
+	port_edit_node.release_focus()
+	main_menu_node.activate()
+

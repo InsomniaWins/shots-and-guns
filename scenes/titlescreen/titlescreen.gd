@@ -18,6 +18,7 @@ func _ready():
 	username_edit_node.text = Network.my_information.username
 	update_hat_texture()
 	update_body_color()
+	update_username()
 	add_swatches_to_color_picker(player_color_picker_node)
 
 
@@ -68,13 +69,15 @@ func _on_join_button_pressed():
 func show_message(message:String) -> void:
 	message_panel_node.get_node("Label").text = message
 	message_panel_node.visible = true
-
+	main_menu_node.deactivate()
+	$MessagePanel/MesagePanelButtonMenu.activate()
 
 func _on_close_message_panel_button_pressed():
 	hide_message()
 
 func hide_message() -> void:
 	message_panel_node.visible = false
+	main_menu_node.activate()
 
 
 
@@ -110,7 +113,11 @@ func _on_edit_player_color_button_pressed():
 
 func _on_username_edit_text_changed(new_text):
 	Network.my_information.username = new_text
+	update_username()
 
+
+func update_username():
+	$Character/UsernameLabel.text = Network.my_information.username
 
 func _on_main_menu_menu_selected():
 	
@@ -144,8 +151,9 @@ func _on_edit_character_menu_menu_selected():
 			main_menu_node.activate()
 			character_editor_node.visible = false
 		"USERNAME":
-			$CharacterEditor/UsernameEdit.grab_focus()
 			edit_character_menu_node.deactivate()
+			$CharacterEditor/UsernameEdit.grab_focus()
+			
 		"HAT":
 			character_editor_node.hat_edit_menu_node.visible = true
 			edit_character_menu_node.deactivate()
@@ -181,3 +189,14 @@ func _on_body_color_picker_menu_selected():
 	body_color_picker_node.visible = false
 	body_color_picker_node.deactivate()
 	edit_character_menu_node.activate()
+
+
+
+
+func _on_mesage_panel_button_menu_menu_selected():
+	var button_name = $MessagePanel/MesagePanelButtonMenu.button_names[$MessagePanel/MesagePanelButtonMenu.selected_button_index]
+	
+	match button_name:
+		"CLOSE MESSAGE":
+			hide_message()
+

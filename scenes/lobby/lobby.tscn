@@ -358,6 +358,7 @@ layout_mode = 2
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 layer = 4
+visible = false
 
 [node name="StartButton" type="Button" parent="CanvasLayer"]
 anchors_preset = 3

@@ -1,5 +1,8 @@
-RichTextLabel
+CanvasLayer
 Label
+MarginContainer
+PanelContainer
+RichTextLabel
 TextureButton
 Timer
 AudioStreamPlayer
@@ -10,6 +13,3 @@ ColorRect
 Node2D
 GPUParticles2D
 Button
-Sprite2D
-Control
-CanvasLayer

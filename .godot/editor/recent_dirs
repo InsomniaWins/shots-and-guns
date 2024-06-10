@@ -1,3 +1,5 @@
+res://scenes/pause_menu
+res://scenes/controller_keyboard_line_edit_input
 res://scenes/settings_screen
 C:/Users/insom/Desktop/Shots and Guns exports
 res://autoload
@@ -18,5 +20,3 @@ res://scenes/ammo_pickup
 res://scenes/color_picker_menu
 res://scenes/vertical_button_menu
 res://scenes/levels
-res://scenes/player
-res://textures/entities/player

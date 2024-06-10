@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://c1pstmk3bsdv8"]
+[gd_scene load_steps=12 format=3 uid="uid://c1pstmk3bsdv8"]
 
 [ext_resource type="Script" path="res://scenes/titlescreen/titlescreen.gd" id="1_vrurj"]
 [ext_resource type="FontFile" uid="uid://bhvepy8hqrp7p" path="res://fonts/normal/normal.png" id="2_grua3"]
@@ -8,6 +8,7 @@
 [ext_resource type="Script" path="res://scenes/titlescreen/character_editor.gd" id="6_j4asw"]
 [ext_resource type="Texture2D" uid="uid://byp01oykmm2x0" path="res://textures/gui/ninepatch_outline.png" id="7_c8i5c"]
 [ext_resource type="PackedScene" uid="uid://b2bgy60osqp6x" path="res://scenes/color_picker_menu/color_picker_menu.tscn" id="7_ij63k"]
+[ext_resource type="PackedScene" uid="uid://caypn28v4edjm" path="res://scenes/controller_keyboard_input/controller_keyboard_input.tscn" id="7_mqkgx"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_d7fkh"]
 shader = ExtResource("3_qq2v1")
@@ -301,6 +302,13 @@ grow_horizontal = 2
 grow_vertical = 2
 button_names = Array[String](["BACK", "NEXT HAT", "PREVIOUS HAT", "REMOVE HAT"])
 
+[node name="ControllerKeyboardInput" parent="CharacterEditor" instance=ExtResource("7_mqkgx")]
+visible = false
+offset_left = 64.0
+offset_top = 104.0
+offset_right = 307.0
+offset_bottom = 196.0
+
 [node name="Character" type="Control" parent="."]
 layout_mode = 1
 anchors_preset = 6
@@ -324,6 +332,7 @@ vframes = 4
 position = Vector2(0, -8)
 
 [node name="Outline" type="NinePatchRect" parent="Character"]
+self_modulate = Color(1, 1, 1, 0.235294)
 layout_mode = 0
 offset_left = -46.0
 offset_top = -79.0
@@ -350,6 +359,21 @@ grow_horizontal = 2
 grow_vertical = 0
 theme_override_fonts/font = ExtResource("2_grua3")
 text = "CHARACTER"
+
+[node name="UsernameLabel" type="Label" parent="Character"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -28.0
+offset_top = -72.0
+offset_right = 28.0
+offset_bottom = -49.0
+grow_horizontal = 2
+theme_override_fonts/font = ExtResource("2_grua3")
+text = "USERNAME"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="PlayerColorEditor" type="ColorRect" parent="."]
 visible = false
@@ -455,21 +479,20 @@ text = "THIS IS A MESSAGE!"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="CloseMessagePanelButton" type="Button" parent="MessagePanel"]
+[node name="MesagePanelButtonMenu" parent="MessagePanel" instance=ExtResource("5_vtk78")]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -29.0
-offset_top = -40.0
-offset_right = 29.0
-offset_bottom = -16.0
+offset_left = -50.0
+offset_top = -44.0
+offset_right = 50.0
+offset_bottom = 56.0
 grow_horizontal = 2
 grow_vertical = 0
-theme_override_fonts/font = ExtResource("2_grua3")
-text = "CLOSE"
+button_names = Array[String](["CLOSE MESSAGE"])
 
 [connection signal="text_changed" from="HBoxContainer/CharacterEditor/UsernameEdit" to="." method="_on_username_edit_text_changed"]
 [connection signal="pressed" from="HBoxContainer/CharacterEditor/HatButtons/DecrementHat" to="." method="_on_decrement_hat_pressed"]
@@ -480,11 +503,18 @@ text = "CLOSE"
 [connection signal="pressed" from="HBoxContainer/Menu/VBoxContainer/JoinButton" to="." method="_on_join_button_pressed"]
 [connection signal="menu_selected" from="MainMenu" to="." method="_on_main_menu_menu_selected"]
 [connection signal="menu_selected" from="CharacterEditor/EditCharacterMenu" to="." method="_on_edit_character_menu_menu_selected"]
+[connection signal="focus_entered" from="CharacterEditor/UsernameEdit" to="CharacterEditor" method="_on_username_edit_focus_entered"]
 [connection signal="focus_exited" from="CharacterEditor/UsernameEdit" to="CharacterEditor" method="_on_username_edit_focus_exited"]
 [connection signal="text_submitted" from="CharacterEditor/UsernameEdit" to="CharacterEditor" method="_on_username_edit_text_submitted"]
 [connection signal="menu_selected" from="CharacterEditor/HatEditMenu" to="CharacterEditor" method="_on_hat_edit_menu_menu_selected"]
+[connection signal="backspace" from="CharacterEditor/ControllerKeyboardInput" to="CharacterEditor" method="_on_controller_keyboard_input_backspace"]
+[connection signal="bumper_left" from="CharacterEditor/ControllerKeyboardInput" to="CharacterEditor" method="_on_controller_keyboard_input_bumper_left"]
+[connection signal="bumper_right" from="CharacterEditor/ControllerKeyboardInput" to="CharacterEditor" method="_on_controller_keyboard_input_bumper_right"]
+[connection signal="enter" from="CharacterEditor/ControllerKeyboardInput" to="CharacterEditor" method="_on_controller_keyboard_input_enter"]
+[connection signal="letter_selected" from="CharacterEditor/ControllerKeyboardInput" to="CharacterEditor" method="_on_controller_keyboard_input_letter_selected"]
+[connection signal="space" from="CharacterEditor/ControllerKeyboardInput" to="CharacterEditor" method="_on_controller_keyboard_input_space"]
 [connection signal="color_changed" from="PlayerColorEditor/ScrollContainer/PlayerColorPicker" to="." method="_on_player_color_picker_color_changed"]
 [connection signal="pressed" from="PlayerColorEditor/ColorPickerOkayButton" to="." method="_on_color_picker_okay_button_pressed"]
 [connection signal="menu_moved" from="BodyColorPicker" to="." method="_on_body_color_picker_menu_moved"]
 [connection signal="menu_selected" from="BodyColorPicker" to="." method="_on_body_color_picker_menu_selected"]
-[connection signal="pressed" from="MessagePanel/CloseMessagePanelButton" to="." method="_on_close_message_panel_button_pressed"]
+[connection signal="menu_selected" from="MessagePanel/MesagePanelButtonMenu" to="." method="_on_mesage_panel_button_menu_menu_selected"]

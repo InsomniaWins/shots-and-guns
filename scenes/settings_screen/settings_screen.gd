@@ -22,7 +22,7 @@ func change_input_mode():
 func update_info_label():
 	settings_info_label_node.text = str(
 		"Input Mode: ", "Controller" if Settings.input_mode == Settings.InputMode.CONTROLLER else "Keyboard & Mouse",
-		"\n[color=#868188]Some controls will still work with either input mode; however, most will not."
+		"\n[color=#868188]Some controls will still work with either input mode; however, most will not. (i.e. Aiming)"
 		)
 
 

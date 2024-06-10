@@ -7,10 +7,12 @@ extends Control
 @onready var winner_username_label_node:Label = $CharacterScaler/UsernameLabel
 @onready var win_audio_player_node:AudioStreamPlayer = $WinSound
 @onready var lose_audio_player_node:AudioStreamPlayer = $LoseSound
+@onready var lobby_button_menu_node := $LobbyButtonMenu
 
 func _ready():
 	if Network.is_online() and multiplayer.is_server():
-		$LobbyButton.visible = true
+		lobby_button_menu_node.visible = true
+		lobby_button_menu_node.activate()
 		$WaitingOnHostLabel.visible = false
 
 
@@ -52,11 +54,13 @@ func show_winner(winner_id:int, winner_name:String, winner_color:Color, winner_h
 	var outline_color = Color.WHITE if body_color_average <= 0.5 else Color.BLACK
 	
 	winner_character_body_node.material.set_shader_parameter("color", outline_color)
-	
 
 
-func _on_lobby_button_pressed():
+
+func _on_lobby_button_menu_menu_selected():
+	var button_name = lobby_button_menu_node.button_names[lobby_button_menu_node.selected_button_index]
 	
-	SceneManager.change_scene.rpc("res://scenes/lobby/lobby.tscn")
-	
+	match button_name:
+		"RETURN TO LOBBY":
+			SceneManager.change_scene.rpc("res://scenes/lobby/lobby.tscn")
 	

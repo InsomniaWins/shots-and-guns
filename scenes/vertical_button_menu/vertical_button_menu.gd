@@ -92,6 +92,7 @@ func update_labels() -> void:
 		var label_node = get_button_label(i)
 		label_node.text = button_names[i]
 	
+	update_selected_button_graphic()
 
 func select():
 	AudioManager.play_sound(preload("res://sounds/button_select.wav"), -5)
@@ -145,7 +146,13 @@ func update_selected_button_graphic() -> void:
 	if selection_label_node.visible:
 		
 		selection_label_node.position.y = get_selected_button_label().position.y
-		
+	
+	for label_node in labels_vbox_node.get_children():
+		label_node.self_modulate = Color("868188")
+	
+	var selected_button_label:Label = get_selected_button_label()
+	if is_instance_valid(selected_button_label):
+		selected_button_label.self_modulate = Color.WHITE
 
 
 func get_button_count() -> int:
@@ -181,9 +188,11 @@ func activate():
 	
 	active = true
 	update_active_effect()
+	update_selected_button_graphic()
 
 
 func deactivate():
 	active = false
 	update_active_effect()
 	
+

@@ -2,19 +2,18 @@ extends Control
 
 var current_ip:String = "LOCALHOST"
 var current_port:String = "25565"
-var editing_ip = false
-var editing_port = false
 
 @onready var main_menu_node = $MainMenu
-@onready var current_ip_label_node = $ConnectionInfo/IPLabel
-@onready var current_port_label_node = $ConnectionInfo/PortLabel
 @onready var status_label_node:Label = $StatusLabel
 @onready var connect_timer_node:Timer = $ConnectTimer
 @onready var connecting_label_animation_player_node:AnimationPlayer = $ConnectingLabelAnimationPlayer
+@onready var port_edit_controller_input_node := $PortEditControllerInput
+@onready var ip_edit_controller_input_node := $IpEditControllerInput
+@onready var ip_edit_node := $IpEdit
+@onready var port_edit_node := $PortEdit
 
 func _ready():
 	Network.player_joined.connect(player_joined)
-	update_current_information()
 
 func _process(delta):
 	status_label_node.modulate.a = lerp(status_label_node.modulate.a, 0.0, delta)
@@ -38,6 +37,8 @@ func _join_server(ip:String, port:int, username:String) -> void:
 	multiplayer.multiplayer_peer = peer
 	
 	main_menu_node.deactivate()
+	port_edit_node.mouse_filter = MOUSE_FILTER_IGNORE
+	ip_edit_node.mouse_filter = MOUSE_FILTER_IGNORE
 	connecting_label_animation_player_node.play("connecting")
 	
 	const TIMEOUT:int = 10
@@ -56,6 +57,8 @@ func _join_server(ip:String, port:int, username:String) -> void:
 		status_label_node.modulate = Color.RED
 		
 		main_menu_node.activate()
+		port_edit_node.mouse_filter = MOUSE_FILTER_STOP
+		ip_edit_node.mouse_filter = MOUSE_FILTER_STOP
 		
 		peer.close()
 		connecting_label_animation_player_node.play("RESET")
@@ -65,6 +68,9 @@ func _join_server(ip:String, port:int, username:String) -> void:
 		status_label_node.text = "Failed to join server!"
 		status_label_node.modulate = Color.RED
 		connecting_label_animation_player_node.play("RESET")
+		port_edit_node.mouse_filter = MOUSE_FILTER_STOP
+		ip_edit_node.mouse_filter = MOUSE_FILTER_STOP
+		main_menu_node.activate()
 		return
 	
 	Network.players[peer.get_unique_id()] = Network.create_new_player_info(
@@ -93,43 +99,7 @@ func player_joined(peer_id):
 	
 	var lobby = SceneManager.get_current_scene()
 	lobby.update_player_list()
-	
 
-
-func _input(event):
-	if event is InputEventKey:
-		if event.pressed and !event.echo:
-			var key_string:String = event.as_text_keycode()
-			
-			if key_string.length() > 1:
-				
-				if key_string == "Enter" or key_string == "Escape" or key_string == "Enter":
-					editing_port = false
-					editing_ip = false
-					main_menu_node.activate()
-					return
-				elif key_string == "Backspace":
-					if editing_port:
-						current_port = current_port.substr(0, current_port.length()-1)
-					elif editing_ip:
-						current_ip = current_ip.substr(0, current_ip.length()-1)
-					update_current_information()
-					return
-				elif key_string == "Period":
-					key_string = "."
-				else:
-					return
-			
-			if editing_ip:
-				current_ip = current_ip + key_string
-			elif editing_port:
-				current_port = str(current_port, key_string.to_int())
-			update_current_information()
-
-
-func update_current_information() -> void:
-	current_ip_label_node.text = "IP: " + current_ip
-	current_port_label_node.text = "PORT: " + current_port
 
 
 func _on_main_menu_menu_selected():
@@ -137,11 +107,13 @@ func _on_main_menu_menu_selected():
 	
 	match button_name:
 		"EDIT IP":
-			editing_ip = true
 			main_menu_node.deactivate()
+			ip_edit_node.grab_focus()
+			ip_edit_node.caret_column = ip_edit_node.text.length()
 		"EDIT PORT":
-			editing_port = true
 			main_menu_node.deactivate()
+			port_edit_node.grab_focus()
+			port_edit_node.caret_column = port_edit_node.text.length()
 		"JOIN":
 			main_menu_node.deactivate()
 			_join_server(current_ip, current_port.to_int(), Network.my_information.username)
@@ -154,3 +126,18 @@ func _on_server_already_started_timer_timeout():
 	status_label_node.modulate = Color.RED
 	main_menu_node.activate()
 	connecting_label_animation_player_node.play("RESET")
+
+
+func _on_port_edit_text_submitted(new_text):
+	current_port = str(new_text.to_int())
+	port_edit_node.release_focus()
+	main_menu_node.activate()
+
+
+func _on_ip_edit_text_submitted(new_text):
+	if new_text.is_empty():
+		return
+	
+	current_ip = new_text
+	ip_edit_node.release_focus()
+	main_menu_node.activate()

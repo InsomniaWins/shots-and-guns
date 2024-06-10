@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://mix78kbxkyo3"]
+[gd_scene load_steps=10 format=3 uid="uid://mix78kbxkyo3"]
 
 [ext_resource type="Script" path="res://scenes/results_screen/results_screen.gd" id="1_maanr"]
 [ext_resource type="FontFile" uid="uid://bhvepy8hqrp7p" path="res://fonts/normal/normal.png" id="2_7pvae"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://byp01oykmm2x0" path="res://textures/gui/ninepatch_outline.png" id="4_e7b28"]
 [ext_resource type="AudioStream" uid="uid://dcb7a6j5g8p33" path="res://sounds/win.ogg" id="6_bebti"]
 [ext_resource type="AudioStream" uid="uid://cry054wfy1nro" path="res://sounds/lose.ogg" id="7_k3of3"]
+[ext_resource type="PackedScene" uid="uid://duaa42vwqvo0k" path="res://scenes/vertical_button_menu/vertical_button_menu.tscn" id="8_0jun7"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_3ffx3"]
 shader = ExtResource("3_hlpkq")
@@ -113,23 +114,6 @@ grow_vertical = 0
 theme_override_fonts/font = ExtResource("2_7pvae")
 text = "Waiting on host . . . "
 
-[node name="LobbyButton" type="Button" parent="."]
-visible = false
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -117.0
-offset_top = -36.0
-offset_right = -32.0
-offset_bottom = -16.0
-grow_horizontal = 0
-grow_vertical = 0
-theme_override_fonts/font = ExtResource("2_7pvae")
-text = "GO TO LOBBY"
-
 [node name="WinSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("6_bebti")
 volume_db = -10.0
@@ -138,4 +122,20 @@ volume_db = -10.0
 stream = ExtResource("7_k3of3")
 volume_db = -10.0
 
-[connection signal="pressed" from="LobbyButton" to="." method="_on_lobby_button_pressed"]
+[node name="LobbyButtonMenu" parent="." instance=ExtResource("8_0jun7")]
+visible = false
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -132.0
+offset_top = -44.0
+offset_right = -32.0
+offset_bottom = 56.0
+grow_horizontal = 0
+grow_vertical = 0
+button_names = Array[String](["RETURN TO LOBBY"])
+
+[connection signal="menu_selected" from="LobbyButtonMenu" to="." method="_on_lobby_button_menu_menu_selected"]
