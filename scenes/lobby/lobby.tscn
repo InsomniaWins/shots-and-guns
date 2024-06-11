@@ -256,41 +256,6 @@ text = "LOBBY
 "
 horizontal_alignment = 1
 
-[node name="Panel" type="ColorRect" parent="Label"]
-show_behind_parent = true
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_bottom = 36.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.129412, 0.129412, 0.137255, 1)
-
-[node name="NinePatchRect" type="NinePatchRect" parent="Label/Panel"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -3.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("3_shq0y")
-patch_margin_left = 3
-patch_margin_top = 3
-patch_margin_right = 3
-patch_margin_bottom = 3
-
-[node name="ControlsLabel" type="Label" parent="Label"]
-layout_mode = 0
-offset_left = 7.0
-offset_top = 15.0
-offset_right = 455.0
-offset_bottom = 72.0
-theme_override_fonts/font = ExtResource("2_8l7bb")
-text = "WALK:  [W] [A] [S] [D]                         SHOOT: [SPACEBAR]
-AIM:   [LEFT] [UP] [DOWN] [RIGHT]              DASH: [SHIFT]"
-
 [node name="Outline" type="NinePatchRect" parent="."]
 visible = false
 layout_mode = 2

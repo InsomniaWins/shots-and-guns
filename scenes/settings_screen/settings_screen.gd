@@ -32,7 +32,9 @@ func _on_main_button_menu_menu_selected():
 	
 	match button_name:
 		"BACK":
+			Settings.save_settings()
 			SceneManager.change_scene("res://scenes/titlescreen/titlescreen.tscn")
+			
 		
 		"CHANGE INPUT MODE":
 			change_input_mode()

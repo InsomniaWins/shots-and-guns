@@ -130,12 +130,16 @@ func spawn_players():
 		
 		if player.is_local():
 			player.global_position = get_new_player_respawn_position()
+			player.requested_quit_game.connect(leave_game)
 		
 		total_players.append(player.peer_id)
 		
 		if Network.is_online() and multiplayer.is_server():
 			player.eliminated.connect(player_eliminated)
 
+
+func leave_game():
+	Network.leave_game()
 
 
 func player_eliminated(player_node:CharacterBody2D) -> void:

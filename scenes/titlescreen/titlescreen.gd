@@ -16,6 +16,7 @@ extends Control
 
 func _ready():
 	username_edit_node.text = Network.my_information.username
+	
 	update_hat_texture()
 	update_body_color()
 	update_username()
@@ -150,6 +151,7 @@ func _on_edit_character_menu_menu_selected():
 			edit_character_menu_node.deactivate()
 			main_menu_node.activate()
 			character_editor_node.visible = false
+			Settings.save_settings()
 		"USERNAME":
 			edit_character_menu_node.deactivate()
 			$CharacterEditor/UsernameEdit.grab_focus()

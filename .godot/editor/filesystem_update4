@@ -32,3 +32,5 @@ res://scenes/vertical_button_menu/vertical_button_menu.tscn
 res://scenes/results_screen/results_screen.gd
 res://scenes/results_screen/results_screen.tscn
 res://scenes/color_picker_menu/color_picker_menu.tscn
+res://scenes/levels/level.gd
+res://autoload/settings.gd
