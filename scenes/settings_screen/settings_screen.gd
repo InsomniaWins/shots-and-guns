@@ -19,16 +19,40 @@ func change_input_mode():
 	update_info_label()
 
 
+func change_window_mode():
+	
+	var new_window_mode:int = 0
+	
+	match DisplayServer.window_get_mode(0):
+		DisplayServer.WINDOW_MODE_WINDOWED:
+			new_window_mode = DisplayServer.WINDOW_MODE_FULLSCREEN
+		DisplayServer.WINDOW_MODE_MAXIMIZED:
+			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+			new_window_mode = DisplayServer.WINDOW_MODE_FULLSCREEN
+		_:
+			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_MINIMIZED)
+			new_window_mode = DisplayServer.WINDOW_MODE_WINDOWED
+	
+	DisplayServer.window_set_mode(new_window_mode)
+	
+	update_info_label()
+
+
 func update_info_label():
 	settings_info_label_node.text = str(
 		"Input Mode: ", "Controller" if Settings.input_mode == Settings.InputMode.CONTROLLER else "Keyboard & Mouse",
-		"\n[color=#868188]Some controls will still work with either input mode; however, most will not. (i.e. Aiming)"
+		"\n[color=#868188]Some controls will still work with either input mode; however, most will not. (i.e. Aiming)",
+		"\n",
+		"\nWindow Mode: ", "Windowed" if DisplayServer.window_get_mode(0) != DisplayServer.WINDOW_MODE_FULLSCREEN else "Fullscreen"
 		)
+		
+	
 
 
 func _on_main_button_menu_menu_selected():
 	var selected_button_index:int = main_button_menu_node.selected_button_index
 	var button_name:String = main_button_menu_node.button_names[selected_button_index]
+	
 	
 	match button_name:
 		"BACK":
@@ -36,5 +60,8 @@ func _on_main_button_menu_menu_selected():
 			SceneManager.change_scene("res://scenes/titlescreen/titlescreen.tscn")
 			
 		
-		"CHANGE INPUT MODE":
+		"INPUT MODE":
 			change_input_mode()
+		
+		"WINDOW MODE":
+			change_window_mode()

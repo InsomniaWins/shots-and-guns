@@ -1,16 +1,18 @@
 extends Control
 
-var current_port:String = "25565"
+var current_port:String = str(Settings.default_port)
 
 @onready var main_menu_node = $MainMenu
 @onready var port_edit_node := $PortEdit
 @onready var status_label_node:Label = $StatusLabel
 @onready var port_edit_controller_keyboard_input_node := $PortEditControllerKeyboardInput
 
+func _ready():
+	current_port = str(Settings.default_port)
+	port_edit_node.text = current_port
 
 func _on_back_button_pressed():
 	SceneManager.change_scene("res://scenes/titlescreen/titlescreen.tscn")
-
 
 func _process(delta):
 	status_label_node.modulate.a = lerp(status_label_node.modulate.a, 0.0, delta)
@@ -75,4 +77,7 @@ func _on_port_edit_text_submitted(new_text):
 	port_edit_node.text = str(new_text.to_int())
 	port_edit_node.release_focus()
 	main_menu_node.activate()
+	
+	Settings.default_port = port_edit_node.text.to_int()
+	Settings.save_settings()
 

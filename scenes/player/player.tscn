@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=3 uid="uid://cylhp3m23ae8t"]
+[gd_scene load_steps=39 format=3 uid="uid://cylhp3m23ae8t"]
 
 [ext_resource type="Script" path="res://scenes/player/player.gd" id="1_esw1k"]
 [ext_resource type="Material" uid="uid://do57vqbce53gv" path="res://particle_process_materials/player_invincible_particles.tres" id="2_2rwgc"]
@@ -7,8 +7,10 @@
 [ext_resource type="Script" path="res://scenes/player/health_manager.gd" id="2_swqtb"]
 [ext_resource type="Texture2D" uid="uid://vuy3ijme7ks8" path="res://textures/entities/player/hats/yellow_dog.png" id="3_0bkh4"]
 [ext_resource type="Script" path="res://scenes/player/ammo_manager.gd" id="3_1o33k"]
+[ext_resource type="Texture2D" uid="uid://ckhup1028uh1s" path="res://textures/particles/i_particle.png" id="3_divcu"]
 [ext_resource type="FontFile" uid="uid://bhvepy8hqrp7p" path="res://fonts/normal/normal.png" id="3_lmcf5"]
 [ext_resource type="Texture2D" uid="uid://dnwr7vktqrbu1" path="res://textures/entities/player/nameplate_ninepatch.png" id="4_ed3bs"]
+[ext_resource type="Texture2D" uid="uid://lb5gswfr5xrd" path="res://textures/entities/shadow.png" id="5_prbk1"]
 [ext_resource type="Texture2D" uid="uid://njagl4vf4qqn" path="res://textures/entities/player/nameplate_arrow.png" id="5_rybmr"]
 [ext_resource type="Texture2D" uid="uid://c1lfr7oe1i5gr" path="res://textures/entities/player/aim_arrow.png" id="8_wp4i1"]
 [ext_resource type="Script" path="res://scenes/player/status_bar.gd" id="9_dyjj4"]
@@ -189,17 +191,15 @@ collision_layer = 2
 motion_mode = 1
 script = ExtResource("1_esw1k")
 
-[node name="InvincibleParticles" type="GPUParticles2D" parent="."]
-emitting = false
-amount = 32
-process_material = ExtResource("2_2rwgc")
-lifetime = 0.5
-
 [node name="HealthManager" type="Node" parent="."]
 script = ExtResource("2_swqtb")
 
 [node name="AmmoManager" type="Node" parent="."]
 script = ExtResource("3_1o33k")
+
+[node name="Shadow" type="Sprite2D" parent="."]
+position = Vector2(0, 7)
+texture = ExtResource("5_prbk1")
 
 [node name="FacingScaler" type="Node2D" parent="."]
 
@@ -214,6 +214,13 @@ vframes = 4
 [node name="Hat" type="Sprite2D" parent="FacingScaler/Sprite"]
 position = Vector2(0, -16)
 texture = ExtResource("3_0bkh4")
+
+[node name="InvincibleParticles" type="GPUParticles2D" parent="."]
+emitting = false
+amount = 32
+process_material = ExtResource("2_2rwgc")
+texture = ExtResource("3_divcu")
+lifetime = 0.5
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 4)
@@ -336,7 +343,7 @@ anchor_bottom = 1.0
 offset_top = -40.0
 grow_horizontal = 2
 grow_vertical = 0
-color = Color(0.129412, 0.129412, 0.137255, 1)
+color = Color(0.129412, 0.129412, 0.137255, 0)
 script = ExtResource("9_dyjj4")
 
 [node name="StaminaBar" type="TextureProgressBar" parent="GUI/StatusBar"]
@@ -478,6 +485,7 @@ script = ExtResource("18_hn2mt")
 
 [node name="ShotgunSound" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("24_e6wwv")
+volume_db = 8.0
 
 [node name="InvincibilitySound" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("25_x7qb2")

@@ -3,6 +3,7 @@ extends Control
 signal menu_moved
 signal menu_selected
 
+const MENU_MOVE_SOUND:AudioStream = preload("res://sounds/button_move.ogg")
 
 @export var active:bool = false
 
@@ -10,7 +11,6 @@ var selected_button_vector:Vector2 = Vector2(0,0)
 
 @onready var grid_container_node:GridContainer = $GridContainer
 @onready var selected_color_outline_node:NinePatchRect = $SelectedColor
-@onready var move_audio_player_node:AudioStreamPlayer = $MoveSound
 
 func _ready():
 	var x:int = 0
@@ -56,7 +56,7 @@ func move_to_button(button_vector:Vector2, play_sound:bool = true) -> void:
 		move(Vector2(0, direction.y), false)
 	
 	if play_sound:
-		move_audio_player_node.play()
+		AudioManager.play_sound(MENU_MOVE_SOUND)
 
 
 func _unhandled_input(event):
@@ -102,7 +102,7 @@ func move(move_direction:Vector2, play_sound:bool = true):
 		return
 	
 	if play_sound:
-		move_audio_player_node.play()
+		AudioManager.play_sound(MENU_MOVE_SOUND)
 	
 	if h_direction != 0.0:
 		selected_button_vector.x += h_direction
@@ -148,7 +148,7 @@ func update_selection_graphic():
 
 
 func select():
-	AudioManager.play_sound(preload("res://sounds/button_select.wav"), -5)
+	AudioManager.play_sound(preload("res://sounds/button_select.ogg"))
 	menu_selected.emit()
 
 func activate():

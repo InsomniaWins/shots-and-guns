@@ -1,3 +1,4 @@
+res://tile_sets
 res://scenes/pause_menu
 res://scenes/controller_keyboard_line_edit_input
 res://scenes/settings_screen
@@ -19,4 +20,3 @@ res://scenes/bullet_line
 res://scenes/ammo_pickup
 res://scenes/color_picker_menu
 res://scenes/vertical_button_menu
-res://scenes/levels

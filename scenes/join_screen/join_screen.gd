@@ -1,7 +1,7 @@
 extends Control
 
-var current_ip:String = "LOCALHOST"
-var current_port:String = "25565"
+var current_ip:String = Settings.default_ip
+var current_port:String = str(Settings.default_port)
 
 @onready var main_menu_node = $MainMenu
 @onready var status_label_node:Label = $StatusLabel
@@ -14,6 +14,12 @@ var current_port:String = "25565"
 
 func _ready():
 	Network.player_joined.connect(player_joined)
+	
+	current_port = str(Settings.default_port)
+	port_edit_node.text = current_port
+	
+	current_ip = str(Settings.default_ip)
+	ip_edit_node.text = current_ip
 
 func _process(delta):
 	status_label_node.modulate.a = lerp(status_label_node.modulate.a, 0.0, delta)
@@ -27,11 +33,19 @@ func _join_server(ip:String, port:int, username:String) -> void:
 	if client_creation_result != OK:
 		status_label_node.text = str("Failed to make client peer: ", client_creation_result)
 		status_label_node.modulate = Color.RED
+		
+		main_menu_node.activate()
+		port_edit_node.mouse_filter = MOUSE_FILTER_STOP
+		ip_edit_node.mouse_filter = MOUSE_FILTER_STOP
 		return
 	
 	if peer.get_connection_status() == MultiplayerPeer.CONNECTION_DISCONNECTED:
 		status_label_node.text = "Failed to join server!"
 		status_label_node.modulate = Color.RED
+		
+		main_menu_node.activate()
+		port_edit_node.mouse_filter = MOUSE_FILTER_STOP
+		ip_edit_node.mouse_filter = MOUSE_FILTER_STOP
 		return
 	
 	multiplayer.multiplayer_peer = peer
@@ -132,6 +146,9 @@ func _on_port_edit_text_submitted(new_text):
 	current_port = str(new_text.to_int())
 	port_edit_node.release_focus()
 	main_menu_node.activate()
+	
+	Settings.default_port = current_port.to_int()
+	Settings.save_settings()
 
 
 func _on_ip_edit_text_submitted(new_text):
@@ -141,3 +158,6 @@ func _on_ip_edit_text_submitted(new_text):
 	current_ip = new_text
 	ip_edit_node.release_focus()
 	main_menu_node.activate()
+	
+	Settings.default_ip = current_ip
+	Settings.save_settings()

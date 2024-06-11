@@ -16,11 +16,13 @@ extends Control
 
 func _ready():
 	username_edit_node.text = Network.my_information.username
+	hat_sprite_node = $Character/Body/Hat
+	hat_name_label_node = $HBoxContainer/CharacterEditor/HatNameLabel
 	
-	update_hat_texture()
 	update_body_color()
 	update_username()
 	add_swatches_to_color_picker(player_color_picker_node)
+	
 
 
 func add_swatches_to_color_picker(color_picker:ColorPicker) -> void:
@@ -56,8 +58,8 @@ func add_swatches_to_color_picker(color_picker:ColorPicker) -> void:
 
 
 func update_hat_texture() -> void:
-	hat_sprite_node.texture = HatManager.get_hat_texture(Network.my_information.hat)
-	hat_name_label_node.text = "Hat: " + HatManager.get_hat_name(Network.my_information.hat)
+	$Character/Body/Hat.texture = HatManager.get_hat_texture(Network.my_information.hat)
+	$HBoxContainer/CharacterEditor/HatNameLabel.text = "Hat: " + HatManager.get_hat_name(Network.my_information.hat)
 
 func _on_host_button_pressed():
 	SceneManager.change_scene("res://scenes/host_screen/host_screen.tscn")
@@ -134,6 +136,7 @@ func _on_main_menu_menu_selected():
 		"EDIT CHARACTER":
 			character_editor_node.visible = true
 			main_menu_node.deactivate()
+			main_menu_node.visible = false
 			edit_character_menu_node.activate()
 		
 		"SETTINGS":
@@ -150,6 +153,7 @@ func _on_edit_character_menu_menu_selected():
 		"BACK":
 			edit_character_menu_node.deactivate()
 			main_menu_node.activate()
+			main_menu_node.visible = true
 			character_editor_node.visible = false
 			Settings.save_settings()
 		"USERNAME":

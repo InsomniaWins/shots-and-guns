@@ -23,7 +23,10 @@ enum Hats {
 	BOUNTY_HUNTER,
 	GREEN_PLUMBER,
 	RED_PLUMBER,
-	WATER
+	WATER,
+	VORT,
+	PETE,
+	PANT
 	
 }
 
@@ -115,6 +118,18 @@ var HAT_INFO:Dictionary = {
 	Hats.WATER: _new_hat_info(
 		"Water",
 		"res://textures/entities/player/hats/water.png"
+	),
+	Hats.VORT: _new_hat_info(
+		"Vort",
+		"res://textures/entities/player/hats/vort.png"
+	),
+	Hats.PETE: _new_hat_info(
+		"Pete",
+		"res://textures/entities/player/hats/pete.png"
+	),
+	Hats.PANT: _new_hat_info(
+		"Pant",
+		"res://textures/entities/player/hats/pant.png"
 	)
 }
 

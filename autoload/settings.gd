@@ -5,6 +5,8 @@ enum InputMode {
 	CONTROLLER
 }
 
+var default_ip:String = "LOCALHOST"
+var default_port:int = 25565
 var input_mode:int = InputMode.KEYBOARD_AND_MOUSE
 var accept_input:bool = true
 
@@ -21,7 +23,9 @@ func load_settings():
 		return
 	
 	input_mode = config_file.get_value("gameplay", "input_mode", input_mode)
-	
+	default_ip = config_file.get_value("gameplay", "default_ip", default_ip)
+	default_port = config_file.get_value("gameplay", "default_port", default_port)
+	DisplayServer.window_set_mode(config_file.get_value("visual", "window_mode", DisplayServer.WINDOW_MODE_WINDOWED))
 	Network.my_information.username = config_file.get_value("cosmetics", "username", Network.my_information.username)
 	Network.my_information.hat = config_file.get_value("cosmetics", "hat", Network.my_information.hat)
 	Network.my_information.color = config_file.get_value("cosmetics", "color", Network.my_information.color)
@@ -31,6 +35,10 @@ func save_settings():
 	var config_file:ConfigFile = ConfigFile.new()
 	
 	config_file.set_value("gameplay", "input_mode", input_mode)
+	config_file.set_value("gameplay", "default_ip", default_ip)
+	config_file.set_value("gameplay", "default_port", default_port)
+	
+	config_file.set_value("visual", "window_mode", DisplayServer.window_get_mode(0))
 	
 	config_file.set_value("cosmetics", "username", Network.my_information.username)
 	config_file.set_value("cosmetics", "hat", Network.my_information.hat)

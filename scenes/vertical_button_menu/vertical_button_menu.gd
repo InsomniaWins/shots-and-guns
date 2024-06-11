@@ -3,6 +3,7 @@ extends Control
 signal menu_moved
 signal menu_selected
 
+const MENU_MOVE_SOUND:AudioStream = preload("res://sounds/button_move.ogg")
 
 @export var button_names:Array[String]
 @export var active:bool = false:
@@ -10,12 +11,12 @@ signal menu_selected
 		active = value
 		update_active_effect()
 
-
 var selected_button_index:int = 0
+var play_sound_timer:float = 0.0
 
-@onready var move_sound_audio_player_node:AudioStreamPlayer = $MoveSound
 @onready var labels_vbox_node = $VBoxContainer
 @onready var selection_label_node = $SelectionLabel
+@onready var background_node = $Background
 
 func _ready():
 	update_active_effect()
@@ -38,6 +39,10 @@ func _unhandled_input(event):
 		elif event.is_action_pressed("select"):
 			select()
 			get_viewport().set_input_as_handled()
+
+func _process(delta):
+	play_sound_timer = max(0.0, play_sound_timer - delta)
+
 
 func update_active_effect():
 	
@@ -68,8 +73,9 @@ func button_gui_input(event:InputEvent, button_index:int) -> void:
 	if event is InputEventMouseButton:
 		if event.pressed and !event.is_echo():
 			if event.button_index == MOUSE_BUTTON_LEFT:
-				move_to_button(button_index, false)
-				select()
+				
+				if button_index == selected_button_index:
+					select()
 	
 
 func update_labels() -> void:
@@ -79,6 +85,7 @@ func update_labels() -> void:
 		var new_label_node = Label.new()
 		new_label_node.add_theme_font_override("font", preload("res://fonts/normal/normal.png"))
 		new_label_node.mouse_filter = Control.MOUSE_FILTER_STOP
+		#new_label_node.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		new_label_node.mouse_entered.connect(move_to_button.bind(current_button_index))
 		new_label_node.gui_input.connect(button_gui_input.bind(current_button_index))
 		labels_vbox_node.add_child(new_label_node)
@@ -95,7 +102,7 @@ func update_labels() -> void:
 	update_selected_button_graphic()
 
 func select():
-	AudioManager.play_sound(preload("res://sounds/button_select.wav"), -5)
+	AudioManager.play_sound(preload("res://sounds/button_select.ogg"), 0.0, randf() * 0.25 + 0.75)
 	menu_selected.emit()
 
 
@@ -114,8 +121,9 @@ func move_to_button(button_index:int, play_sound:bool = true) -> void:
 	while button_index != selected_button_index:
 		move(direction, false)
 	
-	if play_sound:
-		move_sound_audio_player_node.play()
+	if play_sound and play_sound_timer <= 0.0:
+		AudioManager.play_sound(MENU_MOVE_SOUND, 0.0, randf() * 0.25 + 0.75)
+		play_sound_timer = 0.05
 
 
 
@@ -125,8 +133,9 @@ func move(direction:int, play_sound:bool = true) -> void:
 	if direction == 0:
 		return
 	
-	if play_sound:
-		move_sound_audio_player_node.play()
+	if play_sound and play_sound_timer <= 0.0:
+		AudioManager.play_sound(MENU_MOVE_SOUND, 0.0, randf() * 0.25 + 0.75)
+		play_sound_timer = 0.05
 	
 	selected_button_index += direction
 	
@@ -148,11 +157,11 @@ func update_selected_button_graphic() -> void:
 		selection_label_node.position.y = get_selected_button_label().position.y
 	
 	for label_node in labels_vbox_node.get_children():
-		label_node.self_modulate = Color("868188")
+		label_node.self_modulate = Color("567B79")
 	
 	var selected_button_label:Label = get_selected_button_label()
 	if is_instance_valid(selected_button_label):
-		selected_button_label.self_modulate = Color.WHITE
+		selected_button_label.self_modulate = Color("C2D368")
 
 
 func get_button_count() -> int:
@@ -196,3 +205,7 @@ func deactivate():
 	update_active_effect()
 	
 
+
+
+func _on_v_box_container_resized():
+	background_node.size = labels_vbox_node.size

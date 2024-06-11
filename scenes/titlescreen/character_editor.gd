@@ -9,6 +9,7 @@ extends ColorRect
 
 func _ready():
 	username_edit_node.text = Network.my_information.username
+	update_hat_display()
 
 
 func _on_username_edit_text_submitted(_new_text):
