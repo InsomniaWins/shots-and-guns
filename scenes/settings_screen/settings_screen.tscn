@@ -23,7 +23,7 @@ offset_top = -50.0
 offset_right = 116.0
 offset_bottom = 50.0
 grow_vertical = 2
-button_names = Array[String](["BACK", "INPUT MODE", "WINDOW MODE"])
+button_names = Array[String](["BACK", "INPUT MODE", "WINDOW MODE", "VOLUME"])
 
 [node name="SettingsInfoLabel" type="RichTextLabel" parent="."]
 layout_mode = 1
@@ -50,4 +50,13 @@ text = "SETTINGS"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="VolumeButtonMenu" parent="." instance=ExtResource("2_lqwry")]
+visible = false
+offset_left = 31.0
+offset_top = 124.0
+offset_right = 131.0
+offset_bottom = 144.0
+button_names = Array[String](["BACK", "INCREASE", "DECREASE"])
+
 [connection signal="menu_selected" from="MainButtonMenu" to="." method="_on_main_button_menu_menu_selected"]
+[connection signal="menu_selected" from="VolumeButtonMenu" to="." method="_on_volume_button_menu_menu_selected"]

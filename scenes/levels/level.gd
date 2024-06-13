@@ -19,6 +19,7 @@ var eliminated_players:Array[int] = []
 
 func _ready():
 	Network.player_left.connect(player_left)
+	mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 
 func player_left(peer_id:int):
@@ -129,8 +130,12 @@ func spawn_players():
 		var player = Network.spawn_player(peer_id, entities_node, Vector2.ZERO, peer_id == multiplayer.get_unique_id())
 		
 		if player.is_local():
+			
+			print("im local!: ", peer_id)
+			
 			player.global_position = get_new_player_respawn_position()
 			player.requested_quit_game.connect(leave_game)
+			player.spawn_local_camera()
 		
 		total_players.append(player.peer_id)
 		

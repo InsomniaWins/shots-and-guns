@@ -10,6 +10,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 script = ExtResource("1_wi0cm")
 
 [node name="CurrentSceneParent" type="Control" parent="."]
@@ -20,9 +21,11 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="EffectsLoader" parent="CurrentSceneParent" instance=ExtResource("2_lch1k")]
 layout_mode = 1
+mouse_filter = 2
 
 [node name="FreedScenesParent" type="Node" parent="."]
 unique_name_in_owner = true

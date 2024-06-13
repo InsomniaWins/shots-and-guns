@@ -1,6 +1,7 @@
 extends Area2D
 
 
+
 func set_entity_data(data:Dictionary) -> void:
 	
 	await ready
@@ -20,7 +21,8 @@ func _on_body_entered(body):
 	var player_node:CharacterBody2D = body
 	
 	if player_node.ammo_manager_node.get_ammo() == player_node.ammo_manager_node.get_max_ammo():
-		player_node.wide_spread = true
+		if !player_node.wide_spread:
+			player_node.ammo_manager_node.boost()
 	
 	if player_node.ammo_manager_node.get_ammo() == 0:
 		player_node.ammo_manager_node.add_ammo(6)

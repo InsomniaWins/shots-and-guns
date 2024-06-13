@@ -10,8 +10,10 @@ const EMPTY_AMMO_TEXTURE:Texture = preload("res://textures/gui/ammo_indicator_em
 @onready var health_manager_node:Node = $"../../HealthManager"
 @onready var ammo_manager_node:Node = $"../../AmmoManager"
 @onready var hearts_hbox_node:HBoxContainer = $Stats/Hearts
-@onready var ammo_hbox_node:HBoxContainer = $Stats/Ammo
+@onready var ammo_node:Control = $Ammo
+@onready var bonus_ammo_node:Control = $BonusAmmo
 @onready var mini_health_indicator_node:HBoxContainer = $"../../UsernameLabel/HealthIndicator"
+@onready var rage_meter_node := $"../RageMeter"
 
 func update_ammo_indicator():
 	
@@ -20,9 +22,18 @@ func update_ammo_indicator():
 	
 	for i in ammo_manager_node.get_max_ammo():
 		
-		var indicator_texture_node:TextureRect = ammo_hbox_node.get_child(i)
+		var indicator_texture_node:TextureRect = ammo_node.get_child(i)
 		
 		if i < ammo_manager_node.get_ammo():
+			indicator_texture_node.texture = FULL_AMMO_TEXTURE
+		else:
+			indicator_texture_node.texture = EMPTY_AMMO_TEXTURE
+	
+	for i in ammo_manager_node.get_max_bonus_ammo():
+		
+		var indicator_texture_node:TextureRect = bonus_ammo_node.get_child(i)
+		
+		if i < ammo_manager_node.get_bonus_ammo():
 			indicator_texture_node.texture = FULL_AMMO_TEXTURE
 		else:
 			indicator_texture_node.texture = EMPTY_AMMO_TEXTURE

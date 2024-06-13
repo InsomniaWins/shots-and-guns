@@ -1,0 +1,39 @@
+[gd_scene load_steps=7 format=3 uid="uid://xkqaufni2nju"]
+
+[ext_resource type="Texture2D" uid="uid://bliuoay2rfjpe" path="res://textures/particles/footstep_particle.png" id="1_663i2"]
+[ext_resource type="Script" path="res://scenes/footstep_particle/footstep_particle.gd" id="2_tefxu"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hv6l3"]
+atlas = ExtResource("1_663i2")
+region = Rect2(0, 0, 11, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1e36h"]
+atlas = ExtResource("1_663i2")
+region = Rect2(11, 0, 11, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k75xq"]
+atlas = ExtResource("1_663i2")
+region = Rect2(22, 0, 11, 7)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_md2ld"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hv6l3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1e36h")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k75xq")
+}],
+"loop": false,
+"name": &"default",
+"speed": 10.0
+}]
+
+[node name="FootstepParticle" type="AnimatedSprite2D"]
+sprite_frames = SubResource("SpriteFrames_md2ld")
+script = ExtResource("2_tefxu")
+
+[connection signal="animation_finished" from="." to="." method="_on_animation_finished"]

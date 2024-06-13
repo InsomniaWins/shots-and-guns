@@ -1,11 +1,12 @@
-[gd_scene load_steps=4 format=3 uid="uid://duaa42vwqvo0k"]
+[gd_scene load_steps=5 format=3 uid="uid://duaa42vwqvo0k"]
 
 [ext_resource type="Script" path="res://scenes/vertical_button_menu/vertical_button_menu.gd" id="1_hr3at"]
 [ext_resource type="FontFile" uid="uid://bhvepy8hqrp7p" path="res://fonts/normal/normal.png" id="2_e0stw"]
 [ext_resource type="Texture2D" uid="uid://byp01oykmm2x0" path="res://textures/gui/ninepatch_outline.png" id="3_jhcuk"]
+[ext_resource type="Texture2D" uid="uid://dylvyjeiu10j6" path="res://textures/gui/menu_background.png" id="3_of1fy"]
 
 [node name="VerticalButtonMenu" type="Control" groups=["button_menu"]]
-custom_minimum_size = Vector2(100, 100)
+custom_minimum_size = Vector2(100, 20)
 layout_mode = 3
 anchors_preset = 0
 script = ExtResource("1_hr3at")
@@ -15,7 +16,7 @@ layout_mode = 2
 offset_left = -1.0
 offset_top = -1.0
 offset_right = 101.0
-offset_bottom = 101.0
+offset_bottom = 19.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0.47451)
@@ -38,6 +39,21 @@ patch_margin_top = 3
 patch_margin_right = 3
 patch_margin_bottom = 3
 
+[node name="TextureRect" type="TextureRect" parent="Background"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = -1.0
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("3_of1fy")
+stretch_mode = 1
+
 [node name="SelectionLabel" type="Label" parent="."]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
@@ -50,6 +66,6 @@ text = ">"
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 0
 offset_right = 100.0
-offset_bottom = 100.0
+offset_bottom = 20.0
 
 [connection signal="resized" from="VBoxContainer" to="." method="_on_v_box_container_resized"]

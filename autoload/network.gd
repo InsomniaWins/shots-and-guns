@@ -111,12 +111,14 @@ func got_player_list_from_server(_players:Dictionary) -> void:
 
 
 @rpc("any_peer", "unreliable")
-func synchronize_node_unreliable(node_path:String, node_data:Dictionary, should_print_error:bool=false):
+func synchronize_node_unreliable(node_path:String, node_data:Dictionary, data_type:String="local_data", should_print_error:bool=false):
 	
 	var node = get_node_or_null(node_path)
 	var my_peer_id:int = get_tree().get_multiplayer().multiplayer_peer.get_unique_id()
 	
 	if is_instance_valid(node):
+		
+		node_data["data_type"] = data_type
 		
 		if node.has_method("_synchronize_unreliable"):
 			node._synchronize_unreliable(node_data)

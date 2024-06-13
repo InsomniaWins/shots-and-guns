@@ -1,10 +1,11 @@
+C:/Users/insom/Desktop/sag
+res://textures/particles
+res://scenes/footstep_particle
 res://tile_sets
 res://scenes/pause_menu
 res://scenes/controller_keyboard_line_edit_input
 res://scenes/settings_screen
-C:/Users/insom/Desktop/Shots and Guns exports
 res://autoload
-C:/Users/insom/Documents/GitHub/party-game/exports/web
 res://
 res://particle_process_materials
 res://scenes/effects_loader
@@ -18,5 +19,3 @@ res://scenes/health_pickup
 res://scenes/bullet
 res://scenes/bullet_line
 res://scenes/ammo_pickup
-res://scenes/color_picker_menu
-res://scenes/vertical_button_menu

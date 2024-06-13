@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=3 uid="uid://cylhp3m23ae8t"]
+[gd_scene load_steps=48 format=3 uid="uid://cylhp3m23ae8t"]
 
 [ext_resource type="Script" path="res://scenes/player/player.gd" id="1_esw1k"]
 [ext_resource type="Material" uid="uid://do57vqbce53gv" path="res://particle_process_materials/player_invincible_particles.tres" id="2_2rwgc"]
@@ -12,7 +12,6 @@
 [ext_resource type="Texture2D" uid="uid://dnwr7vktqrbu1" path="res://textures/entities/player/nameplate_ninepatch.png" id="4_ed3bs"]
 [ext_resource type="Texture2D" uid="uid://lb5gswfr5xrd" path="res://textures/entities/shadow.png" id="5_prbk1"]
 [ext_resource type="Texture2D" uid="uid://njagl4vf4qqn" path="res://textures/entities/player/nameplate_arrow.png" id="5_rybmr"]
-[ext_resource type="Texture2D" uid="uid://c1lfr7oe1i5gr" path="res://textures/entities/player/aim_arrow.png" id="8_wp4i1"]
 [ext_resource type="Script" path="res://scenes/player/status_bar.gd" id="9_dyjj4"]
 [ext_resource type="Texture2D" uid="uid://bkxi2dkpj7j41" path="res://textures/gui/health_indicator_full.png" id="9_vwq3s"]
 [ext_resource type="Texture2D" uid="uid://behum2gfknlne" path="res://textures/entities/player/tiny_health_indicator.png" id="10_vnl8t"]
@@ -21,15 +20,20 @@
 [ext_resource type="Texture2D" uid="uid://dh4we0fn177h8" path="res://textures/gui/stamina_bar_back.png" id="13_ba5ku"]
 [ext_resource type="Material" uid="uid://c16pwq8urvk3r" path="res://particle_process_materials/player_dash_particles.tres" id="13_fhv1g"]
 [ext_resource type="Texture2D" uid="uid://cnd8boqab3y5q" path="res://textures/gui/stamina_bar_front.png" id="14_1gkjs"]
+[ext_resource type="Texture2D" uid="uid://b4yttdun7bsdn" path="res://textures/entities/player/shotgun.png" id="14_2p2a8"]
 [ext_resource type="PackedScene" uid="uid://cab13h2075ldn" path="res://scenes/hitbox/hit_box.tscn" id="17_8wme3"]
 [ext_resource type="Script" path="res://scenes/hitbox/hit_box.gd" id="18_hn2mt"]
 [ext_resource type="Texture2D" uid="uid://ds7k5gyqer5u3" path="res://textures/gui/ammo_indicator_empty.png" id="20_ycssa"]
 [ext_resource type="Texture2D" uid="uid://byp01oykmm2x0" path="res://textures/gui/ninepatch_outline.png" id="21_p4x2s"]
+[ext_resource type="Texture2D" uid="uid://icoebk1a3140" path="res://textures/gui/rage_meter_bottom.png" id="24_bc1cr"]
 [ext_resource type="AudioStream" uid="uid://clba0wbukdyps" path="res://sounds/shotgun.ogg" id="24_e6wwv"]
+[ext_resource type="Texture2D" uid="uid://kur2fspyc057" path="res://textures/gui/rage_meter_progress.png" id="25_21gug"]
 [ext_resource type="AudioStream" uid="uid://cal5b08liqt8j" path="res://sounds/gain_invincibility.ogg" id="25_x7qb2"]
 [ext_resource type="AudioStream" uid="uid://cnhb0eridcj47" path="res://sounds/heal.ogg" id="26_bcpry"]
+[ext_resource type="Texture2D" uid="uid://dr8a0h2yefrxm" path="res://textures/gui/rage_meter_ammo_icon.png" id="26_f8ubn"]
 [ext_resource type="AudioStream" uid="uid://pmpii68j07r6" path="res://sounds/pickup_ammo.ogg" id="27_j8njt"]
 [ext_resource type="AudioStream" uid="uid://cry054wfy1nro" path="res://sounds/lose.ogg" id="28_5wsys"]
+[ext_resource type="Script" path="res://scenes/player/footstep_timer.gd" id="31_m600h"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_lo8ta"]
 shader = ExtResource("2_fhlsj")
@@ -185,6 +189,31 @@ particles_anim_h_frames = 1
 particles_anim_v_frames = 1
 particles_anim_loop = false
 
+[sub_resource type="Gradient" id="Gradient_wjcqy"]
+colors = PackedColorArray(1, 0, 0, 1, 1, 0, 0, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_83jc5"]
+gradient = SubResource("Gradient_wjcqy")
+
+[sub_resource type="Curve" id="Curve_xidu8"]
+max_value = 3.0
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 3), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_p8c64"]
+curve = SubResource("Curve_xidu8")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_mwt38"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(36, 11.125, 1)
+spread = 180.0
+initial_velocity_min = 30.0
+initial_velocity_max = 30.0
+gravity = Vector3(0, 0, 0)
+scale_curve = SubResource("CurveTexture_p8c64")
+color_ramp = SubResource("GradientTexture1D_83jc5")
+
 [node name="Player" type="CharacterBody2D" groups=["player"]]
 z_index = 1
 collision_layer = 2
@@ -198,8 +227,16 @@ script = ExtResource("2_swqtb")
 script = ExtResource("3_1o33k")
 
 [node name="Shadow" type="Sprite2D" parent="."]
+visible = false
 position = Vector2(0, 7)
 texture = ExtResource("5_prbk1")
+
+[node name="InvincibleParticles" type="GPUParticles2D" parent="."]
+emitting = false
+amount = 32
+process_material = ExtResource("2_2rwgc")
+texture = ExtResource("3_divcu")
+lifetime = 0.5
 
 [node name="FacingScaler" type="Node2D" parent="."]
 
@@ -214,13 +251,6 @@ vframes = 4
 [node name="Hat" type="Sprite2D" parent="FacingScaler/Sprite"]
 position = Vector2(0, -16)
 texture = ExtResource("3_0bkh4")
-
-[node name="InvincibleParticles" type="GPUParticles2D" parent="."]
-emitting = false
-amount = 32
-process_material = ExtResource("2_2rwgc")
-texture = ExtResource("3_divcu")
-lifetime = 0.5
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 4)
@@ -316,9 +346,12 @@ libraries = {
 
 [node name="AimArrowRotation" type="Node2D" parent="."]
 
-[node name="AimArrowSprite" type="Sprite2D" parent="AimArrowRotation"]
+[node name="ShotgunSprite" type="Sprite2D" parent="AimArrowRotation"]
 position = Vector2(11, 0)
-texture = ExtResource("8_wp4i1")
+texture = ExtResource("14_2p2a8")
+
+[node name="BulletSpawnPosition" type="Node2D" parent="AimArrowRotation/ShotgunSprite"]
+position = Vector2(6, 0)
 
 [node name="DashTimer" type="Timer" parent="."]
 one_shot = true
@@ -343,6 +376,7 @@ anchor_bottom = 1.0
 offset_top = -40.0
 grow_horizontal = 2
 grow_vertical = 0
+mouse_filter = 2
 color = Color(0.129412, 0.129412, 0.137255, 0)
 script = ExtResource("9_dyjj4")
 
@@ -353,18 +387,266 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -34.0
-offset_top = -17.0
-offset_right = 34.0
-offset_bottom = -8.0
+offset_left = -207.0
+offset_top = -12.0
+offset_right = 208.0
+offset_bottom = -6.0
 grow_horizontal = 2
 grow_vertical = 0
+mouse_filter = 2
 max_value = 1.0
 step = 0.0
 value = 1.0
+nine_patch_stretch = true
+stretch_margin_left = 3
+stretch_margin_top = 3
+stretch_margin_right = 3
+stretch_margin_bottom = 3
 texture_under = ExtResource("13_ba5ku")
 texture_progress = ExtResource("14_1gkjs")
-texture_progress_offset = Vector2(1, 1)
+
+[node name="WideShotParticles" type="GPUParticles2D" parent="GUI/StatusBar"]
+position = Vector2(256, 10)
+amount = 48
+process_material = SubResource("ParticleProcessMaterial_mwt38")
+texture = ExtResource("3_divcu")
+lifetime = 0.25
+
+[node name="AmmoBackground" type="ColorRect" parent="GUI/StatusBar"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -34.5
+offset_top = -39.0
+offset_right = 34.5
+offset_bottom = -21.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Ammo" type="Control" parent="GUI/StatusBar"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -32.5
+offset_top = -36.0
+offset_right = 32.5
+offset_bottom = -24.0
+grow_horizontal = 2
+grow_vertical = 0
+pivot_offset = Vector2(32.5, 6)
+size_flags_horizontal = 4
+mouse_filter = 2
+
+[node name="0" type="TextureRect" parent="GUI/StatusBar/Ammo"]
+layout_mode = 2
+offset_right = 10.0
+offset_bottom = 12.0
+pivot_offset = Vector2(5, 6)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+texture = ExtResource("12_ijtbc")
+
+[node name="1" type="TextureRect" parent="GUI/StatusBar/Ammo"]
+layout_mode = 2
+offset_left = 11.0
+offset_right = 21.0
+offset_bottom = 12.0
+pivot_offset = Vector2(5, 6)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+texture = ExtResource("12_ijtbc")
+
+[node name="2" type="TextureRect" parent="GUI/StatusBar/Ammo"]
+layout_mode = 2
+offset_left = 22.0
+offset_right = 32.0
+offset_bottom = 12.0
+pivot_offset = Vector2(5, 6)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+texture = ExtResource("12_ijtbc")
+
+[node name="3" type="TextureRect" parent="GUI/StatusBar/Ammo"]
+layout_mode = 2
+offset_left = 33.0
+offset_right = 43.0
+offset_bottom = 12.0
+pivot_offset = Vector2(5, 6)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+texture = ExtResource("12_ijtbc")
+
+[node name="4" type="TextureRect" parent="GUI/StatusBar/Ammo"]
+layout_mode = 2
+offset_left = 44.0
+offset_right = 54.0
+offset_bottom = 12.0
+pivot_offset = Vector2(5, 6)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+texture = ExtResource("12_ijtbc")
+
+[node name="5" type="TextureRect" parent="GUI/StatusBar/Ammo"]
+layout_mode = 2
+offset_left = 55.0
+offset_right = 65.0
+offset_bottom = 12.0
+pivot_offset = Vector2(5, 6)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+texture = ExtResource("20_ycssa")
+
+[node name="AmmoNinePatch" type="NinePatchRect" parent="GUI/StatusBar"]
+modulate = Color(0.305882, 0.345098, 0.290196, 1)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -35.5
+offset_top = -40.0
+offset_right = 35.5
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("21_p4x2s")
+patch_margin_left = 3
+patch_margin_top = 3
+patch_margin_right = 3
+patch_margin_bottom = 3
+
+[node name="BonusAmmoBackground" type="ColorRect" parent="GUI/StatusBar"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -34.0
+offset_top = -60.0
+offset_right = 35.0
+offset_bottom = -42.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
+
+[node name="BonusAmmoNinePatch" type="NinePatchRect" parent="GUI/StatusBar"]
+modulate = Color(0.305882, 0.345098, 0.290196, 1)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -35.0
+offset_top = -61.0
+offset_right = 36.0
+offset_bottom = -41.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("21_p4x2s")
+patch_margin_left = 3
+patch_margin_top = 3
+patch_margin_right = 3
+patch_margin_bottom = 3
+
+[node name="BonusAmmo" type="Control" parent="GUI/StatusBar"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -32.5
+offset_top = -57.0
+offset_right = 32.5
+offset_bottom = -45.0
+grow_horizontal = 2
+grow_vertical = 0
+pivot_offset = Vector2(32.5, 6)
+size_flags_horizontal = 4
+mouse_filter = 2
+
+[node name="0" type="TextureRect" parent="GUI/StatusBar/BonusAmmo"]
+layout_mode = 2
+offset_right = 10.0
+offset_bottom = 12.0
+pivot_offset = Vector2(5, 6)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+texture = ExtResource("20_ycssa")
+
+[node name="1" type="TextureRect" parent="GUI/StatusBar/BonusAmmo"]
+layout_mode = 2
+offset_left = 11.0
+offset_right = 21.0
+offset_bottom = 12.0
+pivot_offset = Vector2(5, 6)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+texture = ExtResource("20_ycssa")
+
+[node name="2" type="TextureRect" parent="GUI/StatusBar/BonusAmmo"]
+layout_mode = 2
+offset_left = 22.0
+offset_right = 32.0
+offset_bottom = 12.0
+pivot_offset = Vector2(5, 6)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+texture = ExtResource("20_ycssa")
+
+[node name="3" type="TextureRect" parent="GUI/StatusBar/BonusAmmo"]
+layout_mode = 2
+offset_left = 33.0
+offset_right = 43.0
+offset_bottom = 12.0
+pivot_offset = Vector2(5, 6)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+texture = ExtResource("20_ycssa")
+
+[node name="4" type="TextureRect" parent="GUI/StatusBar/BonusAmmo"]
+layout_mode = 2
+offset_left = 44.0
+offset_right = 54.0
+offset_bottom = 12.0
+pivot_offset = Vector2(5, 6)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+texture = ExtResource("20_ycssa")
+
+[node name="5" type="TextureRect" parent="GUI/StatusBar/BonusAmmo"]
+layout_mode = 2
+offset_left = 55.0
+offset_right = 65.0
+offset_bottom = 12.0
+pivot_offset = Vector2(5, 6)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+texture = ExtResource("20_ycssa")
 
 [node name="Stats" type="VBoxContainer" parent="GUI/StatusBar"]
 layout_mode = 1
@@ -379,6 +661,7 @@ offset_right = 34.0
 offset_bottom = -15.0
 grow_horizontal = 2
 grow_vertical = 0
+mouse_filter = 2
 theme_override_constants/separation = 2
 alignment = 1
 
@@ -386,6 +669,7 @@ alignment = 1
 visible = false
 layout_mode = 2
 size_flags_horizontal = 4
+mouse_filter = 2
 theme_override_constants/separation = 1
 
 [node name="0" type="TextureRect" parent="GUI/StatusBar/Stats/Hearts"]
@@ -406,66 +690,6 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 texture = ExtResource("9_vwq3s")
 
-[node name="Ammo" type="HBoxContainer" parent="GUI/StatusBar/Stats"]
-layout_mode = 2
-size_flags_horizontal = 4
-theme_override_constants/separation = 1
-
-[node name="0" type="TextureRect" parent="GUI/StatusBar/Stats/Ammo"]
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-texture = ExtResource("12_ijtbc")
-
-[node name="1" type="TextureRect" parent="GUI/StatusBar/Stats/Ammo"]
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-texture = ExtResource("12_ijtbc")
-
-[node name="2" type="TextureRect" parent="GUI/StatusBar/Stats/Ammo"]
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-texture = ExtResource("12_ijtbc")
-
-[node name="3" type="TextureRect" parent="GUI/StatusBar/Stats/Ammo"]
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-texture = ExtResource("12_ijtbc")
-
-[node name="4" type="TextureRect" parent="GUI/StatusBar/Stats/Ammo"]
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-texture = ExtResource("12_ijtbc")
-
-[node name="5" type="TextureRect" parent="GUI/StatusBar/Stats/Ammo"]
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-texture = ExtResource("20_ycssa")
-
-[node name="NinePatchRect" type="NinePatchRect" parent="GUI/StatusBar"]
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -36.0
-offset_top = -40.0
-offset_right = 35.0
-offset_bottom = -20.0
-grow_horizontal = 2
-grow_vertical = 0
-texture = ExtResource("21_p4x2s")
-patch_margin_left = 3
-patch_margin_top = 3
-patch_margin_right = 3
-patch_margin_bottom = 3
-
 [node name="FlashRect" type="ColorRect" parent="GUI"]
 anchors_preset = 15
 anchor_right = 1.0
@@ -474,6 +698,40 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 color = Color(1, 1, 1, 0)
+
+[node name="RageMeter" type="TextureProgressBar" parent="GUI"]
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 16.0
+offset_top = -66.0
+offset_right = 35.0
+offset_bottom = 67.0
+grow_vertical = 2
+pivot_offset = Vector2(9.5, 66.5)
+mouse_filter = 2
+max_value = 1.0
+step = 0.0
+fill_mode = 3
+texture_under = ExtResource("24_bc1cr")
+texture_progress = ExtResource("25_21gug")
+
+[node name="TextureRect" type="TextureRect" parent="GUI/RageMeter"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -3.5
+offset_top = -14.0
+offset_right = 11.5
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+texture = ExtResource("26_f8ubn")
+stretch_mode = 3
 
 [node name="ShootTimer" type="Timer" parent="."]
 wait_time = 0.25
@@ -486,19 +744,30 @@ script = ExtResource("18_hn2mt")
 [node name="ShotgunSound" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("24_e6wwv")
 volume_db = 8.0
+attenuation = 15.0
 
 [node name="InvincibilitySound" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("25_x7qb2")
+attenuation = 15.0
 
 [node name="HealSound" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("26_bcpry")
+attenuation = 20.0
 
 [node name="PickupAmmo" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("27_j8njt")
+attenuation = 20.0
 
 [node name="LoseSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("28_5wsys")
 volume_db = -10.0
 
+[node name="FootstepTimer" type="Timer" parent="."]
+wait_time = 0.3
+script = ExtResource("31_m600h")
+
+[node name="EvilBoostSound" type="AudioStreamPlayer" parent="."]
+
 [connection signal="timeout" from="DashTimer" to="." method="_on_dash_timer_timeout"]
 [connection signal="damaged" from="HitBox" to="." method="_on_hit_box_damaged"]
+[connection signal="timeout" from="FootstepTimer" to="FootstepTimer" method="_on_timeout"]

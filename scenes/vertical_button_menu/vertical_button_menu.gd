@@ -75,6 +75,7 @@ func button_gui_input(event:InputEvent, button_index:int) -> void:
 			if event.button_index == MOUSE_BUTTON_LEFT:
 				
 				if button_index == selected_button_index:
+					get_viewport().set_input_as_handled()
 					select()
 	
 
@@ -209,3 +210,4 @@ func deactivate():
 
 func _on_v_box_container_resized():
 	background_node.size = labels_vbox_node.size
+	

@@ -28,10 +28,7 @@ var camera_shaking_amount:int = 0
 @onready var outline_node:NinePatchRect = $Outline
 @onready var players_node = $Players
 @onready var player_spawn_point_node = $PlayerSpawnPoint
-@onready var start_button_node = $CanvasLayer/StartButton
 @onready var pickup_spawn_positions_node = $PickupSpawnPositions
-@onready var camera_node = $Camera2D
-@onready var camera_start_position = camera_node.global_position
 
 func _ready():
 	Network.player_list_updated.connect(_players_dictionary_updated)
@@ -44,25 +41,25 @@ func _ready():
 	
 	if multiplayer.is_server():
 		spawn_pickup_timer_node.start()
-		start_button_node.visible = true
 		Network.allow_new_connections()
 	else:
-		start_button_node.visible = false
 		Network.respawn_entities_for_peer.rpc_id(1)
 
 func _process(delta):
+	
+	var camera_node = get_viewport().get_camera_2d()
 	
 	camera_node.rotation = lerp_angle(camera_node.rotation, 0.0, delta * 10)
 	
 	if camera_shaking_timer > 0.0:
 		camera_shaking_timer = max(0.0, camera_shaking_timer - delta)
 		
-		camera_node.position = camera_start_position + Vector2(
+		camera_node.position = Vector2(
 			randi_range(-camera_shaking_amount, camera_shaking_amount),
 			randi_range(-camera_shaking_amount, camera_shaking_amount)
 		)
 	else:
-		camera_node.position = camera_start_position
+		camera_node.position = Vector2.ZERO
 
 
 func server_on_player_joined(peer_id):
@@ -94,6 +91,7 @@ func spawn_player(peer_id:int) -> void:
 	
 	if peer_id == multiplayer.get_unique_id():
 		player_node.requested_quit_game.connect(leave_lobby)
+		player_node.spawn_local_camera()
 
 func player_eliminated(player_node:CharacterBody2D) -> void:
 	
@@ -107,7 +105,7 @@ func player_eliminated(player_node:CharacterBody2D) -> void:
 func shake_camera(amount:int = 1, time:float = 2.0, rotation_amount:float = 0.0):
 	camera_shaking_amount = amount
 	camera_shaking_timer = time
-	camera_node.rotation = rotation_amount
+	get_viewport().get_camera_2d().rotation = rotation_amount
 
 
 
