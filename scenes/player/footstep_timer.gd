@@ -7,7 +7,7 @@ const FOOTSTEP_SOUND:AudioStream = preload("res://sounds/footstep.ogg")
 
 var foot_index:int = 0
 
-func _process(delta):
+func _process(_delta):
 	wait_time = 20.0 / player_node.move_speed
 	
 	if is_stopped():

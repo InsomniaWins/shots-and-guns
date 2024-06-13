@@ -49,6 +49,7 @@ var pause_menu_node:CanvasLayer = null
 @onready var gain_invincibility_audio_player_node:AudioStreamPlayer2D = $InvincibilitySound
 @onready var heal_audio_player_node:AudioStreamPlayer2D = $HealSound
 @onready var bullet_spawn_position_node := shotgun_sprite_node.get_node("BulletSpawnPosition") 
+@onready var username_label_node := $UsernameLabel
 
 func _ready():
 	gui_node.visible = is_local()
@@ -90,6 +91,17 @@ func _unhandled_input(event):
 
 
 func _process(delta):
+	
+	var current_camera_node:Camera2D = get_viewport().get_camera_2d()
+	if is_instance_valid(current_camera_node):
+		
+		var viewport_rect:Rect2 = get_viewport().get_visible_rect()
+		viewport_rect.position = current_camera_node.global_position
+		viewport_rect.position -= viewport_rect.size / 2
+		username_label_node.visible = viewport_rect.has_point(global_position)
+		
+	else:
+		username_label_node.visible = true
 	
 	if Input.is_action_just_pressed("pause"):
 		if !is_paused():
@@ -142,7 +154,8 @@ func _process(delta):
 	elif Network.is_online() and Network.multiplayer.is_server():
 		
 		Network.synchronize_node_unreliable.rpc(get_path(), {
-				"wide_spread": wide_spread
+				"wide_spread": wide_spread,
+				"rage_meter_amount": ammo_manager_node._boost_amount
 			}, "server_data")
 	
 	_handle_sprite_animations()
@@ -261,6 +274,7 @@ func _synchronize_unreliable(data:Dictionary):
 			aim_direction = data.aim_direction
 		"server_data":
 			wide_spread = data.wide_spread
+			ammo_manager_node._boost_amount = data.rage_meter_amount
 
 
 @rpc("any_peer", "unreliable")
@@ -357,7 +371,7 @@ func _on_pause_menu_start_game_selected():
 	requested_start_game.emit()
 
 func spawn_local_camera() -> void:
-	var camera_node = Camera2D.new()
+	camera_node = Camera2D.new()
 	camera_node.ignore_rotation = false
 	add_child(camera_node)
 	camera_node.make_current()

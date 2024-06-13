@@ -1,9 +1,9 @@
+Node2D
+Control
 TextureRect
 TextureProgressBar
 NinePatchRect
 AudioStreamPlayer
-Node2D
-Control
 Camera2D
 AnimationPlayer
 AnimationTree
@@ -12,4 +12,3 @@ GPUParticles2D
 AnimatedSprite2D
 CPUParticles2D
 Timer
-AudioStreamPlayer2D

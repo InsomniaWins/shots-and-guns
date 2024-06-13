@@ -199,7 +199,7 @@ func move(direction:Vector2) -> void:
 
 func get_child_index_from_button_vector(button_vector:Vector2) -> int:
 	
-	var button_index:int = button_vector.x
+	var button_index:int = int(button_vector.x)
 	
 	while button_vector.y > 0:
 		button_vector.y -= 1

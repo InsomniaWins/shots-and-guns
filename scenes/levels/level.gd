@@ -131,8 +131,6 @@ func spawn_players():
 		
 		if player.is_local():
 			
-			print("im local!: ", peer_id)
-			
 			player.global_position = get_new_player_respawn_position()
 			player.requested_quit_game.connect(leave_game)
 			player.spawn_local_camera()
