@@ -1,4 +1,4 @@
-[gd_scene load_steps=48 format=3 uid="uid://cylhp3m23ae8t"]
+[gd_scene load_steps=51 format=3 uid="uid://cylhp3m23ae8t"]
 
 [ext_resource type="Script" path="res://scenes/player/player.gd" id="1_esw1k"]
 [ext_resource type="Material" uid="uid://do57vqbce53gv" path="res://particle_process_materials/player_invincible_particles.tres" id="2_2rwgc"]
@@ -22,7 +22,10 @@
 [ext_resource type="Texture2D" uid="uid://cnd8boqab3y5q" path="res://textures/gui/stamina_bar_front.png" id="14_1gkjs"]
 [ext_resource type="Texture2D" uid="uid://b4yttdun7bsdn" path="res://textures/entities/player/shotgun.png" id="14_2p2a8"]
 [ext_resource type="PackedScene" uid="uid://cab13h2075ldn" path="res://scenes/hitbox/hit_box.tscn" id="17_8wme3"]
+[ext_resource type="Script" path="res://scenes/player/minimap.gd" id="17_pment"]
 [ext_resource type="Script" path="res://scenes/hitbox/hit_box.gd" id="18_hn2mt"]
+[ext_resource type="Texture2D" uid="uid://dylvyjeiu10j6" path="res://textures/gui/menu_background.png" id="18_nbu78"]
+[ext_resource type="Texture2D" uid="uid://b1dcu6icdqay7" path="res://textures/gui/ninepatch_outline_border.png" id="19_wr0d8"]
 [ext_resource type="Texture2D" uid="uid://ds7k5gyqer5u3" path="res://textures/gui/ammo_indicator_empty.png" id="20_ycssa"]
 [ext_resource type="Texture2D" uid="uid://byp01oykmm2x0" path="res://textures/gui/ninepatch_outline.png" id="21_p4x2s"]
 [ext_resource type="Texture2D" uid="uid://icoebk1a3140" path="res://textures/gui/rage_meter_bottom.png" id="24_bc1cr"]
@@ -368,6 +371,67 @@ explosiveness = 0.2
 [node name="GUI" type="CanvasLayer" parent="."]
 script = ExtResource("11_qbqle")
 
+[node name="Minimap" type="Control" parent="GUI"]
+layout_mode = 3
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -88.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = 68.0
+grow_horizontal = 0
+mouse_filter = 2
+script = ExtResource("17_pment")
+metadata/_edit_group_ = true
+
+[node name="ColorRect" type="ColorRect" parent="GUI/Minimap"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
+
+[node name="TextureRect" type="TextureRect" parent="GUI/Minimap/ColorRect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("18_nbu78")
+stretch_mode = 1
+
+[node name="NinePatchRect" type="NinePatchRect" parent="GUI/Minimap"]
+self_modulate = Color(0.305882, 0.345098, 0.290196, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -2.0
+offset_top = -2.0
+offset_right = 2.0
+offset_bottom = 2.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("19_wr0d8")
+patch_margin_left = 4
+patch_margin_top = 4
+patch_margin_right = 4
+patch_margin_bottom = 4
+
+[node name="PlayerIcons" type="Control" parent="GUI/Minimap"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
 [node name="StatusBar" type="ColorRect" parent="GUI"]
 anchors_preset = 12
 anchor_top = 1.0
@@ -382,16 +446,13 @@ script = ExtResource("9_dyjj4")
 
 [node name="StaminaBar" type="TextureProgressBar" parent="GUI/StatusBar"]
 layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
+anchors_preset = 2
 anchor_top = 1.0
-anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -207.0
-offset_top = -12.0
-offset_right = 208.0
-offset_bottom = -6.0
-grow_horizontal = 2
+offset_left = 221.0
+offset_top = -14.0
+offset_right = 292.0
+offset_bottom = -5.0
 grow_vertical = 0
 mouse_filter = 2
 max_value = 1.0
@@ -698,16 +759,17 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 color = Color(1, 1, 1, 0)
+metadata/_edit_lock_ = true
 
 [node name="RageMeter" type="TextureProgressBar" parent="GUI"]
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = 16.0
-offset_top = -66.0
-offset_right = 35.0
-offset_bottom = 67.0
-grow_vertical = 2
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = -141.0
+offset_right = 27.0
+offset_bottom = -8.0
+grow_vertical = 0
 pivot_offset = Vector2(9.5, 66.5)
 mouse_filter = 2
 max_value = 1.0

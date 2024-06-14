@@ -104,7 +104,7 @@ func take_damage(amount:int = 1) -> void:
 		str("dead_body_e", Network.entity_counter),
 		player_node.get_parent().get_path(),
 		{
-			"position": player_node.global_position + Vector2(0, 6),
+			"position": player_node.global_position.floor() + Vector2(0, 6),
 			"color": Network.players[player_node.peer_id].color,
 			"hat": Network.players[player_node.peer_id].hat
 		}

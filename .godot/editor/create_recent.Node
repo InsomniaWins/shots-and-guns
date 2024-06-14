@@ -1,13 +1,13 @@
-Node2D
-Control
 TextureRect
-TextureProgressBar
+Control
 NinePatchRect
+ColorRect
+Node2D
+TextureProgressBar
 AudioStreamPlayer
 Camera2D
 AnimationPlayer
 AnimationTree
-ColorRect
 GPUParticles2D
 AnimatedSprite2D
 CPUParticles2D

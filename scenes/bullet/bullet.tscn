@@ -14,7 +14,7 @@ curve = SubResource("Curve_8lbo7")
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_qq6i2"]
 particle_flag_disable_z = true
 emission_shape = 1
-emission_sphere_radius = 2.25
+emission_sphere_radius = 3.0
 gravity = Vector3(0, 0, 0)
 scale_curve = SubResource("CurveTexture_gefbm")
 
@@ -25,7 +25,7 @@ radius = 3.0
 script = ExtResource("1_b34i2")
 
 [node name="GPUParticles2D" type="GPUParticles2D" parent="."]
-amount = 15
+amount = 30
 process_material = SubResource("ParticleProcessMaterial_qq6i2")
 lifetime = 0.25
 
@@ -37,3 +37,5 @@ shape = SubResource("CircleShape2D_or3a3")
 target_position = Vector2(100, 0)
 collision_mask = 5
 collide_with_areas = true
+
+[connection signal="tree_exiting" from="." to="." method="_on_tree_exiting"]

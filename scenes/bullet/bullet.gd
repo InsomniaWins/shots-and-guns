@@ -5,6 +5,7 @@ var shooter:int = -1
 
 @onready var shape_cast_node:ShapeCast2D = $ShapeCast2D
 
+
 func set_entity_data(data:Dictionary):
 	position = data.position
 	rotation = data.rotation
@@ -77,6 +78,3 @@ func _move_and_collide(next_position_local:Vector2):
 		
 		if should_free:
 			Network.free_entity.rpc(get_path())
-
-
-

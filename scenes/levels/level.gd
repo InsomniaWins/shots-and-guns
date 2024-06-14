@@ -103,24 +103,24 @@ func spawn_health_pickup() -> void:
 
 func _process(delta):
 	
-	camera_node.rotation = lerp_angle(camera_node.rotation, 0.0, delta * 10)
+	get_viewport().get_camera_2d().rotation = lerp_angle(get_viewport().get_camera_2d().rotation, 0.0, delta * 10)
 	
 	if camera_shaking_timer > 0.0:
 		camera_shaking_timer = max(0.0, camera_shaking_timer - delta)
 		
 		
-		camera_node.position = camera_start_position + Vector2(
+		get_viewport().get_camera_2d().position = Vector2(
 			randi_range(-camera_shaking_amount, camera_shaking_amount),
 			randi_range(-camera_shaking_amount, camera_shaking_amount)
 		)
 	else:
-		camera_node.position = camera_start_position
+		get_viewport().get_camera_2d().position = Vector2()
 
 
 func shake_camera(amount:int = 1, time:float = 2.0, rotation_amount:float = 0.0):
 	camera_shaking_amount = amount
 	camera_shaking_timer = time
-	camera_node.rotation = rotation_amount
+	get_viewport().get_camera_2d().rotation = rotation_amount
 
 
 @rpc("authority", "call_local")

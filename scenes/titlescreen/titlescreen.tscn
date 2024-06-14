@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://c1pstmk3bsdv8"]
+[gd_scene load_steps=13 format=3 uid="uid://c1pstmk3bsdv8"]
 
 [ext_resource type="Script" path="res://scenes/titlescreen/titlescreen.gd" id="1_vrurj"]
 [ext_resource type="FontFile" uid="uid://bhvepy8hqrp7p" path="res://fonts/normal/normal.png" id="2_grua3"]
@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://byp01oykmm2x0" path="res://textures/gui/ninepatch_outline.png" id="7_c8i5c"]
 [ext_resource type="PackedScene" uid="uid://b2bgy60osqp6x" path="res://scenes/color_picker_menu/color_picker_menu.tscn" id="7_ij63k"]
 [ext_resource type="PackedScene" uid="uid://caypn28v4edjm" path="res://scenes/controller_keyboard_input/controller_keyboard_input.tscn" id="7_mqkgx"]
+[ext_resource type="PackedScene" uid="uid://8bjgjmci7m42" path="res://scenes/effects_loader/effects_loader.tscn" id="10_uoq52"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_d7fkh"]
 shader = ExtResource("3_qq2v1")
@@ -490,6 +491,13 @@ offset_bottom = 56.0
 grow_horizontal = 2
 grow_vertical = 0
 button_names = Array[String](["CLOSE MESSAGE"])
+
+[node name="EffectsLoader" parent="." instance=ExtResource("10_uoq52")]
+layout_mode = 1
+offset_left = -743.0
+offset_top = 339.0
+offset_right = -743.0
+offset_bottom = 339.0
 
 [connection signal="text_changed" from="HBoxContainer/CharacterEditor/UsernameEdit" to="." method="_on_username_edit_text_changed"]
 [connection signal="pressed" from="HBoxContainer/CharacterEditor/HatButtons/DecrementHat" to="." method="_on_decrement_hat_pressed"]

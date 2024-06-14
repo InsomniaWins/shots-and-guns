@@ -84,6 +84,6 @@ func get_current_scene_parent() -> Control:
 
 func get_current_scene() -> Node:
 	return get_current_scene_parent().get_child(0)
-	
+
 
 

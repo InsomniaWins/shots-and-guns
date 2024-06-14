@@ -125,7 +125,8 @@ func _process(delta):
 			var axis_vector:Vector2
 			
 			if Settings.input_mode == Settings.InputMode.CONTROLLER:
-				# key aiming
+				# stick aiming
+				
 				axis_vector = Vector2(
 					Input.get_joy_axis(0, JOY_AXIS_RIGHT_X),
 					Input.get_joy_axis(0, JOY_AXIS_RIGHT_Y)
@@ -134,7 +135,7 @@ func _process(delta):
 				# mouse aiming
 				axis_vector = get_global_mouse_position() - global_position
 			
-			if axis_vector.x != 0 or axis_vector.y != 0:
+			if axis_vector.length() > 0.5:
 				aim_direction = axis_vector
 			
 			
@@ -373,6 +374,7 @@ func _on_pause_menu_start_game_selected():
 func spawn_local_camera() -> void:
 	camera_node = Camera2D.new()
 	camera_node.ignore_rotation = false
+	#camera_node.position_smoothing_enabled = true
 	add_child(camera_node)
 	camera_node.make_current()
 
